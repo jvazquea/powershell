@@ -93,9 +93,9 @@ $Unpublish_OnClick=
            $app="$objItem"
 		   $server="$objItem2"
 	   	   Remove-XAApplicationServer -BrowserName $app -ServerNames $server
-	   	   $mensaje = "Server Removed to Application " + $groups + "`r`n"
+	   	   $message = "Server " + $server + " removed to Application " + $app + "`r`n"
 	   	   $wshell = New-Object -ComObject Wscript.Shell
-           $wshell.Popup($mensaje,0,"Done",0x1)
+           $wshell.Popup($menssage,0,"Done",0x1)
 	   }
 
 	}
