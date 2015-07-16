@@ -1,0 +1,22 @@
+#############################################################################################################
+# Creates in a CSV an application report from Xenapp Farm
+# The file name will be FarmName_Xenappversion.csv, in the same location of the script
+# Autor: Javier Vázquez Martín
+#############################################################################################################
+
+$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+
+asnp Citrix.*
+
+$farm = Get-XAFarm|select farmname,serverversion
+
+$namefile=$farm.farmname + "_" + $farm.serverversion + ".csv"
+
+$file = [string]"$scriptPath\$namefile"
+$filetemp = [string]"$scriptPath\app-listtemp.csv"
+
+Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(" ; ", $_.Browsername)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, @{n="DistinguisedName";e={[string]::join(" ; ", $_.FolderPath + "/" + $_.BrowserName)}},ApplicationType,ProfileLocation,ProfileProgramName, @{n="CommandLine";e={[string]::join(" ; ", $_.CommandLineExecutable)}}, @{n="WorkingDirectory";e={[string]::join(" ; ", $_.WorkingDirectory)}}, @{n="ClientFolder";e={[string]::join(" ; ", $_.ClientFolder)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.Accounts)}}, @{n="Servers";e={[string]::join(" ; ", $_.ServerNames)}}, @{n="WorkerGroups";e={[string]::join(" ; ", $_.WorkerGroupNames)}} |Export-Csv $file
+
+get-content $file |select -Skip 1 |set-content "$filetemp"
+	
+move "$filetemp" $file -Force
