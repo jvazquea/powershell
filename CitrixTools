@@ -93,9 +93,9 @@ $Unpublish_OnClick=
            $app="$objItem"
 		   $server="$objItem2"
 	   	   Remove-XAApplicationServer -BrowserName $app -ServerNames $server
-	   	   $message = "Server " + $server + " removed to Application " + $app + "`r`n"
+	   	   $message = "Server Removed to Application " + $groups + "`r`n"
 	   	   $wshell = New-Object -ComObject Wscript.Shell
-           $wshell.Popup($menssage,0,"Done",0x1)
+           $wshell.Popup($message,0,"Done",0x1)
 	   }
 
 	}
@@ -146,21 +146,27 @@ $permission_app_Click=
 
 $Add_Click= 
 {
-
+    $appscheck = $Applications.CheckedItems
+    $count=$appscheck.count
+    $applicationchecked=(1..$count)
     IF ($Dom_group.Text -lt 0) {
-	$mensaje = "Empty field" + "`r`n"
+	$message = "Empty field" + "`r`n"
 	$wshell = New-Object -ComObject Wscript.Shell
-   	$wshell.Popup($mensaje,0,"Write a group name",0x1)
+   	$wshell.Popup($message,0,"Write a group name",0x1)
 	} else {
-	   foreach ( $objItem in $Applications.CheckedItems ) {
+              $i=0
+	      foreach ( $objItem in $Applications.CheckedItems ) {
 	      $app="$objItem"
 	      $groups = $Dom_group.Text
 	      Add-XAApplicationAccount $app -accounts $groups -force
-	      $mensaje = "Added user/group " + $groups + " to application " + $app + "`r`n"
-	      $wshell = New-Object -ComObject Wscript.Shell
-          $wshell.Popup($mensaje,0,"Done",0x1)
-	   }
-		    }
+	      $applicationchecked[$i]=$app
+              $i++
+	      }
+	   $applicationchecked=$applicationchecked|out-string
+	   $message = [string]"Added user/group " + $groups + " to applications " + "`r`n" + "$applicationchecked"
+	   $wshell = New-Object -ComObject Wscript.Shell
+           $wshell.Popup($message,0,"Done",0x1)
+    }
   
 }
 
@@ -184,9 +190,9 @@ $Refresh_OnClick=
 
     $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
 
-    $mensaje = "Farm Data has been updated"
+    $message = "Farm Data has been updated"
     $wshell = New-Object -ComObject Wscript.Shell
-    $wshell.Popup($mensaje,0,"Done",0x1)
+    $wshell.Popup($message,0,"Done",0x1)
     
     $Applications.Items.clear()
 
@@ -238,25 +244,39 @@ $Check_app_OnClick=
 
 $Remove_OnClick= 
 {
-
+    $appscheck = $Applications.CheckedItems
+    $count=$appscheck.count
+    $applicationchecked=(1..$count)
     IF ($Dom_group.Text -lt 0) {
-	$mensaje = "Empty field" + "`r`n"
+	$message = "Empty field" + "`r`n"
 	$wshell = New-Object -ComObject Wscript.Shell
-   	$wshell.Popup($mensaje,0,"Write a group name",0x1)
+   	$wshell.Popup($message,0,"Write a group name",0x1)
 	} else {
+        $i=0
         foreach ($objItem in $Applications.CheckedItems)
 	    {
+             $app="$objItem"
+             $groups = $Dom_group.Text
 	     $a = new-object -comobject wscript.shell
-	     $Pregunta = $a.popup("Are you sure to remove permission to the user/group?", 0,"Delete Files",4)
+	     $Pregunta = $a.popup("Are you sure to remove permission in $app to the user/group?", 0,"Delete Files",4)
 	     If ($Pregunta -eq 6) {
-  	      $app="$objItem"
-	      $groups = $Dom_group.Text
 	      Remove-XAApplicationAccount $app -accounts $groups
-	      $message = "Removed user/group " + $groups + " to application " + $app + "`r`n"
-	      $wshell = New-Object -ComObject Wscript.Shell
-	      $wshell.Popup($message,0,"Done",0x1)
-	  }
+	      $applicationchecked[$i]=$app
+              $i++ 
+	     }
 	}
+	   if ($i -eq 0){
+	      $message = [string]"Cancelado"
+	      $wshell = New-Object -ComObject Wscript.Shell
+              $wshell.Popup($message,0,"Done",0x1)
+           } else {
+           $i--
+	   $applicationchecked=$applicationchecked[0..$i]
+	   $applicationchecked=$applicationchecked|out-string
+	   $message = [string]"Added user/group " + $groups + " to applications " + "`r`n" + "$applicationchecked"
+	   $wshell = New-Object -ComObject Wscript.Shell
+           $wshell.Popup($message,0,"Done",0x1)
+}
 }
 }
 
