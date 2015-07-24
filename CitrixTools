@@ -88,18 +88,34 @@ $Export_txt_OnClick=
 
 $Unpublish_OnClick= 
 {
-	foreach ( $objItem in $Applications.CheckedItems ) {
-	   foreach ( $objItem2 in $Servers_list.CheckedItems ) {
-           $app="$objItem"
-		   $server="$objItem2"
-	   	   Remove-XAApplicationServer -BrowserName $app -ServerNames $server
-	   	   $message = "Server Removed to Application " + $groups + "`r`n"
-	   	   $wshell = New-Object -ComObject Wscript.Shell
-           $wshell.Popup($message,0,"Done",0x1)
-	   }
-
+	$apps=$Applications.CheckedItems
+	$capps=$apps.count -1
+	$servers=$Servers_list.CheckedItems
+	$cservers=$servers.count -1
+	$resapps=(0..$capps)
+	$resservers=(0..$cservers)
+	$j=0
+	$a = new-object -comobject wscript.shell
+	$Pregunta = $a.popup("Are you sure to remove permission in $app to the Servers Selected?", 0,"Delete Permission",4)
+	If ($Pregunta -eq 6) {
+		foreach ( $objItem in $Applications.CheckedItems ) {
+		$i=0
+		$app="$objItem"
+		$resapps[$j]=$app
+		$j++
+		foreach ( $objServer in $Servers_list.CheckedItems ) {
+             		$server="$objServer"
+	     		Remove-XAApplicationServer -BrowserName $app -ServerNames $server
+	    		$resservers[$i]=$server
+             		$i++
+	   	}
+		}
 	}
-
+	$resservers=$resservers|out-string
+	$resapps=$resapps|out-string
+	$message = [string]"Server/s " + "$resservers"+ " removed to Application/s " + "$resapps" + "`r`n"
+	$wshell = New-Object -ComObject Wscript.Shell
+        $wshell.Popup($message,0,"Done",0x1)
 }
 
 $handler_checkedListBox1_SelectedIndexChanged= 
@@ -163,7 +179,7 @@ $Add_Click=
               $i++
 	      }
 	   $applicationchecked=$applicationchecked|out-string
-	   $message = [string]"Added user/group " + $groups + " to applications " + "`r`n" + "$applicationchecked"
+	   $message = [string]"User/group addded " + $groups + " to applications " + "`r`n" + "$applicationchecked"
 	   $wshell = New-Object -ComObject Wscript.Shell
            $wshell.Popup($message,0,"Done",0x1)
     }
@@ -220,17 +236,31 @@ $Refresh_OnClick=
 
 $Publish_OnClick= 
 {
-	foreach ( $objItem in $Applications.CheckedItems ) {
-	   foreach ( $objServer in $Servers_list.CheckedItems ) {
-               $app="$objItem"
-	       $server="$objServer"
-	       Add-XAApplicationServer -BrowserName $app -ServerNames $server
-	       $message = "Server " + $server + " added to Application " + $app + "`r`n"
-	       $wshell = New-Object -ComObject Wscript.Shell
-               $wshell.Popup($message,0,"Done",0x1)
-	   }
 
+	$apps=$Applications.CheckedItems
+	$capps=$apps.count -1
+	$servers=$Servers_list.CheckedItems
+	$cservers=$servers.count -1
+	$resapps=(0..$capps)
+	$resservers=(0..$cservers)
+	$j=0
+	foreach ( $objItem in $Applications.CheckedItems ) {
+	$i=0
+	$app="$objItem"
+	$resapps[$j]=$app
+	$j++
+	foreach ( $objServer in $Servers_list.CheckedItems ) {
+               $server="$objServer"
+	       Add-XAApplicationServer -BrowserName $app -ServerNames $server
+	       $resservers[$i]=$server
+               $i++
+	   }
 	}
+	$resservers=$resservers|out-string
+	$resapps=$resapps|out-string
+	$message = [string]"Server/s " + "$resservers"+ " added to Application/s " + "$resapps" + "`r`n"
+	$wshell = New-Object -ComObject Wscript.Shell
+        $wshell.Popup($message,0,"Done",0x1)
 }
 
 $Check_app_OnClick= 
@@ -262,7 +292,7 @@ $Remove_OnClick=
 	     If ($Pregunta -eq 6) {
 	      Remove-XAApplicationAccount $app -accounts $groups
 	      $applicationchecked[$i]=$app
-              $i++ 
+              $i++
 	     }
 	}
 	   if ($i -eq 0){
@@ -273,7 +303,7 @@ $Remove_OnClick=
            $i--
 	   $applicationchecked=$applicationchecked[0..$i]
 	   $applicationchecked=$applicationchecked|out-string
-	   $message = [string]"Added user/group " + $groups + " to applications " + "`r`n" + "$applicationchecked"
+	   $message = [string]"User/group removed " + $groups + " to applications " + "`r`n" + "$applicationchecked"
 	   $wshell = New-Object -ComObject Wscript.Shell
            $wshell.Popup($message,0,"Done",0x1)
 }
