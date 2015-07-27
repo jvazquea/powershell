@@ -75,14 +75,14 @@ for ($i=0;$i -lt $datos.length;$i++) {
       $cuenta=$text.count
       $prueba=$text -join " ; "
       $datos[$i].servers=$prueba
-      $datos[$i].servers
+
    }
 }
 
-$datos|Export-Csv $file
-get-content $file |select -Skip 1 |set-content "$filetemp"
-move "$filetemp" $file -Force
-$apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
+   $datos|Export-Csv $file
+   get-content $file |select -Skip 1 |set-content "$filetemp"
+   move "$filetemp" $file -Force
+   $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
 
 }
 
@@ -238,14 +238,13 @@ for ($i=0;$i -lt $datos.length;$i++) {
       $cuenta=$text.count
       $prueba=$text -join " ; "
       $datos[$i].servers=$prueba
-      $datos[$i].servers
    }
 }
 
-$datos|Export-Csv $file
-get-content $file |select -Skip 1 |set-content "$filetemp"
-move "$filetemp" $file -Force
-$apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
+   $datos|Export-Csv $file
+   get-content $file |select -Skip 1 |set-content "$filetemp"
+   move "$filetemp" $file -Force
+   $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
 
     $message = "Farm Data has been updated"
     $wshell = New-Object -ComObject Wscript.Shell
