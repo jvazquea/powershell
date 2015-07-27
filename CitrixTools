@@ -223,13 +223,13 @@ $Check_srv_OnClick=
 $Refresh_OnClick= 
 {
 
-$nombrefile="apps.csv"
-$file = [string]"$scriptPath\$nombrefile"
-$filetemp = [string]"$scriptPath\app-listtemp.csv"
-$datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(";", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}
+   $nombrefile="apps.csv"
+   $file = [string]"$scriptPath\$nombrefile"
+   $filetemp = [string]"$scriptPath\app-listtemp.csv"
+   $datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";",    $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(";", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}
 
-#this "for" is for order server names
-for ($i=0;$i -lt $datos.length;$i++) {
+   #this "for" is for order server names
+   for ($i=0;$i -lt $datos.length;$i++) {
 
    if ($datos[$i].servers -gt 0) {
       $text=$datos[$i].servers.split("{;}")
@@ -239,10 +239,10 @@ for ($i=0;$i -lt $datos.length;$i++) {
    }
 }
 
-$datos|Export-Csv $file
-get-content $file |select -Skip 1 |set-content "$filetemp"
-move "$filetemp" $file -Force
-$apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
+   $datos|Export-Csv $file
+   get-content $file |select -Skip 1 |set-content "$filetemp"
+   move "$filetemp" $file -Force
+   $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
 
     $message = "Farm Data has been updated"
     $wshell = New-Object -ComObject Wscript.Shell
