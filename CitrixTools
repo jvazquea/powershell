@@ -61,19 +61,21 @@ If((Test-Path -path $scriptPath\apps.csv)) {
 $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
 }
 else {
+
 $nombrefile="apps.csv"
 $file = [string]"$scriptPath\$nombrefile"
 $filetemp = [string]"$scriptPath\app-listtemp.csv"
 $datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(";", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}
 
-#this "for" is for order server names
 for ($i=0;$i -lt $datos.length;$i++) {
 
    if ($datos[$i].servers -gt 0) {
       $text=$datos[$i].servers.split("{;}")
       $text=$text|sort-object
-      $join=$text -join " ; "
-      $datos[$i].servers=$join
+      $cuenta=$text.count
+      $prueba=$text -join " ; "
+      $datos[$i].servers=$prueba
+      $datos[$i].servers
    }
 }
 
@@ -141,7 +143,7 @@ $Unpublish_OnClick=
 	$resapps=$resapps|out-string
 	$message = [string]"Server/s " + "$resservers"+ " removed to Application/s " + "$resapps" + "`r`n"
 	$wshell = New-Object -ComObject Wscript.Shell
-        $wshell.Popup($message,0,"Done",0x1)
+        $wshell.Popup($message,0,"Done",0x0)
 }
 
 $handler_checkedListBox1_SelectedIndexChanged= 
@@ -194,7 +196,7 @@ $Add_Click=
     IF ($Dom_group.Text -lt 0) {
 	$message = "Empty field" + "`r`n"
 	$wshell = New-Object -ComObject Wscript.Shell
-   	$wshell.Popup($message,0,"Write a group name",0x1)
+   	$wshell.Popup($message,0,"Write a group name",0x0)
 	} else {
               $i=0
 	      foreach ( $objItem in $Applications.CheckedItems ) {
@@ -207,7 +209,7 @@ $Add_Click=
 	   $applicationchecked=$applicationchecked|out-string
 	   $message = [string]"User/group addded " + $groups + " to applications " + "`r`n" + "$applicationchecked"
 	   $wshell = New-Object -ComObject Wscript.Shell
-           $wshell.Popup($message,0,"Done",0x1)
+           $wshell.Popup($message,0,"Done",0x0)
     }
   
 }
@@ -223,30 +225,31 @@ $Check_srv_OnClick=
 $Refresh_OnClick= 
 {
 
-   $nombrefile="apps.csv"
-   $file = [string]"$scriptPath\$nombrefile"
-   $filetemp = [string]"$scriptPath\app-listtemp.csv"
-   $datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";",    $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(";", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}
+$nombrefile="apps.csv"
+$file = [string]"$scriptPath\$nombrefile"
+$filetemp = [string]"$scriptPath\app-listtemp.csv"
+$datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(";", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}
 
-   #this "for" is for order server names
-   for ($i=0;$i -lt $datos.length;$i++) {
+for ($i=0;$i -lt $datos.length;$i++) {
 
    if ($datos[$i].servers -gt 0) {
       $text=$datos[$i].servers.split("{;}")
       $text=$text|sort-object
-      $join=$text -join " ; "
-      $datos[$i].servers=$join
+      $cuenta=$text.count
+      $prueba=$text -join " ; "
+      $datos[$i].servers=$prueba
+      $datos[$i].servers
    }
 }
 
-   $datos|Export-Csv $file
-   get-content $file |select -Skip 1 |set-content "$filetemp"
-   move "$filetemp" $file -Force
-   $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
+$datos|Export-Csv $file
+get-content $file |select -Skip 1 |set-content "$filetemp"
+move "$filetemp" $file -Force
+$apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
 
     $message = "Farm Data has been updated"
     $wshell = New-Object -ComObject Wscript.Shell
-    $wshell.Popup($message,0,"Done",0x1)
+    $wshell.Popup($message,0,"Done",0x0)
     
     $Applications.Items.clear()
 
@@ -298,7 +301,7 @@ $Publish_OnClick=
 	$resapps=$resapps|out-string
 	$message = [string]"Server/s " + "$resservers"+ " added to Application/s " + "$resapps" + "`r`n"
 	$wshell = New-Object -ComObject Wscript.Shell
-        $wshell.Popup($message,0,"Done",0x1)
+        $wshell.Popup($message,0,"Done",0x0)
 }
 
 $Check_app_OnClick= 
@@ -318,7 +321,7 @@ $Remove_OnClick=
     IF ($Dom_group.Text -lt 0) {
 	$message = "Empty field" + "`r`n"
 	$wshell = New-Object -ComObject Wscript.Shell
-   	$wshell.Popup($message,0,"Write a group name",0x1)
+   	$wshell.Popup($message,0,"Write a group name",0x0)
 	} else {
         $i=0
         foreach ($objItem in $Applications.CheckedItems)
@@ -336,14 +339,14 @@ $Remove_OnClick=
 	   if ($i -eq 0){
 	      $message = [string]"Cancelado"
 	      $wshell = New-Object -ComObject Wscript.Shell
-              $wshell.Popup($message,0,"Done",0x1)
+              $wshell.Popup($message,0,"Done",0x0)
            } else {
            $i--
 	   $applicationchecked=$applicationchecked[0..$i]
 	   $applicationchecked=$applicationchecked|out-string
 	   $message = [string]"User/group removed " + $groups + " to applications " + "`r`n" + "$applicationchecked"
 	   $wshell = New-Object -ComObject Wscript.Shell
-           $wshell.Popup($message,0,"Done",0x1)
+           $wshell.Popup($message,0,"Done",0x0)
 }
 }
 }
