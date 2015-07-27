@@ -396,8 +396,8 @@ $form1.Text = "Citrix tool"
 $Refresh.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 150
-$System_Drawing_Point.Y = 584
+$System_Drawing_Point.X = 148
+$System_Drawing_Point.Y = 570
 $Refresh.Location = $System_Drawing_Point
 $Refresh.Name = "Refresh"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -453,8 +453,8 @@ $Permisos.Controls.Add($tabPage1)
 $Export_txt.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 359
-$System_Drawing_Point.Y = 549
+$System_Drawing_Point.X = 391
+$System_Drawing_Point.Y = 533
 $Export_txt.Location = $System_Drawing_Point
 $Export_txt.Name = "button1"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -520,8 +520,8 @@ $tabPage1.Controls.Add($Groups_app)
 $Permissions_app.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 245
-$System_Drawing_Point.Y = 549
+$System_Drawing_Point.X = 310
+$System_Drawing_Point.Y = 533
 $Permissions_app.Location = $System_Drawing_Point
 $Permissions_app.Name = "Permissions_app"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -540,7 +540,7 @@ $Remove.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
-$System_Drawing_Point.Y = 580
+$System_Drawing_Point.Y = 564
 $Remove.Location = $System_Drawing_Point
 $Remove.Name = "Remove"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -575,7 +575,7 @@ $Add.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
-$System_Drawing_Point.Y = 549
+$System_Drawing_Point.Y = 533
 $Add.Location = $System_Drawing_Point
 $Add.Name = "Add"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -616,8 +616,8 @@ $Permisos.Controls.Add($tabPage2)
 $exp_app_srv.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 359
-$System_Drawing_Point.Y = 549
+$System_Drawing_Point.X = 391
+$System_Drawing_Point.Y = 533
 $exp_app_srv.Location = $System_Drawing_Point
 $exp_app_srv.Name = "exp_app_srv"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -635,8 +635,8 @@ $tabPage2.Controls.Add($exp_app_srv)
 $Perm_server.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 245
-$System_Drawing_Point.Y = 549
+$System_Drawing_Point.X = 310
+$System_Drawing_Point.Y = 533
 $Perm_server.Location = $System_Drawing_Point
 $Perm_server.Name = "Perm_server"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -686,13 +686,13 @@ $tabPage2.Controls.Add($Servers_list)
 $Check_srv.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 110
+$System_Drawing_Point.X = 105
 $System_Drawing_Point.Y = 471
 $Check_srv.Location = $System_Drawing_Point
 $Check_srv.Name = "Check_srv"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 23
-$System_Drawing_Size.Width = 67
+$System_Drawing_Size.Width = 79
 $Check_srv.Size = $System_Drawing_Size
 $Check_srv.TabIndex = 14
 $Check_srv.Text = "Check"
@@ -743,7 +743,7 @@ $Uncheck_srv.Location = $System_Drawing_Point
 $Uncheck_srv.Name = "Uncheck_srv"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 23
-$System_Drawing_Size.Width = 67
+$System_Drawing_Size.Width = 79
 $Uncheck_srv.Size = $System_Drawing_Size
 $Uncheck_srv.TabIndex = 13
 $Uncheck_srv.Text = "Uncheck"
@@ -757,7 +757,7 @@ $Publish.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
-$System_Drawing_Point.Y = 549
+$System_Drawing_Point.Y = 533
 $Publish.Location = $System_Drawing_Point
 $Publish.Name = "Publish"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -776,7 +776,7 @@ $Unpublish.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
-$System_Drawing_Point.Y = 580
+$System_Drawing_Point.Y = 564
 $Unpublish.Location = $System_Drawing_Point
 $Unpublish.Name = "Unpublish"
 $System_Drawing_Size = New-Object System.Drawing.Size
