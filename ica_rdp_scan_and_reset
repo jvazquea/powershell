@@ -1,0 +1,52 @@
+#############################################################################################
+# Escanea puertos ICA y RDP de la lista de serversps.txt. Si da error, resetea el listener  #
+# y lo guarda en el archivo log.txt y manda un correo de alerta                             #
+#############################################################################################
+
+$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+echo $scriptPath
+$listaserversps="$scriptPath\serversps.txt"
+$servers=get-content $listaserversps
+$SMTP=[string]""
+$varFrom=[string]""
+$varto=[string]""
+
+$log="$scriptPath\log.txt"
+$fecha=(get-date).ToString()
+
+$servers|ForEach-Object {
+    $maquina= -split $_
+	
+	#puerto ICA
+	  $port=1494
+	  $socket = New-Object Net.sockets.tcpclient
+          try
+             {
+             $socket.connect($maquina,$port)
+             }
+          catch {}
+          IF (!($socket.Connected)) {
+	             	$mensaje="$fecha - $maquina - Puerto 1494 inaccesible, se reseteará el listener de ICA"
+	            	echo $mensaje >> $log
+	            	reset session ica-tcp /server:$maquina
+	             	send-mailmessage -to $VarTo -from $VarFrom -Body $mensaje -Subject "Error en puerto ICA $maquina" -smtp $smtp
+          }
+
+          $socket.close()
+
+	#puerto Remote Desktop
+	  $puerto2=3389
+	  $socket = New-Object Net.sockets.tcpclient
+          try
+             {
+             $socket.connect($maquina,$puerto2)
+             }
+          catch {}
+          IF (!($socket.Connected)) {
+                $mensaje="$fecha - $maquina - Puerto 3389 inaccesible, se reseteará el listener de RDP" >> $log
+		            echo $mensaje >> $log
+	            	reset session rdp-tcp /server:$maquina
+	            	send-mailmessage -to $VarTo -from $VarFrom -Body $mensaje -Subject "Error en puerto RDP $maquina" -smtp $smtp
+          }
+          $socket.close()
+}
