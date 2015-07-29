@@ -1,0 +1,43 @@
+########################################################
+# This script checks SSL certificates of the URLs      #
+# included  in the $url var and send  an email if      #
+# $days_to_notify or less remaining until expiration.  #
+#						                                           #
+# Autor: Javier Vázquez Martín                         #
+######################################################## 
+
+#Variables for mailing, configure with your own settings
+$varFrom=""
+$varTo=""
+$SMTP=""
+
+#Days notice of upcoming expiration
+$days_to_notify = 32
+
+#URLS to scan
+$urls = @(
+ "https://url1",
+ "https://url2",
+ "https://url3"
+)
+
+#The following command will enable the scanning of the already expired certificates.
+[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
+
+#Scan each url
+foreach ($url in $urls)
+ {
+ $eq = [Net.HttpWebRequest]::Create($url)
+ $req.GetResponse() |Out-Null
+ $today = [system.DateTime]::now
+ $deadline = $today.Adddays($days_to_notify)
+ $expiration = $req.ServicePoint.Certificate.GetExpirationDateString()
+
+ #Locale for setting dates
+ $culture=get-culture
+ $dateexpires=[datetime]::Parse("$expiration",$culture)
+
+if ($deadline -gt $dateexpires) {
+ send-mailmessage -to $VarTo -from $VarFrom -Body "The expiration date of the certificate of the URL $url is $dateexpires "  -Subject "Nearest expiration or expired certificate" -smtp $smtp
+}
+}
