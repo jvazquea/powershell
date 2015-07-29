@@ -1,0 +1,77 @@
+###########################################################
+# Escribe en un MDB una foto del uso de la granja         #
+# El MDB vacío debe nombrarse con el nombre de la granja. #
+# Autor: Javier Vázquez Martín                            #
+###########################################################
+
+asnp citrix*
+$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+
+# FUNCION PARA CREAR/ACTUALIZAR TABLAS DE BASE DE DATOS MDB    #
+Function Invoke-ADOCommand($Db, $Command)
+{
+ $connection = New-Object -ComObject ADODB.Connection
+ $connection.Open("Provider= Microsoft.Jet.OLEDB.4.0;Data Source=$Db" )
+ $connection.Execute($command)
+ $connection.Close()
+} #End Invoke-ADOCommand
+
+#  Variables  #
+$miFecha = get-date 
+$farm = Get-XAFarm|select farmname
+$nombrefile= $farm.farmname + ".mdb"
+$nombrefile
+$db = [string]"$scriptPath\$nombrefile"
+
+
+#  Creación de la tabla "Sesiones" si no existe  #
+$tabla = "Sesiones"
+$existe = "select count (*) from $tabla"
+$tablaexiste = "0"
+try
+   {
+   $tablaexiste = Invoke-ADOCommand -db $Db -command $existe
+   }
+catch {}
+
+   IF ($tablaexiste -eq 0){
+      $Campos = "Fecha Date, Hora Date, ServerName Text, AccountName Text, BrowserName Text, ClientName Text, VirtualIP Text, ClientBuildNumber Text, ColorDepth Text, ClientProductID Text, ClientAddress Text"
+      $command = "Create Table [$tabla] `($Campos`)"
+      Invoke-ADOCommand $Db $command
+   }
+
+#  Creación de la tabla "Licencias" si no existe  #
+$tabla = "Licencias"
+$existe = "select count (*) from $tabla"
+$tablaexiste = "0"
+try
+   {
+   $tablaexiste = Invoke-ADOCommand -db $Db -command $existe
+   }
+catch {}
+
+   IF ($tablaexiste -eq 0){
+      $Campos = "Fecha Date, Hora Date, Licencias Number"
+      $command = "Create Table [$tabla] `($Campos`)"
+      Invoke-ADOCommand $Db $command
+   }
+
+
+# AGREGAR DATOS AL MDB  #
+
+
+$ColSesiones = Get-XASession -Farm -Full | where {$_.Protocol -eq "Ica"}
+$Sesiones = $ColSesiones|select clientaddress -unique|measure|select count
+
+ForEach ($objItem in $colSesiones)
+   {
+    $Command1 = "INSERT INTO Sesiones (Fecha, Hora, ServerName, AccountName, BrowserName, ClientName, VirtualIP, ClientBuildNumber, ColorDepth, ClientProductID, ClientAddress) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')" -f $miFecha, $miFecha, $objItem.ServerName, $objItem.AccountName, $objItem.BrowserName, $objItem.ClientName, $objItem.VirtualIP, $objItem.ClientBuildNumber, $objItem.ColorDepth, $objItem.ClientProductID, $objItem.ClientAddress
+    
+
+ #Añadimos campos a la tabla
+
+    Invoke-ADOCommand -db $Db -command $command1
+
+   }
+$Command2 = "INSERT INTO Licencias (Fecha, Hora, Licencias) VALUES ('{0}','{1}','{2}')" -f $miFecha, $miFecha, $Sesiones.count
+Invoke-ADOCommand -db $Db -command $command2
