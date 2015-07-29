@@ -1,5 +1,6 @@
 #This Script reads connectivity.csv file and scan "port" from "source" to "destination"
 #CSV must contain three fields: Source, Destination and Port
+#You need set WinRM service and trustedhosts
 
 #script location
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
