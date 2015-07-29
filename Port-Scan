@@ -1,0 +1,34 @@
+#This Script reads connectivity.csv file and scan "port" from "source" to "destination"
+#CSV must contain three fields: Source, Destination and Port
+
+#script location
+$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+
+#Variables, change for smtp send
+$VarTo=""
+$VarFrom=""
+$smtpServer=""
+$csvfile=import-csv $scriptPath\connectivity.csv
+$date=(get-date).ToString()
+
+#counter for csv read.
+$i=0
+
+foreach ($obj in $csvfile){
+#read csv
+$source=$csvfile[$i].source
+$destination=$csvfile[$i].destination
+$port=$csvfile[$i].port
+
+#remote command, you need set WinRM service and trustedhosts...
+Invoke-command -Computername $source -scriptblock {
+param ($source,$destination,$port,$date,$VarTo,$VarFrom,$smtpServer)
+$socket = New-Object Net.sockets.tcpclient($destination,$port)
+IF (!($socket.Connected)) {
+$message="$date - $destination - Error port $port. Check connectivity on $Source"
+send-mailmessage -to $VarTo -from $VarFrom -Body $message -Subject "Error port: $port source: $Source destination: $destination -smtp $smtpserver"
+} 
+$socket.close()
+} -ArgumentList $source,$destination,$port,$date,$VarTo,$VarFrom,$smtpServer
+$i=$i+1
+}
