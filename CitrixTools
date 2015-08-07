@@ -342,10 +342,11 @@ $Publish_New_App_OnClick=
 {
    If ($Local_App.Checked -eq $true)
    {
-   New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Cli_App_Folder -server $Servers_pub_new_app.CheckedItems 
+   New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text
    }	
    else {
-   New-XAApplication $Displayname.text -ApplicationType StreamedToServer -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Cli_App_Folder -server $Servers_pub_new_app.CheckedItems 
+   
+   New-XAApplication $Displayname.text -ApplicationType StreamedToClientOrStreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text
    }
 }
 
