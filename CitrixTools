@@ -345,13 +345,25 @@ $Publish_New_App_OnClick=
 {
    If ($Local_App.Checked -eq $true)
    {
-   New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Colors16Bit" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
-   }	
+      $xafarm=Get-XAfarm
+      If ($xafarm.serverversion.major -lt "6")
+      {
+      New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Highcolor" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
+      }
+      else {
+      	New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Colors16Bit" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True  
+		}
+	}
    else {
-   New-XAApplication $Displayname.text -ApplicationType StreamedToClientOrStreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Colors16Bit" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
+      If ($xafarm.serverversion.major -lt "6")
+	  {
+      New-XAApplication $Displayname.text -ApplicationType StreamedToClientOrStreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Highcolor" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
+	  }
+	  else {
+	  New-XAApplication $Displayname.text -ApplicationType StreamedToClientOrStreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Highcolor" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
+	  }
    }
 }
-
 $Perm_server_OnClick=
 {
 
