@@ -34,7 +34,7 @@ $Serv_App_new = New-Object System.Windows.Forms.Label
 $Command_Line_Lab = New-Object System.Windows.Forms.Label
 $Cli_app_folder_lab = New-Object System.Windows.Forms.Label
 $label2 = New-Object System.Windows.Forms.Label
-$AppDescription = New-Object System.Windows.Forms.Label
+$AppDescription_lab = New-Object System.Windows.Forms.Label
 $DisplayName_lab = New-Object System.Windows.Forms.Label
 
 #textbox
@@ -86,7 +86,7 @@ else {
 $nombrefile="apps.csv"
 $file = [string]"$scriptPath\$nombrefile"
 $filetemp = [string]"$scriptPath\app-listtemp.csv"
-$datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}
+$datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}, @{n="Habilitada";e={[string]::join(" ; ", $_.Enabled)}}
 
 for ($i=0;$i -lt $datos.length;$i++) {
 
@@ -156,15 +156,18 @@ $permission_app_Click=
 {
 
     $n=0
-    $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
+    $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName, Habilitada 
     $numero=$Applications.CheckedItems.count -1
     $permiso = (0 .. $numero)
     foreach ($objItem in $Applications.CheckedItems)
 	{
 	$app="$objItem"
-	$groups = $apps|where {$_.ApplicationName -eq $app}|select UsersandGroups
-	$grupo = $groups.UsersandGroups
-	$permiso[$n] = "Application permissions " + $app + ": " + "`r`n" + $grupo + "`r`n" + "`r`n"
+	$datos = $apps|where {$_.ApplicationName -eq $app}|select UsersandGroups, Habilitada
+	$grupo = $datos.UsersandGroups
+	$enabled = $datos.Habilitada
+    IF ($enabled -eq "True") {$state = "Enabled"}
+	else {$state = "Disabled"}
+	$permiso[$n] = "Application permissions " + $app + ": " + $state + "`r`n" + $grupo + "`r`n" + "`r`n"
 	$n = $n + 1
 	}
 
@@ -342,11 +345,10 @@ $Publish_New_App_OnClick=
 {
    If ($Local_App.Checked -eq $true)
    {
-   New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text
+   New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Colors16Bit" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
    }	
    else {
-   
-   New-XAApplication $Displayname.text -ApplicationType StreamedToClientOrStreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text
+   New-XAApplication $Displayname.text -ApplicationType StreamedToClientOrStreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Colors16Bit" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
    }
 }
 
@@ -377,7 +379,7 @@ $Refresh_OnClick=
     $nombrefile="apps.csv"
     $file = [string]"$scriptPath\$nombrefile"
     $filetemp = [string]"$scriptPath\app-listtemp.csv"
-    $datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}
+    $datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}, @{n="Habilitada";e={[string]::join(" ; ", $_.Enabled)}}
 
    for ($i=0;$i -lt $datos.length;$i++) {
 
@@ -981,7 +983,7 @@ $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 15
 $System_Drawing_Size.Width = 400
 $WorkingDir.Size = $System_Drawing_Size
-$WorkingDir.TabIndex = 2
+$WorkingDir.TabIndex = 4
 $WorkingDir.Text = "Working directory:"
 
 $PublishNew.Controls.Add($WorkingDir)
@@ -1012,7 +1014,7 @@ $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 20
 $System_Drawing_Size.Width = 436
 $pkg_cmd.Size = $System_Drawing_Size
-$pkg_cmd.TabIndex = 0
+$pkg_cmd.TabIndex = 2
 
 $PublishNew.Controls.Add($pkg_cmd)
 
@@ -1027,7 +1029,7 @@ $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 14
 $System_Drawing_Size.Width = 300
 $Command_Line_Lab.Size = $System_Drawing_Size
-$Command_Line_Lab.TabIndex = 1
+$Command_Line_Lab.TabIndex = 30
 $Command_Line_Lab.Text = "Command line:"
 
 $PublishNew.Controls.Add($Command_Line_Lab)
@@ -1042,7 +1044,7 @@ $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 20
 $System_Drawing_Size.Width = 436
 $Cli_App_Folder.Size = $System_Drawing_Size
-$Cli_App_Folder.TabIndex = 23
+$Cli_App_Folder.TabIndex = 7
 
 $PublishNew.Controls.Add($Cli_App_Folder)
 
@@ -1074,26 +1076,26 @@ $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 20
 $System_Drawing_Size.Width = 436
 $App_Description.Size = $System_Drawing_Size
-$App_Description.TabIndex = 3
+$App_Description.TabIndex = 1
 
 $PublishNew.Controls.Add($App_Description)
 
-$AppDescription.DataBindings.DefaultDataSourceUpdateMode = 0
+$AppDescription_lab.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 16
 $System_Drawing_Point.Y = 58
-$AppDescription.Location = $System_Drawing_Point
-$AppDescription.Name = "AppDescription"
+$AppDescription_lab.Location = $System_Drawing_Point
+$AppDescription_lab.Name = "AppDescription"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 15
 $System_Drawing_Size.Width = 128
-$AppDescription.Size = $System_Drawing_Size
-$AppDescription.TabIndex = 2
-$AppDescription.Text = "Application Description:"
-$AppDescription.add_Click($handler_label6_Click)
+$AppDescription_lab.Size = $System_Drawing_Size
+$AppDescription_lab.TabIndex = 2
+$AppDescription_lab.Text = "Application Description:"
+$AppDescription_lab.add_Click($handler_label6_Click)
 
-$PublishNew.Controls.Add($AppDescription)
+$PublishNew.Controls.Add($AppDescription_lab)
 
 $Servers_pub_new_app.DataBindings.DefaultDataSourceUpdateMode = 0
 $Servers_pub_new_app.FormattingEnabled = $True
@@ -1107,7 +1109,7 @@ $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 251
 $System_Drawing_Size.Width = 436
 $Servers_pub_new_app.Size = $System_Drawing_Size
-$Servers_pub_new_app.TabIndex = 20
+$Servers_pub_new_app.TabIndex = 5
 
 $PublishNew.Controls.Add($Servers_pub_new_app)
 
