@@ -1287,6 +1287,7 @@ $app_list_search.Location = $System_Drawing_Point
 $app_list_search.Multiline = $True
 $app_list_search.Name = "app_list_search"
 $app_list_search.ReadOnly = $True
+$app_list_search.ScrollBars = 2
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 388
 $System_Drawing_Size.Width = 365
