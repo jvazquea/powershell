@@ -23,7 +23,7 @@ $InitialFormWindowState = New-Object System.Windows.Forms.FormWindowState
 $Permisos = New-Object System.Windows.Forms.TabControl
 $Users_tab = New-Object System.Windows.Forms.TabPage
 $PublishNew = New-Object System.Windows.Forms.TabPage
-$tabPage2 = New-Object System.Windows.Forms.TabPage
+$servers_wg = New-Object System.Windows.Forms.TabPage
 $Searchtab = New-Object System.Windows.Forms.TabPage
 
 #labels
@@ -31,7 +31,6 @@ $label4 = New-Object System.Windows.Forms.Label
 $label1 = New-Object System.Windows.Forms.Label
 $label3 = New-Object System.Windows.Forms.Label
 $WorkingDir = New-Object System.Windows.Forms.Label
-$Serv_App_new = New-Object System.Windows.Forms.Label
 $Command_Line_Lab = New-Object System.Windows.Forms.Label
 $Cli_app_folder_lab = New-Object System.Windows.Forms.Label
 $label2 = New-Object System.Windows.Forms.Label
@@ -40,6 +39,8 @@ $DisplayName_lab = New-Object System.Windows.Forms.Label
 $lab_srch_field = New-Object System.Windows.Forms.Label
 $lab_search_by = New-Object System.Windows.Forms.Label
 $lab_app_list = New-Object System.Windows.Forms.Label
+$lab_workergroup = New-Object System.Windows.Forms.Label
+$publishedinserver = New-Object System.Windows.Forms.Label
 
 #textbox
 $Dom_group = New-Object System.Windows.Forms.TextBox
@@ -56,7 +57,6 @@ $app_list_search = New-Object System.Windows.Forms.TextBox
 #buttons
 $Refresh = New-Object System.Windows.Forms.Button
 $exp_perm_file = New-Object System.Windows.Forms.Button
-$Export_txt = New-Object System.Windows.Forms.Button
 $Permissions_app = New-Object System.Windows.Forms.Button
 $Remove = New-Object System.Windows.Forms.Button
 $Add = New-Object System.Windows.Forms.Button
@@ -68,15 +68,27 @@ $Publish = New-Object System.Windows.Forms.Button
 $Unpublish = New-Object System.Windows.Forms.Button
 $Publish_New_App = New-Object System.Windows.Forms.Button
 $Check_app = New-Object System.Windows.Forms.Button
-$Unchech_app = New-Object System.Windows.Forms.Button
+$Uncheck_app = New-Object System.Windows.Forms.Button
 $chk_search = New-Object System.Windows.Forms.Button
 $but_Search = New-Object System.Windows.Forms.Button
 
+$Enable_app = New-Object System.Windows.Forms.Button
+
+$farm=get-xafarm
+
+IF ($farm.serverversion.major -ge 6) {
+$Remove_Srv_WG = New-Object System.Windows.Forms.Button
+$add_srv_WG = New-Object System.Windows.Forms.Button
+$wg_members = New-Object System.Windows.Forms.Button
+$chk_workgroup = New-Object System.Windows.Forms.Button
+$unchk_workgroup = New-Object System.Windows.Forms.Button
+}
 #checkedlistboxes
 $Servers_list = New-Object System.Windows.Forms.CheckedListBox
 $Applications = New-Object System.Windows.Forms.CheckedListBox
-$Servers_pub_new_app = New-Object System.Windows.Forms.CheckedListBox
-
+IF ($farm.serverversion.major -ge 6) {
+$WG_list = New-Object System.Windows.Forms.CheckedListBox
+}
 #radiobuttons
 $Streamed_App = New-Object System.Windows.Forms.RadioButton
 $Local_App = New-Object System.Windows.Forms.RadioButton
@@ -84,8 +96,37 @@ $Local_App = New-Object System.Windows.Forms.RadioButton
 #combobox
 $Comb_search_by = New-Object System.Windows.Forms.ComboBox
 
+#tooltip
+$balloons = New-Object System.Windows.Forms.ToolTip
+
 #endregion Generated Form Objects
 
+$balloons.add_Popup($handler_toolTip1_Popup)
+$balloons.SetToolTip($Refresh, "Reload all farm data")
+$balloons.SetToolTip($exp_perm_file, "Export permissions field to file")
+$balloons.SetToolTip($Permissions_app, "Show Users and groups permissions from checked applications")
+$balloons.SetToolTip($Remove, "Remove User or Group from checked applications")
+$balloons.SetToolTip($Add, "Add User or Group to checked applications")
+$balloons.SetToolTip($exp_app_srv, "Export application published on servers field to file")
+$balloons.SetToolTip($Perm_server, "Show servers on which Applications are published")
+$balloons.SetToolTip($Check_srv, "Check all servers")
+$balloons.SetToolTip($Uncheck_srv, "Uncheck all servers")
+$balloons.SetToolTip($Publish, "Publish checked applications in checked servers")
+$balloons.SetToolTip($Unpublish, "Unpublish checked applications in checked servers")
+$balloons.SetToolTip($Publish_New_App, "Create new application, without any servers and any users/groups. You can add servers/users from this script in Users and Servers Section. Finally, you can enable the application after updating data.")
+$balloons.SetToolTip($Check_app, "Check all applications")
+$balloons.SetToolTip($Uncheck_app, "Uncheck all applications")
+$balloons.SetToolTip($chk_search, "Check applications from search")
+$balloons.SetToolTip($but_Search, "Search Applications from Server or Domain User/group")
+$balloons.SetToolTip($Enable_app, "Enable checked applications")
+
+IF ($farm.serverversion.major -ge 6) {
+$balloons.SetToolTip($wg_members, "Show Worker groups server members")
+$balloons.SetToolTip($chk_workgroup, "Check all applications")
+$balloons.SetToolTip($unchk_workgroup, "Uncheck all applications")
+$balloons.SetToolTip($Remove_Srv_WG, "Remove Server from Worker Group")
+$balloons.SetToolTip($add_srv_WG, "Add Server to Worker Group")
+}
 #Import CSV with applications and permissions
 
 If((Test-Path -path $scriptPath\apps.csv)) {
@@ -96,18 +137,8 @@ else {
 $nombrefile="apps.csv"
 $file = [string]"$scriptPath\$nombrefile"
 $filetemp = [string]"$scriptPath\app-listtemp.csv"
-$datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}, @{n="Habilitada";e={[string]::join(" ; ", $_.Enabled)}}
+$datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.Accounts)}}, @{n="Servers";e={[string]::join(" ; ", $_.ServerNames)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, @{n="Workergroups";e={[string]::join(" ; ", $_.WorkerGroupNames)}}
 
-for ($i=0;$i -lt $datos.length;$i++) {
-
-   if ($datos[$i].servers -gt 0) {
-      $text=$datos[$i].servers.split("{;}")
-      $text=$text|sort-object
-      $cuenta=$text.count
-      $prueba=$text -join " ; "
-      $datos[$i].servers=$prueba
-   }
-}
 
 $datos|Export-Csv $file
 get-content $file |select -Skip 1 |set-content "$filetemp"
@@ -123,11 +154,21 @@ $servers=get-xaserver|sort-object Servername
     {
     $server=$servers[$n].Servername
     [void] $Servers_list.Items.Add("$server")
-	[void] $Servers_pub_new_app.Items.Add("$server")
+	
 	$n=$n+1
     }
+IF ($farm.serverversion.major -ge 6) {
+$workgroups=get-XAWorkerGroup|sort-object WorkerGroupName
 
-
+$n=0
+    foreach($test in $workgroups)
+    {
+    $workgroup=$workgroups[$n].WorkerGroupName
+    [void] $WG_list.Items.Add("$workgroup")
+	
+	$n=$n+1
+    }
+}
 #----------------------------------------------
 #Generated Event Script Blocks
 #----------------------------------------------
@@ -144,10 +185,26 @@ $handler_button3_Click=
 
 }
 
-$exp_perm_file_OnClick= 
+$permission_app_Click= 
 {
-#TODO: Place custom script here
 
+    $n=0
+    $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName, Enabled 
+    $numero=$Applications.CheckedItems.count -1
+    $permiso = (0 .. $numero)
+    foreach ($objItem in $Applications.CheckedItems)
+	{
+	$app="$objItem"
+	$datos = $apps|where {$_.ApplicationName -eq $app}|select UsersandGroups, Enabled
+	$grupo = $datos.UsersandGroups
+	$enabled = $datos.Enabled
+    IF ($enabled -eq "True") {$state = "Enabled"}
+	else {$state = "Disabled"}
+	$permiso[$n] = "Application permissions " + $app + ": " + $state + "`r`n" + $grupo + "`r`n" + "`r`n"
+	$n = $n + 1
+	}
+
+    $Groups_app.Text = $permiso
 }
 
 $handler_checkedListBox1_SelectedIndexChanged= 
@@ -160,29 +217,6 @@ $handler_Cli_app_folder_Click=
 {
 #TODO: Place custom script here
 
-}
-
-$permission_app_Click= 
-{
-
-    $n=0
-    $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName, Habilitada 
-    $numero=$Applications.CheckedItems.count -1
-    $permiso = (0 .. $numero)
-    foreach ($objItem in $Applications.CheckedItems)
-	{
-	$app="$objItem"
-	$datos = $apps|where {$_.ApplicationName -eq $app}|select UsersandGroups, Habilitada
-	$grupo = $datos.UsersandGroups
-	$enabled = $datos.Habilitada
-    IF ($enabled -eq "True") {$state = "Enabled"}
-	else {$state = "Disabled"}
-	$permiso[$n] = "Application permissions " + $app + ": " + $state + "`r`n" + $grupo + "`r`n" + "`r`n"
-	$n = $n + 1
-	}
-
-    $Groups_app.Text = $permiso
-    
 }
 
 $exp_app_srv_OnClick=
@@ -208,14 +242,25 @@ $Uncheck_srv_OnClick=
         }
     
 }
-
+$chk_workgroup_OnClick=
+{
+        for ($i=0;$i -lt $WG_list.Items.count;$i++) {
+            $WG_list.SetItemchecked($i,$True)
+        }
+}
+$unchk_workgroup_OnClick=
+{
+        for ($i=0;$i -lt $WG_list.Items.count;$i++) {
+            $WG_list.SetItemchecked($i,$False)
+        }
+}
 $handler_textBox1_TextChanged= 
 {
 #TODO: Place custom script here
 
 }
 
-$Export_txt_OnClick= 
+$exp_perm_file_OnClick= 
 {
         if ($Groups_app.Text -ne $empty) {
 	set-content -path $scriptpath\app-groups.txt -value $Groups_app.Text
@@ -245,6 +290,31 @@ $Check_srv_OnClick=
     
 }
 
+$Add_Click= 
+{
+    $appscheck = $Applications.CheckedItems
+    $count=$appscheck.count
+    $applicationchecked=(1..$count)
+    IF ($Dom_group.Text -lt 0) {
+	$message = "Empty field" + "`r`n"
+	$wshell = New-Object -ComObject Wscript.Shell
+   	$wshell.Popup($message,0,"Write a group name",0x0)
+	} else {
+              $i=0
+	      foreach ( $objItem in $Applications.CheckedItems ) {
+	      $app="$objItem"
+	      $groups = $Dom_group.Text
+	      Add-XAApplicationAccount $app -accounts $groups -force
+	      $applicationchecked[$i]=$app
+              $i++
+	      }
+	   $applicationchecked=$applicationchecked|out-string
+	   $message = [string]"User/group addded " + $groups + " to applications " + "`r`n" + "$applicationchecked"
+	   $wshell = New-Object -ComObject Wscript.Shell
+           $wshell.Popup($message,0,"Done",0x0)
+    }
+  
+}
 
 $Remove_OnClick= 
 {
@@ -292,19 +362,28 @@ $handler_textBox4_TextChanged=
 
 $Publish_OnClick= 
 {
-
 	$apps=$Applications.CheckedItems
 	$capps=$apps.count -1
 	$servers=$Servers_list.CheckedItems
 	$cservers=$servers.count -1
 	$resapps=(0..$capps)
 	$resservers=(0..$cservers)
+	$farm=get-xafarm
+
+    IF ($farm.serverversion.major -ge 6) {
+	   $wgs=$WG_list.CheckedItems
+	   $cwgs=$wgs.count -1
+	   $reswg=(0..$cwgs)
+	}
+	
 	$j=0
 	foreach ( $objItem in $Applications.CheckedItems ) {
 	$i=0
+	$k=0
 	$app="$objItem"
 	$resapps[$j]=$app
 	$j++
+	IF ($Servers_list.CheckedItems -gt 0){
 	foreach ( $objServer in $Servers_list.CheckedItems ) {
            $server="$objServer"
 	       Add-XAApplicationServer -BrowserName $app -ServerNames $server
@@ -312,11 +391,28 @@ $Publish_OnClick=
            $i++
 	   }
 	}
+	IF ($farm.serverversion.major -ge 6) {
+	   IF ($WG_list.CheckedItems -gt 0){
+	   foreach ( $objwg in $WG_list.CheckedItems ) {
+           $wg="$objwg"
+	       Add-XAApplicationWorkerGroup -BrowserName $app -WorkerGroupNames $wg
+	       $reswg[$k]=$wg
+           $k++
+	   }
+	}
+	}
+	}
 	$resservers=$resservers|out-string
+	$reswg=$reswg|out-string
 	$resapps=$resapps|out-string
-	$message = [string]"Server/s " + "$resservers"+ " added to Application/s " + "$resapps" + "`r`n"
+	IF ($farm.serverversion.major -ge 6) {
+	   $message = [string]"Server/s: " + "$resservers" + "`r" + "Worker Groups: " + "$reswg" + " added to Application/s " + "$resapps" + "`r`n"
+	}
+	else {
+	   $message = [string]"Server/s " + "$resservers"+ " added to Application/s " + "$resapps" + "`r`n"
+	}
 	$wshell = New-Object -ComObject Wscript.Shell
-        $wshell.Popup($message,0,"Done",0x0)
+    $wshell.Popup($message,0,"Done",0x0)
 }
 
 $Unpublish_OnClick= 
@@ -327,28 +423,56 @@ $Unpublish_OnClick=
 	$cservers=$servers.count -1
 	$resapps=(0..$capps)
 	$resservers=(0..$cservers)
+	IF ($farm.serverversion.major -ge 6) {
+	   $wgs=$WG_list.CheckedItems
+	   $cwgs=$wgs.count -1
+	   $reswg=(0..$cwgs)
+	}
 	$j=0
 	$a = new-object -comobject wscript.shell
+	IF ($farm.serverversion.major -ge 6) {
+	$Pregunta = $a.popup("Are you sure to remove permission in $app to the Servers and/or Worker Group Selected?", 0,"Delete Permission",4)
+	}
+	else {
 	$Pregunta = $a.popup("Are you sure to remove permission in $app to the Servers Selected?", 0,"Delete Permission",4)
+	}
 	If ($Pregunta -eq 6) {
 		foreach ( $objItem in $Applications.CheckedItems ) {
 		$i=0
+		$k=0
 		$app="$objItem"
 		$resapps[$j]=$app
 		$j++
-		foreach ( $objServer in $Servers_list.CheckedItems ) {
+		IF ($Servers_list.CheckedItems -gt 0){
+		   foreach ( $objServer in $Servers_list.CheckedItems ) {
              		$server="$objServer"
-	     		Remove-XAApplicationServer -BrowserName $app -ServerNames $server
-	    		$resservers[$i]=$server
+	     		    Remove-XAApplicationServer -BrowserName $app -ServerNames $server
+	    		    $resservers[$i]=$server
              		$i++
-	   	}
+		   }
 		}
+	   IF ($farm.serverversion.major -ge 6) {
+	       IF ($WG_list.CheckedItems -gt 0){
+	           foreach ( $objwg in $WG_list.CheckedItems ) {
+                   $wg="$objwg"
+	               Remove-XAApplicationWorkerGroup -BrowserName $app -WorkerGroupNames $wg
+	               $reswg[$k]=$wg
+                   $k++
+	           }
+	       }
+	   }
+	   }
 	}
 	$resservers=$resservers|out-string
 	$resapps=$resapps|out-string
-	$message = [string]"Server/s " + "$resservers"+ " removed to Application/s " + "$resapps" + "`r`n"
+    IF ($farm.serverversion.major -ge 6) {
+	   $message = [string]"Server/s: " + "$resservers" + "`r" + "Worker Groups: " + "$reswg" + " removed to Application/s " + "$resapps" + "`r`n"
+	}
+	else {
+	   $message = [string]"Server/s " + "$resservers"+ " removed to Application/s " + "$resapps" + "`r`n"
+	}
 	$wshell = New-Object -ComObject Wscript.Shell
-        $wshell.Popup($message,0,"Done",0x0)
+    $wshell.Popup($message,0,"Done",0x0)
 }
 
 $Publish_New_App_OnClick= 
@@ -358,40 +482,79 @@ $Publish_New_App_OnClick=
       $xafarm=Get-XAfarm
       If ($xafarm.serverversion.major -lt "6")
       {
-      New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Highcolor" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
+      New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -ClientFolder $Cli_App_Folder.text -ColorDepth "Highcolor" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
       }
       else {
-      	New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Colors16Bit" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True  
+      	New-XAApplication $Displayname.text -ApplicationType ServerInstalled -CommandLineExecutable $pkg_cmd.text -WorkingDirectory $Dir_App.text -ClientFolder $Cli_App_Folder.text -ColorDepth "Colors16Bit" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True  
 		}
 	}
    else {
+      $xafarm=Get-XAfarm
       If ($xafarm.serverversion.major -lt "6")
 	  {
-      New-XAApplication $Displayname.text -ApplicationType StreamedToClientOrStreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Highcolor" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
+      New-XAApplication $Displayname.text -ApplicationType StreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -ClientFolder $Cli_App_Folder.text -ColorDepth "Highcolor" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
 	  }
 	  else {
-	  New-XAApplication $Displayname.text -ApplicationType StreamedToClientOrStreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -server $Servers_pub_new_app.CheckedItems -ClientFolder $Cli_App_Folder.text -ColorDepth "Highcolor" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
+	  New-XAApplication $Displayname.text -ApplicationType StreamedToServer -ProfileLocation $pkg_cmd.text -ProfileProgramName $Dir_App.text -ClientFolder $Cli_App_Folder.text -ColorDepth "Colors16Bit" -AudioType None -AudioRequired $False -AddToClientStartMenu $False -WindowType "1024x768" -HideWhenDisabled $True
 	  }
    }
+   $message = "New aplication " + "$Displayname.text" + " published in the Farm"
+   $wshell = New-Object -ComObject Wscript.Shell
+   $wshell.Popup($message,0,"Done",0x0)
 }
+
 $Perm_server_OnClick=
 {
-
-    $n=0
-    $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
-    $numero=$Applications.CheckedItems.count -1
-    $right = (0 .. $numero)
-    foreach ($objItem in $Applications.CheckedItems)
-	{
-	$app="$objItem"
-	$servers = $apps|where {$_.ApplicationName -eq $app}|select Servers|sort-object Servers
-	$server = $servers.servers
-	$right[$n] = "Application " + $app + " published in: " + "`r`n" + $server + "`r`n" + "`r`n"
-	$n = $n + 1
+   IF ($farm.serverversion.major -ge 6) {
+       $n=0
+       $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
+       $numero=$Applications.CheckedItems.count -1
+       $right = (0 .. $numero)
+       foreach ($objItem in $Applications.CheckedItems)
+	   {
+	   $app="$objItem"
+	   $servers = $apps|where {$_.ApplicationName -eq $app}|select Servers|sort-object Servers
+	   $server = $servers.servers
+	   $workergroups = $apps|where {$_.ApplicationName -eq $app}|select Workergroups|sort-object Workergroups
+	   $Workergroup = $workergroups.Workergroups
+	   if ($servers.servers -gt "0"){
+	      if ($workergroups.Workergroups -gt "0"){
+	         $right[$n] = "Application " + $app + " published in: " + "`r`n" + "Servers: " + $server + "`r`n" + "Worker groups: " + $Workergroup + "`r`n" + "`r`n"
+	      }
+		  else {
+		  $right[$n] = "Application " + $app + " published in: " + "`r`n" + "Servers: " + $server + "`r`n" + "`r`n"
+	      }
+		}
+		 else {
+		    if ($workergroups.Workergroups -gt "0"){
+			$right[$n] = "Application " + $app + " published in: " + "`r`n" + "Worker groups: " + $Workergroup + "`r`n" + "`r`n"
+			}
+			else {
+			$right[$n] = "Application " + $app + " not published in any Server and any Work Group" + "`r`n" + "`r`n"
+			}
+		  }
+		  $n++
 	}
 
     $App_server.text = $right
     
+   }
+   else {
+       $n=0
+       $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
+       $numero=$Applications.CheckedItems.count -1
+       $right = (0 .. $numero)
+       foreach ($objItem in $Applications.CheckedItems)
+	   {
+	   $app="$objItem"
+	   $servers = $apps|where {$_.ApplicationName -eq $app}|select Servers|sort-object Servers
+	   $server = $servers.servers
+	   $right[$n] = "Application " + $app + " published in: " + "`r`n" + $server + "`r`n" + "`r`n"
+	   $n++
+	}
+
+    $App_server.text = $right
+    }
 }
 
 
@@ -401,7 +564,7 @@ $Refresh_OnClick=
     $nombrefile="apps.csv"
     $file = [string]"$scriptPath\$nombrefile"
     $filetemp = [string]"$scriptPath\app-listtemp.csv"
-    $datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}, @{n="Habilitada";e={[string]::join(" ; ", $_.Enabled)}}
+    $datos=Get-XAApplicationReport * | select @{n="ApplicationName";e={[string]::join(";", $_.Browsername)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.Accounts)}}, @{n="Servers";e={[string]::join(";", $_.ServerNames)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, @{n="Workergroups";e={[string]::join(" ; ", $_.WorkerGroupNames)}}
 
    for ($i=0;$i -lt $datos.length;$i++) {
 
@@ -442,12 +605,23 @@ $Refresh_OnClick=
     {
     $server=$servers[$n].Servername
     [void] $Servers_list.Items.Add("$server")
-	[void] $Servers_pub_new_app.Items.Add("$server")
     $n=$n+1
     }
-
+IF ($farm.serverversion.major -ge 6) {
+	$WG_list.Items.clear()
+	
+	$workgroups=get-XAWorkerGroup|sort-object WorkerGroupName
+	
+    $n=0
+    foreach($test in $workgroups)
+    {
+    $workgroup=$workgroups[$n].WorkerGroupName
+    [void] $WG_list.Items.Add("$workgroup")
+	
+	$n=$n+1
+    }
 }
-
+}
 
 $handler_TabPage_Click= 
 {
@@ -469,7 +643,7 @@ $WorkingDir.Text = "Application to launch from the Citrix streaming application 
 $but_Search_OnClick=
 {
 If ($txt_search.text -gt $null){
-   If ($Comb_search_by.text -eq "Users_or_groups"){	   
+   If ($Comb_search_by.text -eq "User or group"){	   
 	   $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
        $grpOrigen = $txt_search.text
        $permission = $apps_csv | where{$_.UsersandGroups -like "*$grpOrigen*"} | select ApplicationName
@@ -493,13 +667,27 @@ If ($Comb_search_by.text -eq "Server"){
        $result = $result -replace ("                                                   ","")
        $app_list_search.text = "Published applications for Server " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" +"Application List: " + $result
 }
+IF ($farm.serverversion.major -ge 6) {
+   If ($Comb_search_by.text -eq "Worker Group"){	   
+	   $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
+       $grpOrigen = $txt_search.text
+       $permission = $apps_csv | where{$_.Workergroups -like "*$grpOrigen*"} | select ApplicationName
+       $count = $permission.count
+       $result = $permission|out-string
+       $result = $result -replace ("ApplicationName","")
+       $result = $result -replace ("---------------             ","")
+       $result = $result -replace ("                                                                ","")        
+       $result = $result -replace ("                                                   ","")
+       $app_list_search.text = "Published applications for Worker Group " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" +"Application List: " + $result
+}
+}
 }
 }
 
 $chk_Search_OnClick=
 {
 If ($txt_search.text -gt $null){
-   If ($Comb_search_by.text -eq "Users_or_groups"){	   
+   If ($Comb_search_by.text -eq "User or group"){	   
 	   $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
        $grpOrigen = $txt_search.text
        $permission = $apps_csv | where{$_.UsersandGroups -like "*$grpOrigen*"} | select ApplicationName
@@ -528,7 +716,7 @@ If ($txt_search.text -gt $null){
             $Applications.SetItemchecked($objitem,$True)
           }
    }
-   else {
+   If ($Comb_search_by.text -eq "Server"){
        $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
        $grpOrigen = $txt_search.text
        $permission = $apps_csv | where{$_.Servers -like "*$grpOrigen*"} | select ApplicationName
@@ -542,23 +730,154 @@ If ($txt_search.text -gt $null){
 	   
 	   foreach ($objitem in $Applications.items) {
 	      foreach ($objitem2 in $permission) {
-			$var1=$objitem|out-string
-			$var2=$objitem2.applicationname|out-string
-		    IF ($var1 -eq $var2) {
-
-		     $resapps[$x]=$i
-             #$Applications.SetItemchecked($i,$True)
-			 $x++
+			  $var1=$objitem|out-string
+			  $var2=$objitem2.applicationname|out-string
+		      IF ($var1 -eq $var2) {
+                 $resapps[$x]=$i
+                 $x++
+		        }
 		    }
-		   }
-	   $i++
-	   }
+	     $i++
+	    }
 	   foreach ($objitem in $resapps){
             $Applications.SetItemchecked($objitem,$True)
-          }
-   }
+        }
+    }
+	If ($Comb_search_by.text -eq "Worker Group"){
+	$apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
+       $grpOrigen = $txt_search.text
+       $permission = $apps_csv | where{$_.WorkerGroups -like "*$grpOrigen*"} | select ApplicationName
+	   for ($i=0;$i -lt $Applications.Items.count;$i++) {
+          $Applications.SetItemchecked($i,$False)
+       }
+       $i=0
+	   $count=$permission.count-1
+	   $resapps=(0..$count)
+	   $x=0
+	   
+	   foreach ($objitem in $Applications.items) {
+	      foreach ($objitem2 in $permission) {
+			  $var1=$objitem|out-string
+			  $var2=$objitem2.applicationname|out-string
+		      IF ($var1 -eq $var2) {
+                 $resapps[$x]=$i
+                 $x++
+		        }
+		    }
+	     $i++
+	    }
+	   foreach ($objitem in $resapps){
+            $Applications.SetItemchecked($objitem,$True)
+        }
 }
 }
+}
+
+$add_srv_WG_OnClick = 
+{
+    $j=0
+	$servers = $Servers_list.CheckedItems
+	$wgs = $WG_list.CheckedItems
+	$cservers = $servers.count -1
+	$cwgs = $wgs.count -1
+	$resservers = (0..$cservers)
+	$reswgs = (0..$cwgs)
+	foreach ( $objItem in $Servers_list.CheckedItems ) {
+	   $i=0
+	   $server="$objItem"
+	   $resservers[$j]=$server
+	   $j++
+	   IF ($WG_list.CheckedItems -gt 0){
+	       IF ($Servers_list.CheckedItems -gt 0){
+	          foreach ( $objWG in $WG_list.CheckedItems ) {
+                  $WG="$objWG"
+	              Add-XAWorkerGroupServer $WG -ServerNames $server
+	              $reswgs[$i]=$wg
+                  $i++
+	            }
+	        }   
+	    }
+	}
+	$message = [string]"Server/s " + "$resservers"+ " added to Worker groups " + "$reswgs" + "`r`n"
+	$wshell = New-Object -ComObject Wscript.Shell
+    $wshell.Popup($message,0,"Done",0x0)
+}
+
+$Remove_Srv_WG_OnClick = 
+{
+    $j=0
+	$servers = $Servers_list.CheckedItems
+	$wgs = $WG_list.CheckedItems
+	$cservers = $servers.count -1
+	$cwgs = $wgs.count -1
+	$resservers = (0..$cservers)
+	$reswgs = (0..$cwgs)
+	foreach ( $objItem in $Servers_list.CheckedItems ) {
+	   $i=0
+	   $server="$objItem"
+	   $resservers[$j]=$server
+	   $j++
+	   IF ($WG_list.CheckedItems -gt 0){
+	       IF ($Servers_list.CheckedItems -gt 0){
+	          foreach ( $objWG in $WG_list.CheckedItems ) {
+                  $WG="$objWG"
+	              Remove-XAWorkerGroupServer $WG -ServerNames $server
+	              $reswgs[$i]=$wg
+                  $i++
+	            }
+	        }   
+	    }
+	}
+	$message = [string]"Server/s " + "$resservers"+ " removed to Worker groups " + "$reswgs" + "`r`n"
+	$wshell = New-Object -ComObject Wscript.Shell
+    $wshell.Popup($message,0,"Done",0x0)
+}
+
+$wg_members_OnClick =
+{
+
+    $n=0
+    $wgs=Get-XAWorkerGroup|select WorkerGroupName, @{n="Servers";e= {[string]::join(";", $_.ServerNames)}}
+    $numero=$wg_list.CheckedItems.count -1
+    $perms = (0 .. $numero)
+    foreach ($objItem in $wg_list.CheckedItems)
+	{
+	   $wg="$objItem"
+	   $dates = $wgs|where {$_.WorkerGroupName -eq $wg}
+	   $server = $dates.Servers|out-string
+	   $perms[$n] = "Worker group members " + $wg + ": " + "`r`n" + $server + "`r`n" + "`r`n"
+	   $n++
+	}
+	$app_Server.text = $perms
+}
+
+$Enable_app_OnClick =
+{
+    $appscheck = $Applications.CheckedItems
+    $count=$appscheck.count
+    $applicationchecked=(1..$count)
+    $i=0
+    foreach ($objItem in $Applications.CheckedItems)
+	{
+        $app="$objItem"
+        $a = new-object -comobject wscript.shell
+	    $Pregunta = $a.popup("Are you sure to enable $app application?", 0,"Confirmation",4)
+	    If ($Pregunta -eq 6) {
+	       Enable-XAApplication $app
+	       $applicationchecked[$i]=$app
+           $i++
+	     }
+	}
+	   $i--
+	   $applicationchecked=$applicationchecked[0..$i]
+	   $applicationchecked=$applicationchecked|out-string
+	   $message = [string]"This applications has been enabled: " + "`r`n" + "$applicationchecked"
+	   $wshell = New-Object -ComObject Wscript.Shell
+       $wshell.Popup($message,0,"Done",0x0)
+}
+
+
+
 $OnLoadForm_StateCorrection=
 {#Correct the initial state of the form to prevent the .Net maximized form issue
 	$form1.WindowState = $InitialFormWindowState
@@ -577,17 +896,34 @@ $form1.DataBindings.DefaultDataSourceUpdateMode = 0
 $form1.Name = "form1"
 $form1.Text = "Citrix tool"
 
+$Enable_app.DataBindings.DefaultDataSourceUpdateMode = 0
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 14
+$System_Drawing_Point.Y = 578
+$Enable_app.Location = $System_Drawing_Point
+$Enable_app.Name = "Enable_app"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 56
+$System_Drawing_Size.Width = 75
+$Enable_app.Size = $System_Drawing_Size
+$Enable_app.TabIndex = 30
+$Enable_app.Text = "Enable application"
+$Enable_app.UseVisualStyleBackColor = $True
+$Enable_app.add_Click($Enable_app_OnClick)
+
+$form1.Controls.Add($Enable_app)
 
 $Refresh.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 148
-$System_Drawing_Point.Y = 570
+$System_Drawing_Point.X = 181
+$System_Drawing_Point.Y = 578
 $Refresh.Location = $System_Drawing_Point
 $Refresh.Name = "Refresh"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 56
-$System_Drawing_Size.Width = 162
+$System_Drawing_Size.Width = 131
 $Refresh.Size = $System_Drawing_Size
 $Refresh.TabIndex = 8
 $Refresh.Text = "Refresh (It takes)"
@@ -640,7 +976,7 @@ $exp_perm_file.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 391
-$System_Drawing_Point.Y = 535
+$System_Drawing_Point.Y = 543
 $exp_perm_file.Location = $System_Drawing_Point
 $exp_perm_file.Name = "exp_perm_file"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -685,24 +1021,6 @@ $Dom_group.TabIndex = 4
 $Users_tab.Controls.Add($Dom_group)
 
 
-$Export_txt.DataBindings.DefaultDataSourceUpdateMode = 0
-
-$System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 880
-$System_Drawing_Point.Y = 475
-$Export_txt.Location = $System_Drawing_Point
-$Export_txt.Name = "Export_txt"
-$System_Drawing_Size = New-Object System.Drawing.Size
-$System_Drawing_Size.Height = 56
-$System_Drawing_Size.Width = 75
-$Export_txt.Size = $System_Drawing_Size
-$Export_txt.TabIndex = 9
-$Export_txt.Text = "Export permissions to file"
-$Export_txt.UseVisualStyleBackColor = $True
-$Export_txt.add_Click($Export_txt_OnClick)
-
-$Users_tab.Controls.Add($Export_txt)
-
 $Groups_app.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
@@ -727,7 +1045,7 @@ $Permissions_app.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 310
-$System_Drawing_Point.Y = 535
+$System_Drawing_Point.Y = 543
 $Permissions_app.Location = $System_Drawing_Point
 $Permissions_app.Name = "Permissions_app"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -747,7 +1065,7 @@ $Remove.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
-$System_Drawing_Point.Y = 566
+$System_Drawing_Point.Y = 574
 $Remove.Location = $System_Drawing_Point
 $Remove.Name = "Remove"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -783,7 +1101,7 @@ $Add.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
-$System_Drawing_Point.Y = 533
+$System_Drawing_Point.Y = 545
 $Add.Location = $System_Drawing_Point
 $Add.Name = "Add"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -793,40 +1111,200 @@ $Add.Size = $System_Drawing_Size
 $Add.TabIndex = 6
 $Add.Text = "Add"
 $Add.UseVisualStyleBackColor = $False
-$Add.add_Click($handler_button3_Click)
+$Add.add_Click($Add_Click)
 
 $Users_tab.Controls.Add($Add)
 
 
-$tabPage2.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
-$tabPage2.DataBindings.DefaultDataSourceUpdateMode = 0
+$servers_wg.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
+$servers_wg.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 4
 $System_Drawing_Point.Y = 25
-$tabPage2.Location = $System_Drawing_Point
-$tabPage2.Name = "tabPage2"
+$servers_wg.Location = $System_Drawing_Point
+$servers_wg.Name = "tabPage2"
 $System_Windows_Forms_Padding = New-Object System.Windows.Forms.Padding
 $System_Windows_Forms_Padding.All = 3
 $System_Windows_Forms_Padding.Bottom = 3
 $System_Windows_Forms_Padding.Left = 3
 $System_Windows_Forms_Padding.Right = 3
 $System_Windows_Forms_Padding.Top = 3
-$tabPage2.Padding = $System_Windows_Forms_Padding
+$servers_wg.Padding = $System_Windows_Forms_Padding
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 613
 $System_Drawing_Size.Width = 472
-$tabPage2.Size = $System_Drawing_Size
-$tabPage2.TabIndex = 1
-$tabPage2.Text = "Servers"
+$servers_wg.Size = $System_Drawing_Size
+$servers_wg.TabIndex = 1
 
-$Permisos.Controls.Add($tabPage2)
+$farm=get-xafarm
+
+IF ($farm.serverversion.major -ge 6) {
+$servers_wg.Text = "Servers/Worker Groups"
+}
+else {
+$servers_wg.Text = "Servers"
+}
+$Permisos.Controls.Add($servers_wg)
+
+IF ($farm.serverversion.major -ge 6) {
+$wg_members.DataBindings.DefaultDataSourceUpdateMode = 0
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 150
+$System_Drawing_Point.Y = 497
+$wg_members.Location = $System_Drawing_Point
+$wg_members.Name = "wg_members"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 23
+$System_Drawing_Size.Width = 140
+$wg_members.Size = $System_Drawing_Size
+$wg_members.TabIndex = 29
+$wg_members.Text = "Worker groups servers"
+$wg_members.UseVisualStyleBackColor = $True
+$wg_members.add_Click($wg_members_OnClick)
+
+$servers_wg.Controls.Add($wg_members)
+
+$Remove_Srv_WG.DataBindings.DefaultDataSourceUpdateMode = 0
+$Remove_Srv_WG.Font = New-Object System.Drawing.Font("Webdings",11,0,3,1)
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 150
+$System_Drawing_Point.Y = 244
+$Remove_Srv_WG.Location = $System_Drawing_Point
+$Remove_Srv_WG.Name = "Remove_Srv_WG"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 57
+$System_Drawing_Size.Width = 23
+$Remove_Srv_WG.Size = $System_Drawing_Size
+$Remove_Srv_WG.TabIndex = 28
+$Remove_Srv_WG.Tag = ""
+$Remove_Srv_WG.Text = "5"
+
+$Remove_Srv_WG.UseVisualStyleBackColor = $True
+$Remove_Srv_WG.add_Click($Remove_Srv_WG_OnClick)
+
+$servers_wg.Controls.Add($Remove_Srv_WG)
+
+$add_srv_WG.DataBindings.DefaultDataSourceUpdateMode = 0
+$add_srv_WG.Font = New-Object System.Drawing.Font("Webdings",11,0,3,1)
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 179
+$System_Drawing_Point.Y = 244
+$add_srv_WG.Location = $System_Drawing_Point
+$add_srv_WG.Name = "add_srv_WG"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 57
+$System_Drawing_Size.Width = 23
+
+$add_srv_WG.Size = $System_Drawing_Size
+$add_srv_WG.TabIndex = 27
+$add_srv_WG.Tag = ""
+$add_srv_WG.Text = "6"
+$add_srv_WG.UseVisualStyleBackColor = $True
+$add_srv_WG.add_Click($add_srv_WG_OnClick)
+
+$servers_wg.Controls.Add($add_srv_WG)
+
+$chk_workgroup.DataBindings.DefaultDataSourceUpdateMode = 0
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 85
+$System_Drawing_Point.Y = 497
+$chk_workgroup.Location = $System_Drawing_Point
+$chk_workgroup.Name = "chk_workgroup"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 23
+$System_Drawing_Size.Width = 59
+$chk_workgroup.Size = $System_Drawing_Size
+$chk_workgroup.TabIndex = 24
+$chk_workgroup.Text = "Check"
+$chk_workgroup.UseVisualStyleBackColor = $False
+$chk_workgroup.add_Click($chk_workgroup_OnClick)
+
+$servers_wg.Controls.Add($chk_workgroup)
+
+$unchk_workgroup.DataBindings.DefaultDataSourceUpdateMode = 0
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 20
+$System_Drawing_Point.Y = 497
+$unchk_workgroup.Location = $System_Drawing_Point
+$unchk_workgroup.Name = "unchk_workgroup"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 23
+$System_Drawing_Size.Width = 59
+$unchk_workgroup.Size = $System_Drawing_Size
+$unchk_workgroup.TabIndex = 23
+$unchk_workgroup.Text = "Uncheck"
+$unchk_workgroup.UseVisualStyleBackColor = $False
+$unchk_workgroup.add_Click($unchk_workgroup_OnClick)
+
+$servers_wg.Controls.Add($unchk_workgroup)
+
+$lab_workergroup.DataBindings.DefaultDataSourceUpdateMode = 0
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 20
+$System_Drawing_Point.Y = 288
+$lab_workergroup.Location = $System_Drawing_Point
+$lab_workergroup.Name = "lab_workergroup"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 18
+$System_Drawing_Size.Width = 100
+$lab_workergroup.Size = $System_Drawing_Size
+$lab_workergroup.TabIndex = 22
+$lab_workergroup.Text = "Worker groups:"
+
+$servers_wg.Controls.Add($lab_workergroup)
+
+$WG_list.DataBindings.DefaultDataSourceUpdateMode = 0
+$WG_list.FormattingEnabled = $True
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 20
+$System_Drawing_Point.Y = 307
+$WG_list.Location = $System_Drawing_Point
+$WG_list.Name = "WG_list"
+$WG_list.ScrollAlwaysVisible = $True
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 184
+$System_Drawing_Size.Width = 188
+$WG_list.Size = $System_Drawing_Size
+$WG_list.TabIndex = 21
+
+$servers_wg.Controls.Add($WG_list)
+
+}
+$publishedinserver.DataBindings.DefaultDataSourceUpdateMode = 0
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 225
+$System_Drawing_Point.Y = 17
+$publishedinserver.Location = $System_Drawing_Point
+$publishedinserver.Name = "publishedinserver"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 19
+$System_Drawing_Size.Width = 300
+$publishedinserver.Size = $System_Drawing_Size
+$publishedinserver.TabIndex = 25
+IF ($farm.serverversion.major -ge 6) {
+
+$publishedinserver.Text = "Servers on Applications or WG:"
+}
+else {
+$publishedinserver.Text = "Servers on Applications:"
+}
+$servers_wg.Controls.Add($publishedinserver)
+
+
 $exp_app_srv.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 
 $exp_app_srv.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 391
-$System_Drawing_Point.Y = 535
+$System_Drawing_Point.Y = 543
 $exp_app_srv.Location = $System_Drawing_Point
 $exp_app_srv.Name = "exp_app_srv"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -838,7 +1316,7 @@ $exp_app_srv.Text = "Export App/Srv to txt"
 $exp_app_srv.UseVisualStyleBackColor = $False
 $exp_app_srv.add_Click($exp_app_srv_OnClick)
 
-$tabPage2.Controls.Add($exp_app_srv)
+$servers_wg.Controls.Add($exp_app_srv)
 
 $Perm_server.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 
@@ -846,7 +1324,7 @@ $Perm_server.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 310
-$System_Drawing_Point.Y = 535
+$System_Drawing_Point.Y = 543
 $Perm_server.Location = $System_Drawing_Point
 $Perm_server.Name = "Perm_server"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -858,11 +1336,11 @@ $Perm_server.Text = "Application/Server Report"
 $Perm_server.UseVisualStyleBackColor = $False
 $Perm_server.add_Click($Perm_server_OnClick)
 
-$tabPage2.Controls.Add($Perm_server)
+$servers_wg.Controls.Add($Perm_server)
 
 $App_server.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 214
+$System_Drawing_Point.X = 225
 $System_Drawing_Point.Y = 39
 $App_server.Location = $System_Drawing_Point
 $App_server.Multiline = $True
@@ -870,12 +1348,12 @@ $App_server.Name = "App_server"
 $App_server.ReadOnly = $True
 $App_server.ScrollBars = 2
 $System_Drawing_Size = New-Object System.Drawing.Size
-$System_Drawing_Size.Height = 409
-$System_Drawing_Size.Width = 252
+$System_Drawing_Size.Height = 455
+$System_Drawing_Size.Width = 241
 $App_server.Size = $System_Drawing_Size
 $App_server.TabIndex = 18
 
-$tabPage2.Controls.Add($App_server)
+$servers_wg.Controls.Add($App_server)
 
 $Servers_list.DataBindings.DefaultDataSourceUpdateMode = 0
 $Servers_list.FormattingEnabled = $True
@@ -884,33 +1362,39 @@ $System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 39
 $Servers_list.Location = $System_Drawing_Point
 $Servers_list.Name = "Servers_list"
+$Servers_list.ScrollAlwaysVisible = $True
 $System_Drawing_Size = New-Object System.Drawing.Size
-$System_Drawing_Size.Height = 409
+IF ($farm.serverversion.major -ge 6) {
+$System_Drawing_Size.Height = 199
+}
+else{
+$System_Drawing_Size.Height = 465
+}
 $System_Drawing_Size.Width = 188
 $Servers_list.Size = $System_Drawing_Size
 $Servers_list.TabIndex = 12
 
-$tabPage2.Controls.Add($Servers_list)
+$servers_wg.Controls.Add($Servers_list)
 
 $Check_srv.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 
 $Check_srv.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 111
-$System_Drawing_Point.Y = 468
+$System_Drawing_Point.X = 85
+$System_Drawing_Point.Y = 244
 $Check_srv.Location = $System_Drawing_Point
 $Check_srv.Name = "Check_srv"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 23
-$System_Drawing_Size.Width = 67
+$System_Drawing_Size.Width = 59
 $Check_srv.Size = $System_Drawing_Size
 $Check_srv.TabIndex = 14
 $Check_srv.Text = "Check"
 $Check_srv.UseVisualStyleBackColor = $False
 $Check_srv.add_Click($Check_srv_OnClick)
 
-$tabPage2.Controls.Add($Check_srv)
+$servers_wg.Controls.Add($Check_srv)
 
 $label3.DataBindings.DefaultDataSourceUpdateMode = 0
 
@@ -926,7 +1410,7 @@ $label3.Size = $System_Drawing_Size
 $label3.TabIndex = 17
 $label3.Text = "Servers:"
 
-$tabPage2.Controls.Add($label3)
+$servers_wg.Controls.Add($label3)
 
 $Uncheck_srv.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 
@@ -934,19 +1418,19 @@ $Uncheck_srv.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
-$System_Drawing_Point.Y = 468
+$System_Drawing_Point.Y = 244
 $Uncheck_srv.Location = $System_Drawing_Point
 $Uncheck_srv.Name = "Uncheck_srv"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 23
-$System_Drawing_Size.Width = 67
+$System_Drawing_Size.Width = 59
 $Uncheck_srv.Size = $System_Drawing_Size
 $Uncheck_srv.TabIndex = 13
 $Uncheck_srv.Text = "Uncheck"
 $Uncheck_srv.UseVisualStyleBackColor = $False
 $Uncheck_srv.add_Click($Uncheck_srv_OnClick)
 
-$tabPage2.Controls.Add($Uncheck_srv)
+$servers_wg.Controls.Add($Uncheck_srv)
 
 $Publish.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 
@@ -954,7 +1438,7 @@ $Publish.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
-$System_Drawing_Point.Y = 533
+$System_Drawing_Point.Y = 545
 $Publish.Location = $System_Drawing_Point
 $Publish.Name = "Publish"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -966,7 +1450,7 @@ $Publish.Text = "Publish"
 $Publish.UseVisualStyleBackColor = $False
 $Publish.add_Click($Publish_OnClick)
 
-$tabPage2.Controls.Add($Publish)
+$servers_wg.Controls.Add($Publish)
 
 $Unpublish.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 
@@ -974,7 +1458,7 @@ $Unpublish.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
-$System_Drawing_Point.Y = 566
+$System_Drawing_Point.Y = 574
 $Unpublish.Location = $System_Drawing_Point
 $Unpublish.Name = "Unpublish"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -986,7 +1470,7 @@ $Unpublish.Text = "Unpublish"
 $Unpublish.UseVisualStyleBackColor = $False
 $Unpublish.add_Click($Unpublish_OnClick)
 
-$tabPage2.Controls.Add($Unpublish)
+$servers_wg.Controls.Add($Unpublish)
 
 
 $PublishNew.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
@@ -1022,11 +1506,11 @@ $Streamed_App.Location = $System_Drawing_Point
 $Streamed_App.Name = "Streamed_App"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 24
-$System_Drawing_Size.Width = 104
+$System_Drawing_Size.Width = 150
 $Streamed_App.Size = $System_Drawing_Size
 $Streamed_App.TabIndex = 27
 $Streamed_App.TabStop = $True
-$Streamed_App.Text = "Streamed"
+$Streamed_App.Text = "Streamed to Server"
 $Streamed_App.UseVisualStyleBackColor = $True
 $Streamed_App.add_Click($Streamed_App_OnClick)
 
@@ -1036,13 +1520,13 @@ $PublishNew.Controls.Add($Streamed_App)
 $Local_App.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 15
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 111
 $Local_App.Location = $System_Drawing_Point
 $Local_App.Name = "Local_App"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 24
-$System_Drawing_Size.Width = 104
+$System_Drawing_Size.Width = 57
 $Local_App.Size = $System_Drawing_Size
 $Local_App.TabIndex = 26
 $Local_App.TabStop = $True
@@ -1054,7 +1538,7 @@ $PublishNew.Controls.Add($Local_App)
 
 $Dir_App.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 15
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 201
 $Dir_App.Location = $System_Drawing_Point
 $Dir_App.Name = "Dir_App"
@@ -1071,8 +1555,8 @@ $PublishNew.Controls.Add($Dir_App)
 $Publish_New_App.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 15
-$System_Drawing_Point.Y = 584
+$System_Drawing_Point.X = 20
+$System_Drawing_Point.Y = 295
 $Publish_New_App.Location = $System_Drawing_Point
 $Publish_New_App.Name = "Publish_App"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -1089,38 +1573,22 @@ $PublishNew.Controls.Add($Publish_New_App)
 $WorkingDir.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 16
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 183
 $WorkingDir.Location = $System_Drawing_Point
 $WorkingDir.Name = "WorkingDir"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 15
-$System_Drawing_Size.Width = 400
+$System_Drawing_Size.Width = 600
 $WorkingDir.Size = $System_Drawing_Size
 $WorkingDir.TabIndex = 4
 $WorkingDir.Text = "Working directory:"
 
 $PublishNew.Controls.Add($WorkingDir)
 
-$Serv_App_new.DataBindings.DefaultDataSourceUpdateMode = 0
-
-$System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 15
-$System_Drawing_Point.Y = 246
-$Serv_App_new.Location = $System_Drawing_Point
-$Serv_App_new.Name = "Serv_App_new"
-$System_Drawing_Size = New-Object System.Drawing.Size
-$System_Drawing_Size.Height = 14
-$System_Drawing_Size.Width = 100
-$Serv_App_new.Size = $System_Drawing_Size
-$Serv_App_new.TabIndex = 24
-$Serv_App_new.Text = "Servers:"
-
-$PublishNew.Controls.Add($Serv_App_new)
-
 $pkg_cmd.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 16
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 159
 $pkg_cmd.Location = $System_Drawing_Point
 $pkg_cmd.Name = "pkg_cmd"
@@ -1135,7 +1603,7 @@ $PublishNew.Controls.Add($pkg_cmd)
 $Command_Line_Lab.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 15
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 142
 $Command_Line_Lab.Location = $System_Drawing_Point
 $Command_Line_Lab.Name = "Command_Line_Lab"
@@ -1150,8 +1618,8 @@ $PublishNew.Controls.Add($Command_Line_Lab)
 
 $Cli_App_Folder.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 15
-$System_Drawing_Point.Y = 552
+$System_Drawing_Point.X = 20
+$System_Drawing_Point.Y = 260
 $Cli_App_Folder.Location = $System_Drawing_Point
 $Cli_App_Folder.Name = "Cli_App_Folder"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -1165,8 +1633,8 @@ $PublishNew.Controls.Add($Cli_App_Folder)
 $Cli_app_folder_lab.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 15
-$System_Drawing_Point.Y = 532
+$System_Drawing_Point.X = 20
+$System_Drawing_Point.Y = 240
 $Cli_app_folder_lab.Location = $System_Drawing_Point
 $Cli_app_folder_lab.Name = "Cli_app_folder_lab"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -1182,7 +1650,7 @@ $PublishNew.Controls.Add($Cli_app_folder_lab)
 $App_Description.BackColor = [System.Drawing.Color]::FromArgb(255,255,255,255)
 $App_Description.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 16
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 76
 $App_Description.Location = $System_Drawing_Point
 $App_Description.Name = "App_Description"
@@ -1197,7 +1665,7 @@ $PublishNew.Controls.Add($App_Description)
 $AppDescription_lab.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 16
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 58
 $AppDescription_lab.Location = $System_Drawing_Point
 $AppDescription_lab.Name = "AppDescription"
@@ -1211,26 +1679,10 @@ $AppDescription_lab.add_Click($handler_label6_Click)
 
 $PublishNew.Controls.Add($AppDescription_lab)
 
-$Servers_pub_new_app.DataBindings.DefaultDataSourceUpdateMode = 0
-$Servers_pub_new_app.FormattingEnabled = $True
-$System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 15
-$System_Drawing_Point.Y = 263
-$Servers_pub_new_app.Location = $System_Drawing_Point
-$Servers_pub_new_app.Name = "Servers_pub_new_app"
-$Servers_pub_new_app.ScrollAlwaysVisible = $True
-$System_Drawing_Size = New-Object System.Drawing.Size
-$System_Drawing_Size.Height = 251
-$System_Drawing_Size.Width = 436
-$Servers_pub_new_app.Size = $System_Drawing_Size
-$Servers_pub_new_app.TabIndex = 5
-
-$PublishNew.Controls.Add($Servers_pub_new_app)
-
 $DisplayName_lab.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 16
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 17
 $DisplayName_lab.Location = $System_Drawing_Point
 $DisplayName_lab.Name = "DisplayName_lab"
@@ -1245,7 +1697,7 @@ $PublishNew.Controls.Add($DisplayName_lab)
 
 $DisplayName.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 16
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 35
 $DisplayName.Location = $System_Drawing_Point
 $DisplayName.Name = "DisplayName"
@@ -1281,7 +1733,7 @@ $Searchtab.UseVisualStyleBackColor = $True
 $Permisos.Controls.Add($Searchtab)
 $app_list_search.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 59
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 160
 $app_list_search.Location = $System_Drawing_Point
 $app_list_search.Multiline = $True
@@ -1299,7 +1751,7 @@ $Searchtab.Controls.Add($app_list_search)
 $lab_app_list.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 59
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 140
 $lab_app_list.Location = $System_Drawing_Point
 $lab_app_list.Name = "tab_app_list"
@@ -1316,7 +1768,7 @@ $Searchtab.Controls.Add($lab_app_list)
 $chk_search.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 59
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 566
 $chk_search.Location = $System_Drawing_Point
 $chk_search.Name = "chk_search"
@@ -1335,7 +1787,7 @@ $Searchtab.Controls.Add($chk_search)
 $but_Search.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 349
+$System_Drawing_Point.X = 310
 $System_Drawing_Point.Y = 94
 $but_Search.Location = $System_Drawing_Point
 $but_Search.Name = "but_Search"
@@ -1352,8 +1804,8 @@ $Searchtab.Controls.Add($but_Search)
 
 $txt_search.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 59
-$System_Drawing_Point.Y = 39
+$System_Drawing_Point.X = 20
+$System_Drawing_Point.Y = 35
 $txt_search.Location = $System_Drawing_Point
 $txt_search.Name = "txt_search"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -1367,8 +1819,8 @@ $Searchtab.Controls.Add($txt_search)
 $lab_srch_field.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 59
-$System_Drawing_Point.Y = 19
+$System_Drawing_Point.X = 20
+$System_Drawing_Point.Y = 17
 $lab_srch_field.Location = $System_Drawing_Point
 $lab_srch_field.Name = "lab_srch_field"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -1384,9 +1836,12 @@ $Searchtab.Controls.Add($lab_srch_field)
 $Comb_search_by.DataBindings.DefaultDataSourceUpdateMode = 0
 $Comb_search_by.FormattingEnabled = $True
 $Comb_search_by.Items.Add("Server")|Out-Null
-$Comb_search_by.Items.Add("Users_or_groups")|Out-Null
+IF ($farm.serverversion.major -ge 6) {
+$Comb_search_by.Items.Add("Worker Group")|Out-Null
+}
+$Comb_search_by.Items.Add("User or group")|Out-Null
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 59
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 96
 $Comb_search_by.Location = $System_Drawing_Point
 $Comb_search_by.Name = "Comb_search_by"
@@ -1401,7 +1856,7 @@ $Searchtab.Controls.Add($Comb_search_by)
 $lab_search_by.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
-$System_Drawing_Point.X = 59
+$System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 74
 $lab_search_by.Location = $System_Drawing_Point
 $lab_search_by.Name = "lab_search_by"
@@ -1432,23 +1887,23 @@ $label2.add_Click($handler_label2_Click)
 $form1.Controls.Add($label2)
 
 
-$Unchech_app.DataBindings.DefaultDataSourceUpdateMode = 0
+$Uncheck_app.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 10
 $System_Drawing_Point.Y = 505
-$Unchech_app.Location = $System_Drawing_Point
-$Unchech_app.Name = "Unchech_app"
+$Uncheck_app.Location = $System_Drawing_Point
+$Uncheck_app.Name = "Unchech_app"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 23
 $System_Drawing_Size.Width = 79
-$Unchech_app.Size = $System_Drawing_Size
-$Unchech_app.TabIndex = 2
-$Unchech_app.Text = "Uncheck"
-$Unchech_app.UseVisualStyleBackColor = $True
-$Unchech_app.add_Click($uncheck_app_Click)
+$Uncheck_app.Size = $System_Drawing_Size
+$Uncheck_app.TabIndex = 2
+$Uncheck_app.Text = "Uncheck"
+$Uncheck_app.UseVisualStyleBackColor = $True
+$Uncheck_app.add_Click($uncheck_app_Click)
 
-$form1.Controls.Add($Unchech_app)
+$form1.Controls.Add($Uncheck_app)
 
 $Applications.DataBindings.DefaultDataSourceUpdateMode = 0
 $Applications.FormattingEnabled = $True
