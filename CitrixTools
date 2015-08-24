@@ -27,9 +27,9 @@ $servers_wg = New-Object System.Windows.Forms.TabPage
 $Searchtab = New-Object System.Windows.Forms.TabPage
 
 #labels
-$label4 = New-Object System.Windows.Forms.Label
-$label1 = New-Object System.Windows.Forms.Label
-$label3 = New-Object System.Windows.Forms.Label
+$lab_app_users = New-Object System.Windows.Forms.Label
+$lab_usr_dom = New-Object System.Windows.Forms.Label
+$lab_srvs = New-Object System.Windows.Forms.Label
 $WorkingDir = New-Object System.Windows.Forms.Label
 $Command_Line_Lab = New-Object System.Windows.Forms.Label
 $Cli_app_folder_lab = New-Object System.Windows.Forms.Label
@@ -304,9 +304,13 @@ $Add_Click=
 	      foreach ( $objItem in $Applications.CheckedItems ) {
 	      $app="$objItem"
 	      $groups = $Dom_group.Text
-	      Add-XAApplicationAccount $app -accounts $groups -force
+		  $groups=$groups -replace (" ; ",";")
+	      $groups=$groups -replace (" ;",";")
+		  $groups=$groups -replace ("; ",";")
+		  $groups=$groups.Split(';')
+		  Add-XAApplicationAccount $app -accounts $groups -force
 	      $applicationchecked[$i]=$app
-              $i++
+          $i++
 	      }
 	   $applicationchecked=$applicationchecked|out-string
 	   $message = [string]"User/group addded " + $groups + " to applications " + "`r`n" + "$applicationchecked"
@@ -329,14 +333,18 @@ $Remove_OnClick=
         $i=0
         foreach ($objItem in $Applications.CheckedItems)
 	    {
-             $app="$objItem"
-             $groups = $Dom_group.Text
-	     $a = new-object -comobject wscript.shell
-	     $Pregunta = $a.popup("Are you sure to remove permission in $app to the user/group?", 0,"Delete Files",4)
-	     If ($Pregunta -eq 6) {
-	      Remove-XAApplicationAccount $app -accounts $groups
-	      $applicationchecked[$i]=$app
-              $i++
+           $app="$objItem"
+           $groups = $Dom_group.Text
+	       $a = new-object -comobject wscript.shell
+	       $Pregunta = $a.popup("Are you sure to remove permission in $app to the user/group?", 0,"Delete Files",4)
+	       If ($Pregunta -eq 6) {
+		       $groups=$groups -replace (" ; ",";")
+	           $groups=$groups -replace (" ;",";")
+		       $groups=$groups -replace ("; ",";")
+		       $groups=$groups.Split(';')
+	           Remove-XAApplicationAccount $app -accounts $groups
+	           $applicationchecked[$i]=$app
+               $i++
 	     }
 	}
 	   if ($i -eq 0){
@@ -990,21 +998,21 @@ $exp_perm_file.add_Click($exp_perm_file_OnClick)
 
 $Users_tab.Controls.Add($exp_perm_file)
 
-$label4.DataBindings.DefaultDataSourceUpdateMode = 0
+$lab_app_users.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 17
-$label4.Location = $System_Drawing_Point
-$label4.Name = "label4"
+$lab_app_users.Location = $System_Drawing_Point
+$lab_app_users.Name = "label4"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 20
 $System_Drawing_Size.Width = 100
-$label4.Size = $System_Drawing_Size
-$label4.TabIndex = 18
-$label4.Text = "Application / Users"
+$lab_app_users.Size = $System_Drawing_Size
+$lab_app_users.TabIndex = 18
+$lab_app_users.Text = "Application / Users"
 
-$Users_tab.Controls.Add($label4)
+$Users_tab.Controls.Add($lab_app_users)
 
 $Dom_group.DataBindings.DefaultDataSourceUpdateMode = 0
 $System_Drawing_Point = New-Object System.Drawing.Point
@@ -1079,21 +1087,21 @@ $Remove.add_Click($Remove_OnClick)
 
 $Users_tab.Controls.Add($Remove)
 
-$label1.DataBindings.DefaultDataSourceUpdateMode = 0
+$lab_usr_dom.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 473
-$label1.Location = $System_Drawing_Point
-$label1.Name = "label1"
+$lab_usr_dom.Location = $System_Drawing_Point
+$lab_usr_dom.Name = "label1"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 18
-$System_Drawing_Size.Width = 300
-$label1.Size = $System_Drawing_Size
-$label1.TabIndex = 5
-$label1.Text = "Domain group or user (use with format Domain\login)"
+$System_Drawing_Size.Width = 500
+$lab_usr_dom.Size = $System_Drawing_Size
+$lab_usr_dom.TabIndex = 5
+$lab_usr_dom.Text = "Domain groups or users (use with format Domain\login and ';' separator for multiple values)"
 
-$Users_tab.Controls.Add($label1)
+$Users_tab.Controls.Add($lab_usr_dom)
 
 $Add.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 
@@ -1396,21 +1404,21 @@ $Check_srv.add_Click($Check_srv_OnClick)
 
 $servers_wg.Controls.Add($Check_srv)
 
-$label3.DataBindings.DefaultDataSourceUpdateMode = 0
+$lab_srvs.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
 $System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 17
-$label3.Location = $System_Drawing_Point
-$label3.Name = "label3"
+$lab_srvs.Location = $System_Drawing_Point
+$lab_srvs.Name = "label3"
 $System_Drawing_Size = New-Object System.Drawing.Size
 $System_Drawing_Size.Height = 19
 $System_Drawing_Size.Width = 100
-$label3.Size = $System_Drawing_Size
-$label3.TabIndex = 17
-$label3.Text = "Servers:"
+$lab_srvs.Size = $System_Drawing_Size
+$lab_srvs.TabIndex = 17
+$lab_srvs.Text = "Servers:"
 
-$servers_wg.Controls.Add($label3)
+$servers_wg.Controls.Add($lab_srvs)
 
 $Uncheck_srv.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 
