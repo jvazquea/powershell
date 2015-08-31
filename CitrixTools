@@ -2,6 +2,26 @@
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 asnp Citrix.*
 
+Add-Type -Name Window -Namespace Console -MemberDefinition '
+[DllImport("Kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+ 
+[DllImport("user32.dll")]
+public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+'
+
+function Show-Console {
+   $consolePtr = [Console.Window]::GetConsoleWindow()
+  #5 show
+ [Console.Window]::ShowWindow($consolePtr, 5)
+}
+
+function Hide-Console {
+    $consolePtr = [Console.Window]::GetConsoleWindow()
+  #0 hide
+ [Console.Window]::ShowWindow($consolePtr, 0)
+}
+
 $x = @()
 function GenerateForm {
 ########################################################################
@@ -71,6 +91,7 @@ $Check_app = New-Object System.Windows.Forms.Button
 $Uncheck_app = New-Object System.Windows.Forms.Button
 $chk_search = New-Object System.Windows.Forms.Button
 $but_Search = New-Object System.Windows.Forms.Button
+$but_clear_field = New-Object System.Windows.Forms.Button
 
 $Enable_app = New-Object System.Windows.Forms.Button
 
@@ -92,6 +113,8 @@ $WG_list = New-Object System.Windows.Forms.CheckedListBox
 #radiobuttons
 $Streamed_App = New-Object System.Windows.Forms.RadioButton
 $Local_App = New-Object System.Windows.Forms.RadioButton
+$disa_console = New-Object System.Windows.Forms.RadioButton
+$ena_console = New-Object System.Windows.Forms.RadioButton
 
 #combobox
 $Comb_search_by = New-Object System.Windows.Forms.ComboBox
@@ -119,6 +142,10 @@ $balloons.SetToolTip($Uncheck_app, "Uncheck all applications")
 $balloons.SetToolTip($chk_search, "Check applications from search")
 $balloons.SetToolTip($but_Search, "Search Applications from Server or Domain User/group")
 $balloons.SetToolTip($Enable_app, "Enable checked applications")
+$balloons.SetToolTip($but_clear_field, "Clear User/Groups field")
+$balloons.SetToolTip($disa_console, "Hide Powershell Console")
+$balloons.SetToolTip($ena_console, "Show Powershell Console")
+
 
 IF ($farm.serverversion.major -ge 6) {
 $balloons.SetToolTip($wg_members, "Show Worker groups server members")
@@ -891,8 +918,21 @@ $OnLoadForm_StateCorrection=
 	$form1.WindowState = $InitialFormWindowState
 }
 
+$disa_console_OnClick=
+ {
+ Hide-Console
+ }
 
+$ena_console_OnClick=
+ {
+ Show-Console
+ }
 
+$but_clear_field_OnClick=
+{
+$Dom_group.Text = $null
+}
+ 
 #----------------------------------------------
 #region Generated Form Code
 $form1.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
@@ -903,6 +943,43 @@ $form1.ClientSize = $System_Drawing_Size
 $form1.DataBindings.DefaultDataSourceUpdateMode = 0
 $form1.Name = "form1"
 $form1.Text = "Citrix tool"
+
+$disa_console.DataBindings.DefaultDataSourceUpdateMode = 0
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 211
+$System_Drawing_Point.Y = 527
+$disa_console.Location = $System_Drawing_Point
+$disa_console.Name = "disa_console"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 24
+$System_Drawing_Size.Width = 117
+$disa_console.Size = $System_Drawing_Size
+$disa_console.TabIndex = 32
+$disa_console.TabStop = $True
+$disa_console.Text = "Disable Console"
+$disa_console.Checked = $true
+$disa_console.UseVisualStyleBackColor = $True
+$disa_console.add_Click($disa_console_OnClick)
+$form1.Controls.Add($disa_console)
+
+$ena_console.DataBindings.DefaultDataSourceUpdateMode = 0
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 211
+$System_Drawing_Point.Y = 505
+$ena_console.Location = $System_Drawing_Point
+$ena_console.Name = "ena_console"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 24
+$System_Drawing_Size.Width = 117
+$ena_console.Size = $System_Drawing_Size
+$ena_console.TabIndex = 31
+$ena_console.TabStop = $True
+$ena_console.Text = "Enable Console"
+$ena_console.UseVisualStyleBackColor = $True
+$ena_console.add_Click($ena_console_OnClick)
+$form1.Controls.Add($ena_console)
 
 $Enable_app.DataBindings.DefaultDataSourceUpdateMode = 0
 
@@ -978,6 +1055,26 @@ $Users_tab.Text = "Users"
 $Users_tab.add_Click($handler_TabPage:_Click)
 
 $Permisos.Controls.Add($Users_tab)
+
+$but_clear_field.DataBindings.DefaultDataSourceUpdateMode = 0
+
+$System_Drawing_Point = New-Object System.Drawing.Point
+$System_Drawing_Point.X = 166
+$System_Drawing_Point.Y = 520
+$but_clear_field.Location = $System_Drawing_Point
+$but_clear_field.Name = "but_clear_field"
+$System_Drawing_Size = New-Object System.Drawing.Size
+$System_Drawing_Size.Height = 23
+$System_Drawing_Size.Width = 79
+$but_clear_field.Size = $System_Drawing_Size
+$but_clear_field.TabIndex = 31
+$but_clear_field.Text = "Clear Field"
+$but_clear_field.UseVisualStyleBackColor = $True
+$but_clear_field.add_Click($but_clear_field_OnClick)
+
+$Users_tab.Controls.Add($but_clear_field)
+
+
 $exp_perm_file.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 
 $exp_perm_file.DataBindings.DefaultDataSourceUpdateMode = 0
@@ -1389,8 +1486,14 @@ $Check_srv.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 $Check_srv.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
+IF ($farm.serverversion.major -ge 6) {
 $System_Drawing_Point.X = 85
 $System_Drawing_Point.Y = 244
+}
+else{
+$System_Drawing_Point.X = 85
+$System_Drawing_Point.Y = 497
+}
 $Check_srv.Location = $System_Drawing_Point
 $Check_srv.Name = "Check_srv"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -1425,8 +1528,14 @@ $Uncheck_srv.BackColor = [System.Drawing.Color]::FromArgb(255,212,208,200)
 $Uncheck_srv.DataBindings.DefaultDataSourceUpdateMode = 0
 
 $System_Drawing_Point = New-Object System.Drawing.Point
+IF ($farm.serverversion.major -ge 6) {
 $System_Drawing_Point.X = 20
 $System_Drawing_Point.Y = 244
+}
+else{
+$System_Drawing_Point.X = 20
+$System_Drawing_Point.Y = 497
+}
 $Uncheck_srv.Location = $System_Drawing_Point
 $Uncheck_srv.Name = "Uncheck_srv"
 $System_Drawing_Size = New-Object System.Drawing.Size
@@ -1968,4 +2077,5 @@ $form1.ShowDialog()| Out-Null
 } #End Function
 
 #Call the Function
+Hide-Console
 GenerateForm
