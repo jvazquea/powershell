@@ -958,7 +958,11 @@ $disa_console.Size = $System_Drawing_Size
 $disa_console.TabIndex = 32
 $disa_console.TabStop = $True
 $disa_console.Text = "Disable Console"
+$file="$scriptPath\apps.csv"
+If((Test-Path -path $file)) {
 $disa_console.Checked = $true
+Hide-Console
+}
 $disa_console.UseVisualStyleBackColor = $True
 $disa_console.add_Click($disa_console_OnClick)
 $form1.Controls.Add($disa_console)
@@ -2077,8 +2081,5 @@ $form1.ShowDialog()| Out-Null
 } #End Function
 
 #Call the Function
-$file="$scriptPath\apps.csv"
-If((Test-Path -path $file)) {
-Hide-Console
-}
+
 GenerateForm
