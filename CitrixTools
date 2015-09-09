@@ -2077,5 +2077,8 @@ $form1.ShowDialog()| Out-Null
 } #End Function
 
 #Call the Function
+$file="$scriptPath\apps.csv"
+If((Test-Path -path $file)) {
 Hide-Console
+}
 GenerateForm
