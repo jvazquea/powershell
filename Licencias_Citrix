@@ -1,0 +1,224 @@
+
+#Carpeta de ejecución
+$currentDir = Split-Path $MyInvocation.MyCommand.Path
+
+#Variable para mostrar el nombre del creador del script
+$TeamName="Javier Vazquez"
+#Variable para mostrar al email del creador del script
+$TeamEmail=""
+
+#Definir servidor de licencias.
+$LicenseServer="srbxdmad01.serban.es"
+
+#==============================================================================================
+# PLEASE DO NOT CHANGE ANYTHING BELOW IF YOU ARE NOT SURE :-)
+#==============================================================================================
+
+#Cabeceras HTML
+$headerNames  = "En_uso", "Instaladas"
+$headerWidths =   "3",           "3"
+
+#===========================================================================================
+#                        Define the Global variable and Check for the Citrix Snapin
+#===========================================================================================
+
+#Archivo HTML resultante del script
+$resultsHTM = Join-Path $currentDir ("Citrix_LicenseServer_Results.htm")
+$resultsCSV = Join-Path $currentDir ("Citrix_LicenseServer_Results.csv")
+
+#===========================================================================================
+#                        HTML Report Formating Part
+#===========================================================================================
+
+Function writeHtmlHeader 
+{ 
+	param($title, $fileName)
+	
+    $date = ( Get-Date -format g)
+    $head = @"
+    <html>
+    <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>
+    <title>$title</title>
+    <STYLE TYPE="text/css">
+    <!--
+    td {
+        font-family: Lao UI;
+        font-size: 11px;
+        border-top: 1px solid #999999;
+        border-right: 1px solid #999999;
+        border-bottom: 1px solid #999999;
+        border-left: 1px solid #999999;
+        padding-top: 0px;
+        padding-right: 0px;
+        padding-bottom: 0px;
+        padding-left: 0px;
+        overflow: hidden;}
+    body {
+        margin-left: 5px;
+        margin-top: 5px;
+        margin-right: 0px;
+        margin-bottom: 10px;
+        table {
+            table-layout:fixed; 
+            border: thin solid #000000;}
+        -->
+    </style>
+    </head>
+    <body>
+        <table width='400'><tr bgcolor='#FAFAFA'>
+        <td width=50% colspan='7' height='48' align='center' valign="middle">
+        <font face='Calibri' color='#8A0808' size='4'>
+        <strong>$title  $date</strong>
+        </font>
+        </td>
+        </tr>
+        </table>
+        </table>
+        <table width='400'><tr bgcolor='#000000'>
+        <td width=50% colspan='7' height='24' align='center' valign="middle">
+        <font face='Corbel' color='#FFFFFF' size='3'> 
+        <strong> Resumen de Licencias en el servidor:  $LicenseServer </strong>
+        </font>
+        </td>
+        </tr>
+        </table>
+        <table width='400'><tr bgcolor='#CCCCCC'>
+        </tr>
+        </table>
+"@
+    $head | Out-File $fileName
+}
+
+# ==============================================================================================
+
+Function writeTableHeader 
+{ 
+	param($fileName)
+	
+    $tableHeader = @"
+    <table width='400'><tbody>
+    <tr bgcolor=#CCCCCC>
+    <td width='3%' align='center'><strong>Nombre_de_Licencia</strong></td>
+"@
+
+    $i = 0
+    while ($i -lt $headerNames.count) {
+        $headerName = $headerNames[$i]
+        $headerWidth = $headerWidths[$i]
+        $tableHeader += "<td width='" + $headerWidth + "%' align='center'><strong>$headerName</strong></td>"
+        $i++ }
+
+    $tableHeader += "</tr>"
+    $tableHeader | Out-File $fileName -append 
+}
+
+# ==============================================================================================
+
+Function writeData 
+{   
+	param($data, $fileName)
+	
+	$data.Keys | sort | foreach {
+		$tableEntry += "<tr>"
+		$computerName = $_
+		$tableEntry += ("<td bgcolor='#CCCCCC' align=center><font color='#003399'>$computerName</font></td>")
+		#$data.$_.Keys | foreach {
+		$headerNames | foreach {
+			#"$computerName : $_" | LogMe -display
+			try {
+				if ($data.$computerName.$_[1] -eq $null ) { $bgcolor = "#FF0000"; $fontColor = "#FFFFFF"; $testResult = "Err" }
+				else {
+					if ($data.$computerName.$_[0] -eq "SUCCESS") { $bgcolor = "#387C44"; $fontColor = "#FFFFFF" }
+					elseif ($data.$computerName.$_[0] -eq "WORKER") { $bgcolor = "#F5DA81"; $fontColor = "#000000"  }
+					elseif ($data.$computerName.$_[0] -eq "WARNING") { $bgcolor = "#F5DA81"; $fontColor = "#000000" }
+					elseif ($data.$computerName.$_[0] -eq "ERROR") { $bgcolor = "#FF0000"; $fontColor = "#000000" }
+					else { $bgcolor = "#CCCCCC"; $fontColor = "#003399" }
+					$testResult = $data.$computerName.$_[1]
+				} } catch { $bgcolor = "#CCCCCC"; $fontColor = "#003399"; $testResult = "N/A" }
+			$tableEntry += ("<td bgcolor='" + $bgcolor + "' align=center><font color='" + $fontColor + "'>$testResult</font></td>")
+		}
+		$tableEntry += "</tr>"
+	}
+	$tableEntry | Out-File $fileName -append
+}
+ 
+# ==============================================================================================
+
+Function writeHtmlFooter { 
+	param($fileName)
+
+$footer=("<font face='HP Simplified' color='#003399' size='2'><br><I>Report run on {0} by {1}\{2}<I>. Script Hosted on {3} server. Script Path : {4}</font>" -f (Get-Date -displayhint date),$env:userdomain,$env:username,$env:COMPUTERNAME,$currentDir) 
+@"
+</table>
+
+<br><br>
+<table width='400'>
+<tr bgcolor='#CCCCCC'>
+<td colspan='7' height='25' align='middle'>
+<font face='HPFutura Book' color='#003399' size='2'><strong>Author:</strong> $TeamName.  <strong>Email:</strong> $TeamEmail  </font>
+</td>
+</tr>
+</table>
+<BR><BR><BR>
+
+<ADDRESS>
+<font face='HP Simplified' color='#003399' size='2'><I>
+
+
+</ADDRESS></font>
+<BR><BR>
+</body>
+</html>
+"@ | Out-File $FileName -append
+$footer | Out-File $FileName -append
+}
+
+#========================================================================================
+
+
+# =======================================================================================
+# =======                        MAIN SCRIPT BODY STARTS HERE                     =======
+# =======================================================================================
+
+ 
+#======================================================================================
+#                   PULL THE SERVER NAMES FROM THE FARM COLLECTIONS
+#======================================================================================  
+#Obtener las licencias de Citrix instaladas y en uso. Evidentemente, no funciona con las caducadas.
+$LicensePool = Get-WmiObject -class "Citrix_GT_License_Pool" -Namespace "ROOT\CitrixLicensing" -Computername $LicenseServer
+$allResults = @{}
+$tests = @{}
+#Seleccionar y formatear el nombre de los campos para que aparezcan "Nombre_Licencia, En_uso e Instaladas".
+$Formato=$LicensePool|select @{n="Nombre_Licencia";e={[string]::join(" ; ", $_.PLD)}},@{n="En_uso";e={[string]::join(" ; ", $_.InUseCount)}},@{n="Instaladas";e={[string]::join(" ; ", $_.Count)}}
+$Formato|export-csv $resultsCSV
+$Formato| % { $tests = @{}
+  $lic = $_.Nombre_Licencia
+  $ins = $_.Instaladas
+  $used = $_.En_uso
+  $percent=[int]$used * 100 / [int]$ins
+   If ($percent -gt "70"){
+      If ($percent -gt "85"){
+	     $tests.En_uso = "ERROR", [int]$used
+		 $tests.instaladas = "SUCCESS", [int]$ins
+	  }
+      ELSE{
+	  	 $tests.En_uso = "WARNING", [int]$used
+		 $tests.instaladas = "SUCCESS", [int]$ins
+	  }
+	  }
+	else{
+	  $tests.En_uso = "SUCCESS", [int]$used
+	  $tests.instaladas = "SUCCESS", [int]$ins
+	}
+	
+    $i++
+	$allResults.$lic = $tests
+}
+$TotalServersCount = [int]$TotalServers
+
+# Merging all the Header, Body and Footer of the HTML
+writeHtmlHeader $emailSubject $resultsHTM
+writeTableHeader $resultsHTM
+$allResults | sort-object -property FolderPath | % { writeData $allResults $resultsHTM }
+writeHtmlFooter $resultsHTM
