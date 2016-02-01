@@ -10,17 +10,9 @@ $TeamEmail=""
 #Definir servidor de licencias.
 $LicenseServer="srbxdmad01.serban.es"
 
-#==============================================================================================
-# PLEASE DO NOT CHANGE ANYTHING BELOW IF YOU ARE NOT SURE :-)
-#==============================================================================================
-
 #Cabeceras HTML
 $headerNames  = "En_uso", "Instaladas"
 $headerWidths =   "3",           "3"
-
-#===========================================================================================
-#                        Define the Global variable and Check for the Citrix Snapin
-#===========================================================================================
 
 #Archivo HTML resultante del script
 $resultsHTM = Join-Path $currentDir ("Citrix_LicenseServer_Results.htm")
@@ -178,13 +170,10 @@ $footer | Out-File $FileName -append
 
 
 # =======================================================================================
-# =======                        MAIN SCRIPT BODY STARTS HERE                     =======
+# =======                        MAIN SCRIPT                                      =======
 # =======================================================================================
 
- 
-#======================================================================================
-#                   PULL THE SERVER NAMES FROM THE FARM COLLECTIONS
-#======================================================================================  
+
 #Obtener las licencias de Citrix instaladas y en uso. Evidentemente, no funciona con las caducadas.
 $LicensePool = Get-WmiObject -class "Citrix_GT_License_Pool" -Namespace "ROOT\CitrixLicensing" -Computername $LicenseServer
 $allResults = @{}
@@ -197,10 +186,12 @@ $Formato| % { $tests = @{}
   $ins = $_.Instaladas
   $used = $_.En_uso
   $percent=[int]$used * 100 / [int]$ins
+  #Si el número de licencias usadas es mayor del 70, aparecerá un Warning en las licencias en uso (valor en amarillo)
    If ($percent -gt "70"){
+   #Si el número de licencias usadas es mayor del 85, aparecerá un Error en las licencias en uso (valor en rojo)
       If ($percent -gt "85"){
 	     $tests.En_uso = "ERROR", [int]$used
-		 $tests.instaladas = "SUCCESS", [int]$ins
+             $tests.instaladas = "SUCCESS", [int]$ins
 	  }
       ELSE{
 	  	 $tests.En_uso = "WARNING", [int]$used
@@ -217,7 +208,7 @@ $Formato| % { $tests = @{}
 }
 $TotalServersCount = [int]$TotalServers
 
-# Merging all the Header, Body and Footer of the HTML
+# Generar archivo HTML con resultados
 writeHtmlHeader $emailSubject $resultsHTM
 writeTableHeader $resultsHTM
 $allResults | sort-object -property FolderPath | % { writeData $allResults $resultsHTM }
