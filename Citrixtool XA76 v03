@@ -91,6 +91,7 @@ function Call-citrixtoolXA76v02_psf {
 	$but_Search = New-Object 'System.Windows.Forms.Button'
 	$but_app_priority = New-Object 'System.Windows.Forms.Button'
 	$but_Update_FarmData = New-Object 'System.Windows.Forms.Button'
+	$but_Inventory = New-Object 'System.Windows.Forms.Button'
 	
 	#Textbox
 	$Text_App_Priority = New-Object 'System.Windows.Forms.TextBox'
@@ -880,7 +881,708 @@ function Call-citrixtoolXA76v02_psf {
 	
 	}
 	
+	$but_Inventory_Click={
+	
+	# Define Xenapp Farm Name
+	$FarmName=get-brokersite|select @{n="Name";e={[string]::join(" ; ", $_.Name)}}
+	$EnvironmentName = $Farmname.name
+	  
+	#=======DONT CHANGE BELOW HERE =======================================================================================
 
+
+	$resultsHTM = Join-Path $scriptpath ("Inventory.htm")
+	$resultscsv = Join-Path $scriptpath ("test.csv")
+
+	#Header for Table "ApplicationList"
+	$AppfirstheaderName = "ApplicationList"
+	$AppHeaderNames = "Enabled", "ApplicationType", "CommandLine", "CommandLineArguments", "WorkingDirectory", "Description", "Clientfolder", "UserandGroups", "DesktopGroups"
+	$AppHeaderWidths = "6" , "4", "4", "10", "10", "10", "4", "4", "4", "20"
+	$Apptablewidth = 1600
+
+	#Header for Table "DeliveryGroups"
+	$DelfirstheaderName = "DeliveryGroups"
+	$DelHeaderNames = "Scopes", "DeliveryType", "InMaintenanceMode", "Servers"
+	$DelHeaderWidths = "20" , "6" , "6" , "6" , "20" 
+	$Deltablewidth = 1600
+
+	#Header for Table "XenApp Licenses"
+	$LICfirstheaderName = "License Type"
+	$LICHeaderNames = "Installed", "InUse", "Available"
+	$LICHeaderWidths = "4", "4", "4", "4"
+	$LICtablewidth = 700
+
+	#Header for Table "XD/XA Controllers" Get-BrokerController
+	$XDControllerFirstheaderName = "ControllerServer"
+	$XDControllerHeaderNames = "DesktopsRegistered", "ActiveSiteServices"
+	$XDControllerHeaderWidths = "2", "10"
+	$XDControllerTableWidth= 1200
+
+	#Header for Table "MachineCatalogs" Get-BrokerCatalog
+	$CatalogHeaderName = "CatalogName"
+	$CatalogHeaderNames = "AssignedToUser", "AssignedToDG", "NotToUserAssigned", "ProvisioningType", "AllocationType"
+	$CatalogWidths = "4", "8", "8", "8", "8", "8"
+	$CatalogTablewidth = 900
+
+	#Header for Table "Policies"
+	$PolfirstheaderName = "Path"
+	$PolHeaderNames = "State", "Value"
+	$PolHeaderWidths = "20" , "7" , "20"
+	$Poltablewidth = 1600
+
+	#==============================================================================================
+	#==============================================================================================
+	Function writeHtmlHeader
+	{
+	param($title, $fileName)
+	$date = ( Get-Date -format R)
+$head = @"
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>
+<title>$title</title>
+<STYLE TYPE="text/css">
+<!--
+td {
+font-family: Arial;
+font-size: 11px;
+border-top: 1px solid #000000;
+border-right: 1px solid #000000;
+border-bottom: 1px solid #000000;
+border-left: 1px solid #000000;
+padding-top: 0px;
+padding-right: 0px;
+padding-bottom: 0px;
+padding-left: 0px;
+overflow: hidden;
+}
+body {
+margin-left: 5px;
+margin-top: 5px;
+margin-right: 0px;
+margin-bottom: 10px;
+table {
+table-layout:fixed;
+border: thin solid #000000;
+}
+-->
+</style>
+</head>
+<body>
+<table width='1200'>
+<tr bgcolor='#CCCCCC'>
+<td colspan='7' height='48' align='center' valign="middle">
+<font face='tahoma' color='#003399' size='4'>
+<strong>$title - $date</strong></font>
+</td>
+</tr>
+</table>
+"@
+	$head | Out-File $fileName
+	}
+	# =====================================================================================$te=========
+	Function writeTableHeader
+	{
+	param($fileName, $firstheaderName, $headerNames, $headerWidths, $tablewidth)
+$tableHeader = @"
+  
+<table width='$tablewidth'><tbody>
+<tr bgcolor=#FFCC00>
+<td width='6%' align='center'><strong>$firstheaderName</strong></td>
+"@
+  
+	$i = 0
+	while ($i -lt $headerNames.count) {
+	$headerName = $headerNames[$i]
+	$headerWidth = $headerWidths[$i]
+	$tableHeader += "<td width='" + $headerWidth + "%' align='center'><strong>$headerName</strong></td>"
+	$i++
+	}
+	  
+	$tableHeader += "</tr>"
+	$tableHeader | Out-File $fileName -append
+	}
+  
+	# ==============================================================================================
+	Function writeTableFooter
+	{
+	param($fileName)
+	"</table><br/>"| Out-File $fileName -append
+	}
+	  
+	#==============================================================================================
+	Function writeData
+	{
+	param($data, $fileName, $headerNames)
+	  
+	$data.Keys | sort | foreach {
+	$tableEntry += "<tr>"
+	$computerName = $_
+	$tableEntry += ("<td bgcolor='#FEFAA9' align=center><font color='#000000'>$computerName</font></td>")
+	#$data.$_.Keys | foreach {
+	$headerNames | foreach {
+	#"$computerName : $_" | LogMe -display
+
+	try {
+	$bgcolor = "#CCCCCC"; $fontColor = "#003399"
+	$testResult = $data.$computerName.$_[1]
+	}
+	catch {}
+	#$bgcolor = "#CCCCCC"; $fontColor = "#003399"
+	#$testResult = ""
+	#}
+	$tableEntry += ("<td bgcolor='" + $bgcolor + "' align=left><font color='" + $fontColor + "'>$testResult</font></td>")
+	}
+	$tableEntry += "</tr>"
+	}
+	$tableEntry | Out-File $fileName -append
+	}
+	  
+	# ==============================================================================================
+	  
+	  #==============================================================================================
+	Function writeDatapol
+	{
+	param($data, $fileName, $headerNames)
+	  
+	$data.Keys | sort | foreach {
+	$tableEntry += "<tr>"
+	$computerName = [string]$_
+
+	$tableEntry += ("<td bgcolor='#FEFAA9' align=center><font color='#000000'>$computerName</font></td>")
+	#$data.$_.Keys | foreach {
+	$headerNames | foreach {
+
+	try {
+	$bgcolor = "#CCCCCC"; $fontColor = "#003399"
+	$testResult = $data.$computerName.$_
+	}
+	catch {}
+	#$bgcolor = "#CCCCCC"; $fontColor = "#003399"
+	#$testResult = ""
+	#}
+	$tableEntry += ("<td bgcolor='" + $bgcolor + "' align=left><font color='" + $fontColor + "'>$testResult</font></td>")
+	}
+	$tableEntry += "</tr>"
+	}
+	$tableEntry | Out-File $fileName -append
+	}
+	  
+	# ==============================================================================================
+
+
+
+	#==============================================================================================
+	# == MAIN SCRIPT ==
+	#==============================================================================================
+	rm $resultsHTM -force -EA SilentlyContinue
+	  
+	# Log the loaded Citrix PS Snapins
+	  
+	$controller = Get-BrokerController -AdminAddress $AdminAddress -DNSName $AdminAddress
+	$controllerversion = $controller.ControllerVersion
+
+	  
+	#== App Report ============================================================================================
+	 
+	$AppReport = @{}
+
+	$apps=get-BrokerApplication | select @{n="ApplicationName";e={[string]::join(" ; ", $_.ApplicationName)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, ApplicationType, @{n="CommandLine";e={[string]::join(" ; ", $_.CommandLineExecutable)}}, CommandLineArguments, Description, @{n="WorkingDirectory";e={[string]::join(" ; ", $_.WorkingDirectory)}}, @{n="ClientFolder";e={[string]::join(" ; ", $_.ClientFolder)}}, @{n="UserandGroups";e={[string]::join(" ; ", $_.AssociatedUserNames)}}, @{n="DesktopGroups";e={[string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs)}}
+
+	$count=$apps.count -1
+
+	$desktopgroups = (0 .. $count)
+
+	$i=0
+
+	foreach ($app in $apps) {
+		$tests = @{}
+		$item=$app.DesktopGroups -split ";"
+		$citem=$item.count -1
+		$desktop = (0 .. $citem)
+		$Appname= $app.ApplicationName
+		$tests.appname = "NEUTRAL", $Appname
+		$AppEnabled= $app.Enabled
+		$tests.Enabled = "NEUTRAL", $AppEnabled
+		$AppType=$app.ApplicationType
+		$tests.ApplicationType = "NEUTRAL", $AppType
+		$AppCmd=$app.CommandLine
+		$tests.CommandLine = "NEUTRAL", $AppCmd
+		$AppArg=$app.CommandLineArguments
+		$tests.CommandLineArguments = "NEUTRAL", $AppArg
+		$AppWorkDir=$app.WorkingDirectory
+		$tests.WorkingDirectory = "NEUTRAL", $AppWorkDir
+		$AppDesc=$app.Description
+		$tests.Description = "NEUTRAL", $AppDesc
+		$AppCliFol=$app.ClientFolder
+		$tests.Clientfolder = "NEUTRAL", $AppCliFol
+		$AppUsrGrp=$app.UserandGroups
+		$tests.UserandGroups = "NEUTRAL", $AppUsrGrp
+		$j=0
+		foreach ($it in $item) {
+			$desktop[$j]=get-brokerdesktopgroup|where {$_.UUID -eq $it}|select Name
+			$format=$desktop[$j]|select @{n="Desktopgroups";e={[string]::join(";", $_.Name)}}
+			$desktop[$j]=[string]$format.Desktopgroups
+			$j++
+		}
+		$desktop=$desktop -replace " ","_"
+		
+		$desktopgroups[$i]=[string]$desktop -join ","
+		$desktopgroups[$i]=$desktopgroups[$i] -replace " ",";"
+		$desktopgroups[$i]=$desktopgroups[$i] -replace "_"," "
+
+		$app.DesktopGroups=$desktopgroups[$i]
+		$AppDesGrp=$app.DesktopGroups
+		$tests.DesktopGroups = "NEUTRAL", $AppDesGrp
+		$i++
+		$AppReport.$Appname = $tests 
+	}
+	#== Delivery Report ============================================================================================
+
+	$DelReport = @{}
+	$Deliveries = get-brokerdesktopgroup|select Name, DeliveryType, Scopes, InMaintenanceMode
+
+
+	Foreach ($Delivery in $Deliveries) {
+		$tests = @{}
+		$Delname = $Delivery.Name
+		$tests.Name = "NEUTRAL", $Delname
+		$DelType = $Delivery.DeliveryType
+		$tests.DeliveryType = "NEUTRAL", $DelType
+		$DelScope= $Delivery.Scopes
+		$tests.Scopes = "NEUTRAL", $DelScope
+		$DelMaintenance = $Delivery.InMaintenanceMode
+		$tests.InMaintenanceMode = "NEUTRAL", $DelMaintenance
+		$machines = Get-BrokerDesktop|where {$_.DesktopGroupName -eq "$Delname"}|select DnsName
+		
+		$Delservers = $machines.Dnsname -join ";"
+		$tests.Servers = "NEUTRAL", $Delservers
+		$DelReport.$Delname = $tests 
+	}
+
+	#== Licenses Check ============================================================================================
+	  
+
+	#Define License Server Name
+	$licserver=get-brokersite|select LicenseServerName
+	$licservername=$licserver.LicenseServerName
+	 
+	$LicResults = @{}
+	$licenses=Get-WmiObject -class "Citrix_GT_License_Pool" -Namespace "ROOT\CitrixLicensing" -ComputerName $licservername|where {$_.PLD -ne "ctxlsdiag"}
+	  
+	foreach ($license in $licenses) {
+	$tests = @{}
+	  
+	#Name of License
+	$Licname = $license.PLD 
+	$tests.Licname = "NEUTRAL", $Licname
+
+	#Installed
+	$LicInstalled = $license.count
+	$tests.Installed = "NEUTRAL", $LicInstalled
+
+	#In use
+	$LicInuse = $license.inusecount
+	$tests.InUse = "NEUTRAL", $LicInuse
+
+	#Available
+	$LicAvailable = $license.PooledAvailable
+	$tests.Available = "NEUTRAL", $LicAvailable
+
+	$LICResults.$Licname = $tests 
+	}
+
+
+	#== Controller Check ============================================================================================
+	  
+	$ControllerResults = @{}
+	$Controllers = Get-BrokerController -AdminAddress $AdminAddress
+	 
+	foreach ($Controller in $Controllers) {
+	$tests = @{}
+	  
+	#Name of $Controller
+	$ControllerDNS = $Controller | %{ $_.DNSName }
+	 
+	#DesktopsRegistered on this controller
+	$ControllerDesktopsRegistered = $Controller | %{ $_.DesktopsRegistered }
+	$tests.DesktopsRegistered = "NEUTRAL", $ControllerDesktopsRegistered
+	  
+	#ActiveSiteServices on this controller
+	$ActiveSiteServices = $Controller | %{ $_.ActiveSiteServices }
+	$tests.ActiveSiteServices = "NEUTRAL", $ActiveSiteServices
+	  
+	#Fill $tests into array
+	$ControllerResults.$ControllerDNS = $tests
+	}
+
+	#== Catalog Check ============================================================================================
+	  
+	$CatalogResults = @{}
+	$Catalogs = Get-BrokerCatalog -AdminAddress $AdminAddress
+	  
+	foreach ($Catalog in $Catalogs) {
+	$tests = @{}
+	  
+	#Name of MachineCatalog
+	$CatalogName = $Catalog | %{ $_.Name }
+	  
+	#CatalogAssignedCount
+	$CatalogAssignedCount = $Catalog | %{ $_.AssignedCount }
+	$tests.AssignedToUser = "NEUTRAL", $CatalogAssignedCount
+	  
+	#CatalogUnassignedCount
+	$CatalogUnAssignedCount = $Catalog | %{ $_.UnassignedCount }
+	$tests.NotToUserAssigned = "NEUTRAL", $CatalogUnAssignedCount
+	  
+	# Assigned to DeliveryGroup
+	$CatalogUsedCountCount = $Catalog | %{ $_.UsedCount }
+	$tests.AssignedToDG = "NEUTRAL", $CatalogUsedCountCount
+	  
+	 #ProvisioningType
+	 $CatalogProvisioningType = $Catalog | %{ $_.ProvisioningType }
+	 $tests.ProvisioningType = "NEUTRAL", $CatalogProvisioningType
+	  
+	 #AllocationType
+	 $CatalogAllocationType = $Catalog | %{ $_.AllocationType }
+	 $tests.AllocationType = "NEUTRAL", $CatalogAllocationType
+
+	  
+	$CatalogResults.$CatalogName = $tests
+	}
+
+	# ======= Write all results to an html file =================================================
+
+	Write-Host ("Saving results to html report: " + $resultsHTM)
+	writeHtmlHeader "$EnvironmentName Farm Inventory" $resultsHTM
+
+    @"
+    </table>
+    <table width='1200'>
+    <tr bgcolor='#CCCCCC
+    
+    <font face='courier' color='#000000' size='4'><strong>Citrix</strong></font><font color='#005500' face='courier' size='4'> Applications </font>
+   
+    </table>
+    </body>
+    </html>
+"@ | Out-File $resultsHTM -append
+
+	writeTableHeader $resultsHTM $AppfirstheaderName $Appheadernames $AppHeaderWidths $Apptablewidth
+	$AppReport | sort-object -property Appname | %{ writeData $AppReport $resultsHTM $AppHeaderNames }
+	writeTableFooter $resultsHTM
+
+    @"
+    </table>
+    <table width='1200'>
+    <tr bgcolor='#CCCCCC
+    
+    <font face='courier' color='#000000' size='4'><strong>Citrix</strong></font><font color='#005500' face='courier' size='4'> Delivery Groups </font>
+    
+    </table>
+    </body>
+    </html>
+"@ | Out-File $resultsHTM -append
+ 
+	writeTableHeader $resultsHTM $DelfirstheaderName $Delheadernames $DelHeaderWidths $Deltablewidth
+	$DelReport | sort-object -property Appname | %{ writeData $DelReport $resultsHTM $DelHeaderNames }
+	writeTableFooter $resultsHTM
+
+@"
+<br>
+</table>
+<table width='1200'>
+<tr bgcolor='#CCCCCC
+
+<font face='courier' color='#000000' size='4'><strong>License Server=</strong></font><font color='#005500' face='courier' size='4'> $licservername</font>
+
+</table>
+</body>
+</html>
+"@ | Out-File $resultsHTM -append
+
+
+
+	writeTableHeader $resultsHTM $LICfirstheaderName $LICheadernames $LICHeaderWidths $LICtablewidth
+	$LICResults | sort-object -property Licname | %{ writeData $LICResults $resultsHTM $LICHeaderNames }
+	writeTableFooter $resultsHTM
+
+@"
+<br>
+</table>
+<table width='1200'>
+<tr bgcolor='#CCCCCC
+
+<font face='courier' color='#000000' size='4'><strong>Citrix</strong></font><font color='#005500' face='courier' size='4'> Delivery Controllers</font>
+
+</table>
+</body>
+</html>
+"@ | Out-File $resultsHTM -append
+
+	# Write Table with the Controllers
+	writeTableHeader $resultsHTM $XDControllerFirstheaderName $XDControllerHeaderNames $XDControllerHeaderWidths $XDControllerTableWidth
+	$ControllerResults | sort-object -property XDControllerFirstheaderName | %{ writeData $ControllerResults $resultsHTM $XDControllerHeaderNames }
+	writeTableFooter $resultsHTM
+
+@"
+<br>
+</table>
+<table width='1200'>
+<tr bgcolor='#CCCCCC
+
+<font face='courier' color='#000000' size='4'><strong>Citrix</strong></font><font color='#005500' face='courier' size='4'> Machine Catalogs</font>
+
+</table>
+</body>
+</html>
+"@ | Out-File $resultsHTM -append
+
+	# Write Table with the Catalogs
+	writeTableHeader $resultsHTM $CatalogHeaderName $CatalogHeaderNames $CatalogWidths $CatalogTablewidth
+	$CatalogResults | %{ writeData $CatalogResults $resultsHTM $CatalogHeaderNames}
+	writeTableFooter $resultsHTM
+
+    @"
+    </table>
+    <table width='1200'>
+    <tr bgcolor='#CCCCCC
+    
+    <font face='courier' color='#000000' size='4'><strong>Citrix</strong></font><font color='#005500' face='courier' size='4'> Policies</font>
+    
+    </table>
+    </body>
+    </html>
+"@ | Out-File $resultsHTM -append
+
+	#REPORT DE POLÍTICAS
+	#Apuntamos a la carpeta de Utilidades de Scout
+	#cd "C:\Program Files (x86)\Citrix\Scout\Current\Utilities"
+
+	#Importamos módulo de políticas
+	Import-Module "C:\Program Files (x86)\Citrix\Scout\Current\Utilities\Citrix.GroupPolicy.Commands.psm1"
+
+	#Definimos PSDrive para que funcionen los comandos
+	$a=New-PSDrive -Name LocalFarmGpo -psprovider CitrixGroupPolicy -controller localhost \
+
+	#
+	#Funciones de Citrix, cogidas de Citrix.GroupPolicy.Commands.psm1. Importando el CMDLET tenía errores...
+	#
+
+	Function FilterString
+	{
+		param([string] $value, [string[]] $wildcards)
+
+		$wildcards | Where { $value -like $_ }
+	}
+
+	Function CreateDictionary
+	{
+		return New-Object "System.Collections.Generic.Dictionary``2[System.String,System.Object]"
+	}
+
+	Function CreateObject
+	{
+		param([System.Collections.IDictionary]$props, [string]$name)
+
+		$obj = New-Object PSObject
+		foreach ($prop in $props.Keys)
+		{
+			$obj | Add-Member NoteProperty -Name $prop -Value $props.$prop
+		}
+		if ($name)
+		{
+			$obj | Add-Member ScriptMethod -Name "ToString" -Value $executioncontext.invokecommand.NewScriptBlock('"{0}"' -f $name) -Force
+		}
+		return $obj
+	}
+
+	Function CompareObject
+	{
+		param([PSObject] $NewObject, [PSObject] $CurrentObject)
+
+		$props = CreateDictionary
+
+		$oldprops = $CurrentObject | Get-Member -MemberType Properties | Select-Object -Expand Name
+		$newprops = $NewObject | Get-Member -MemberType Properties | Select-Object -Expand Name
+		ForEach($prop in $newprops)
+		{
+			if ($oldprops -contains $prop)
+			{
+				if (-not (AreValuesEqual $prop $NewObject.$prop $CurrentObject.$prop))
+				{
+					$props.$prop = $NewObject.$prop
+				}
+			}
+		}
+		if ($props.Keys.Count -gt 0)
+		{
+			CreateObject $props
+		}
+	}
+
+	Function AreValuesEqual
+	{
+		param($prop, $new, $old)
+
+		if ($new -eq $null) { return $true }
+		if ($old -eq $null) { return $false }
+
+		if ($new -is [array])
+		{
+			return (Compare-Object $new $old | Measure-Object).Count -eq 0
+		}
+		if ($new -is [PSObject])
+		{
+			return (CompareObject $new $old) -eq $null
+		}
+		$equal = $new -eq $old
+		if ($prop -eq "State")
+		{
+			switch($new)
+			{
+				"Enabled" { $equal = "Enabled", "Allowed" -contains $old }
+				"Disabled" { $equal = "Disabled", "Prohibited", "UseDefault" -contains $old }
+			}
+		}
+		return $equal
+	}
+
+
+	Function Get-CtxGroupPolicy
+	{
+		[CmdletBinding()]
+		param(
+			[Parameter(Position=0, ValueFromPipelineByPropertyName=$true)]
+			[string[]] $PolicyName = "*",
+			[Parameter(Position=1, ValueFromPipelineByPropertyName=$true)]
+			[string] [ValidateSet("Computer", "User", $null)] $Type,
+			[Parameter()]
+			[string] $DriveName = "LocalFarmGpo"
+		)
+
+		process
+		{
+			$types = if (!$Type) { @("Computer", "User") } else { @($Type) }
+			foreach($polType in $types)
+			{
+				$pols = @(Get-ChildItem "$($DriveName):\$polType" | Where-Object { FilterString $_.Name $PolicyName })
+				foreach ($pol in $pols)
+				{
+				   $props = CreateDictionary
+				   $props.PolicyName = $pol.Name
+				   $props.Type = $poltype
+				   $props.Description = $pol.Description
+				   $props.Enabled = $pol.Enabled
+				   $props.Priority = $pol.Priority
+				   CreateObject $props $pol.Name
+				}
+			}
+		}
+	}
+
+	Function Get-CtxGroupPolicyConfiguration
+	{
+		[CmdletBinding()]
+		param(
+			[Parameter(Position=0, ValueFromPipelineByPropertyName=$true)]
+			[String[]] $PolicyName = "*",
+			[Parameter(Position=1, ValueFromPipelineByPropertyName=$true)]
+			[ValidateSet("Computer", "User", $null)] [String] $Type,
+			[Parameter()]
+			[Switch] $ConfiguredOnly,
+			[Parameter()]
+			[string] $DriveName = "LocalFarmGpo"
+		)
+
+		process
+		{
+			$types = if (!$Type) { @("Computer", "User") } else { @($Type) }
+			foreach ($poltype in $types)
+			{
+				$pols = @(Get-ChildItem "$($DriveName):\$poltype" | Where-Object { FilterString $_.Name $PolicyName })
+				foreach ($pol in $pols)
+				{
+					$props = CreateDictionary
+					$props.PolicyName = $pol.Name
+					$props.Type = $poltype
+
+					foreach ($setting in @(Get-ChildItem "$($DriveName):\$poltype\$($pol.Name)\Settings" -Recurse |
+						Where-Object { $_.State -ne $null }))
+					{
+						if (!$ConfiguredOnly -or $setting.State -ne "NotConfigured")
+						{
+							$setname = $setting.PSChildName
+							$config = CreateDictionary
+							$config.State = $setting.State.ToString()
+							if ($setting.Values -ne $null) { $config.Values = ([array]($setting.Values)) }
+							if ($setting.Value -ne $null) { $config.Value = ([string]($setting.Value)) }
+							$config.Path = $setting.PSPath.Substring($setting.PSPath.IndexOf("\Settings\")+10)
+							$props.$setname = CreateObject $config
+						}
+					}
+					CreateObject $props $pol.Name
+				}
+			}
+		}
+	}
+
+	#Reporte de todas las políticas y su configuración
+	$policies=Get-CtxGroupPolicy|Get-CtxGroupPolicyConfiguration
+
+
+	#Recorremos cada una de las políticas
+	Foreach ($policy in $policies) {
+		$PolReport=@{}
+		#Sacamos el nombre y el tipo de la política
+		$Name=$policy.PolicyName
+		$type=$policy.Type
+		
+		#Comenzamos a definir la variable de salida de datos
+
+		#Almacenamos todas las propiedades de las políticas que no sean "PolicyName" ni "Type"
+		$getmember=$policy|Get-Member|where {$_.MemberType -eq "NoteProperty"}|where {$_.Name -ne "PolicyName" -and $_.Name -ne "Type" -and $_.Name -ne "ToString"}
+
+		#Recorremos cada propiedad para almacenar los datos
+		$members=$getmember.name
+		
+		foreach ($member in $members) {
+			
+			#Filtramos únicamente por las propiedades que estén configuradas
+			$propiedades=$policy.$member|where {$_.State -ne "NotConfigured"}
+			foreach ($propiedad in $propiedades){
+			 $tests = @{}       
+			 $Path=$propiedad.Path
+			 $tests.Path=$Path
+			 $tests.State=$propiedad.State
+			 $tests.Value=$propiedad.Value
+			 $PolReport.$Path = $tests        
+			}
+			
+	   }
+	   
+	   
+		
+    @"
+    </table>
+    <table width='1200'>
+    <tr bgcolor='#CCCCCC
+    
+    <font face='courier' color='#000000' size='2'><strong>Policy=</strong></font><font color='#005500' face='courier' size='2'> $Name, $Type type.</font>
+    
+    </table>
+    </body>
+    </html>
+"@ | Out-File $resultsHTM -append
+
+
+	writeTableHeader $resultsHTM $PolfirstheaderName $Polheadernames $PolHeaderWidths $Poltablewidth
+	$PolReport | sort-object -property Path |%{ writeDataPol $PolReport $resultsHTM $PolHeaderNames }
+	#writeTableFooter $resultsHTM
+
+}
+	start $resultsHTM	
+	
+	}
 	
 	# --End User Generated Script--
 	#----------------------------------------------
@@ -942,6 +1644,7 @@ function Call-citrixtoolXA76v02_psf {
 	#
 	# Citrix_tools
 	#
+	$Citrix_tools.Controls.Add($but_Inventory)
 	$Citrix_tools.Controls.Add($but_Update_FarmData)
 	$Citrix_tools.Controls.Add($grp_App_priority)
 	$Citrix_tools.Controls.Add($grpbox_PS_console)
@@ -959,11 +1662,21 @@ function Call-citrixtoolXA76v02_psf {
 	$Citrix_tools.Text = "Citrix Tools"
 	$Citrix_tools.add_Load($handler_Citrix_tools_Load)
 	#
+	# but_Inventory
+	#
+	$but_Inventory.Location = '257, 314'
+	$but_Inventory.Name = "but_Inventory"
+	$but_Inventory.Size = '172, 41'
+	$but_Inventory.TabIndex = 68
+	$but_Inventory.Text = "Farm Inventory HTML"
+	$but_Inventory.UseVisualStyleBackColor = $True
+	$but_Inventory.add_Click($but_Inventory_Click)
+	#
 	# but_Update_FarmData
 	#
-	$but_Update_FarmData.Location = '257, 354'
+	$but_Update_FarmData.Location = '257, 366'
 	$but_Update_FarmData.Name = "but_Update_FarmData"
-	$but_Update_FarmData.Size = '172, 52'
+	$but_Update_FarmData.Size = '172, 41'
 	$but_Update_FarmData.TabIndex = 67
 	$but_Update_FarmData.Text = "Update Farm Data"
 	$but_Update_FarmData.UseVisualStyleBackColor = $True
@@ -993,7 +1706,7 @@ function Call-citrixtoolXA76v02_psf {
 	#
 	$grpbox_PS_console.Controls.Add($Rbut_Enable_Console)
 	$grpbox_PS_console.Controls.Add($Rbut_Disable_Console)
-	$grpbox_PS_console.Location = '257, 267'
+	$grpbox_PS_console.Location = '257, 227'
 	$grpbox_PS_console.Name = "grpbox_PS_console"
 	$grpbox_PS_console.Size = '172, 67'
 	$grpbox_PS_console.TabIndex = 65
@@ -1028,7 +1741,7 @@ function Call-citrixtoolXA76v02_psf {
 	$grpbox_app_deliv.Controls.Add($Grpbox_Priority)
 	$grpbox_app_deliv.Controls.Add($But_Add_app_Delivery)
 	$grpbox_app_deliv.Controls.Add($But_Rmv_app_Delivery)
-	$grpbox_app_deliv.Location = '257, 130'
+	$grpbox_app_deliv.Location = '257, 108'
 	$grpbox_app_deliv.Name = "grpbox_app_deliv"
 	$grpbox_app_deliv.Size = '172, 113'
 	$grpbox_app_deliv.TabIndex = 42
