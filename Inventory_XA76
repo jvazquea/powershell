@@ -189,7 +189,6 @@ $computerName = [string]$_
 $tableEntry += ("<td bgcolor='#FEFAA9' align=center><font color='#000000'>$computerName</font></td>")
 #$data.$_.Keys | foreach {
 $headerNames | foreach {
-#"$computerName : $_" | LogMe -display
 
 try {
 $bgcolor = "#CCCCCC"; $fontColor = "#003399"
@@ -300,7 +299,6 @@ Foreach ($Delivery in $Deliveries) {
 }
 
 #== Licenses Check ============================================================================================
-"Check Licenses #############################################################################" | LogMe -display -progress
   
 
 #Define License Server Name
@@ -503,7 +501,169 @@ writeTableFooter $resultsHTM
 Import-Module "C:\Program Files (x86)\Citrix\Scout\Current\Utilities\Citrix.GroupPolicy.Commands.psm1"
 
 #Definimos PSDrive para que funcionen los comandos
-New-PSDrive -Name LocalFarmGpo -psprovider CitrixGroupPolicy -controller localhost \
+$a=New-PSDrive -Name LocalFarmGpo -psprovider CitrixGroupPolicy -controller localhost \
+
+#
+#Funciones de Citrix, cogidas de Citrix.GroupPolicy.Commands.psm1. Importando el CMDLET tenía errores...
+#
+
+Function FilterString
+{
+    param([string] $value, [string[]] $wildcards)
+
+    $wildcards | Where { $value -like $_ }
+}
+
+Function CreateDictionary
+{
+    return New-Object "System.Collections.Generic.Dictionary``2[System.String,System.Object]"
+}
+
+Function CreateObject
+{
+    param([System.Collections.IDictionary]$props, [string]$name)
+
+    $obj = New-Object PSObject
+    foreach ($prop in $props.Keys)
+    {
+        $obj | Add-Member NoteProperty -Name $prop -Value $props.$prop
+    }
+    if ($name)
+    {
+        $obj | Add-Member ScriptMethod -Name "ToString" -Value $executioncontext.invokecommand.NewScriptBlock('"{0}"' -f $name) -Force
+    }
+    return $obj
+}
+
+Function CompareObject
+{
+    param([PSObject] $NewObject, [PSObject] $CurrentObject)
+
+    $props = CreateDictionary
+
+    $oldprops = $CurrentObject | Get-Member -MemberType Properties | Select-Object -Expand Name
+    $newprops = $NewObject | Get-Member -MemberType Properties | Select-Object -Expand Name
+    ForEach($prop in $newprops)
+    {
+        if ($oldprops -contains $prop)
+        {
+            if (-not (AreValuesEqual $prop $NewObject.$prop $CurrentObject.$prop))
+            {
+                $props.$prop = $NewObject.$prop
+            }
+        }
+    }
+    if ($props.Keys.Count -gt 0)
+    {
+        CreateObject $props
+    }
+}
+
+Function AreValuesEqual
+{
+    param($prop, $new, $old)
+
+    if ($new -eq $null) { return $true }
+    if ($old -eq $null) { return $false }
+
+    if ($new -is [array])
+    {
+        return (Compare-Object $new $old | Measure-Object).Count -eq 0
+    }
+    if ($new -is [PSObject])
+    {
+        return (CompareObject $new $old) -eq $null
+    }
+    $equal = $new -eq $old
+    if ($prop -eq "State")
+    {
+        switch($new)
+        {
+            "Enabled" { $equal = "Enabled", "Allowed" -contains $old }
+            "Disabled" { $equal = "Disabled", "Prohibited", "UseDefault" -contains $old }
+        }
+    }
+    return $equal
+}
+
+
+Function Get-CtxGroupPolicy
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0, ValueFromPipelineByPropertyName=$true)]
+        [string[]] $PolicyName = "*",
+        [Parameter(Position=1, ValueFromPipelineByPropertyName=$true)]
+        [string] [ValidateSet("Computer", "User", $null)] $Type,
+        [Parameter()]
+        [string] $DriveName = "LocalFarmGpo"
+    )
+
+    process
+    {
+        $types = if (!$Type) { @("Computer", "User") } else { @($Type) }
+        foreach($polType in $types)
+        {
+            $pols = @(Get-ChildItem "$($DriveName):\$polType" | Where-Object { FilterString $_.Name $PolicyName })
+            foreach ($pol in $pols)
+            {
+               $props = CreateDictionary
+               $props.PolicyName = $pol.Name
+               $props.Type = $poltype
+               $props.Description = $pol.Description
+               $props.Enabled = $pol.Enabled
+               $props.Priority = $pol.Priority
+               CreateObject $props $pol.Name
+            }
+        }
+    }
+}
+
+Function Get-CtxGroupPolicyConfiguration
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0, ValueFromPipelineByPropertyName=$true)]
+        [String[]] $PolicyName = "*",
+        [Parameter(Position=1, ValueFromPipelineByPropertyName=$true)]
+        [ValidateSet("Computer", "User", $null)] [String] $Type,
+        [Parameter()]
+        [Switch] $ConfiguredOnly,
+        [Parameter()]
+        [string] $DriveName = "LocalFarmGpo"
+    )
+
+    process
+    {
+        $types = if (!$Type) { @("Computer", "User") } else { @($Type) }
+        foreach ($poltype in $types)
+        {
+            $pols = @(Get-ChildItem "$($DriveName):\$poltype" | Where-Object { FilterString $_.Name $PolicyName })
+            foreach ($pol in $pols)
+            {
+                $props = CreateDictionary
+                $props.PolicyName = $pol.Name
+                $props.Type = $poltype
+
+                foreach ($setting in @(Get-ChildItem "$($DriveName):\$poltype\$($pol.Name)\Settings" -Recurse |
+                    Where-Object { $_.State -ne $null }))
+                {
+                    if (!$ConfiguredOnly -or $setting.State -ne "NotConfigured")
+                    {
+                        $setname = $setting.PSChildName
+                        $config = CreateDictionary
+                        $config.State = $setting.State.ToString()
+                        if ($setting.Values -ne $null) { $config.Values = ([array]($setting.Values)) }
+                        if ($setting.Value -ne $null) { $config.Value = ([string]($setting.Value)) }
+                        $config.Path = $setting.PSPath.Substring($setting.PSPath.IndexOf("\Settings\")+10)
+                        $props.$setname = CreateObject $config
+                    }
+                }
+                CreateObject $props $pol.Name
+            }
+        }
+    }
+}
 
 #Reporte de todas las políticas y su configuración
 $policies=Get-CtxGroupPolicy|Get-CtxGroupPolicyConfiguration
