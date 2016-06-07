@@ -1,0 +1,1472 @@
+#------------------------------------------------------------------------
+# Script Citrix Tools for Xenapp/XenDesktop 7.6
+# By Javier Vázquez Martín
+# 
+#------------------------------------------------------------------------
+
+$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+asnp Citrix.*
+
+Add-Type -Name Window -Namespace Console -MemberDefinition '
+[DllImport("Kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+ 
+[DllImport("user32.dll")]
+public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+'
+
+function Show-Console {
+   $consolePtr = [Console.Window]::GetConsoleWindow()
+  #5 show
+ [Console.Window]::ShowWindow($consolePtr, 5)
+}
+
+function Hide-Console {
+    $consolePtr = [Console.Window]::GetConsoleWindow()
+  #0 hide
+ [Console.Window]::ShowWindow($consolePtr, 0)
+}
+
+$x = @()
+
+#----------------------------------------------
+#region Application Functions
+#----------------------------------------------
+
+#endregion Application Functions
+
+#----------------------------------------------
+# Generated Form Function
+#----------------------------------------------
+function Call-citrixtoolXA76v02_psf {
+
+	#----------------------------------------------
+	#region Import the Assemblies
+	#----------------------------------------------
+	[void][reflection.assembly]::Load('mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
+	[void][reflection.assembly]::Load('System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System.DirectoryServices, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
+	[void][reflection.assembly]::Load('System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System.ServiceProcess, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
+	[void][reflection.assembly]::Load('System.Windows.Forms.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35')
+	#endregion Import Assemblies
+
+		#----------------------------------------------
+	#region Generated Form Objects
+	#----------------------------------------------
+	[System.Windows.Forms.Application]::EnableVisualStyles()
+	
+	#Form
+	$Citrix_tools = New-Object 'System.Windows.Forms.Form'
+	
+	#Groupbox
+	$grpbox_PS_console = New-Object 'System.Windows.Forms.GroupBox'
+	$grpbox_app_deliv = New-Object 'System.Windows.Forms.GroupBox'
+	$Grpbox_Priority = New-Object 'System.Windows.Forms.GroupBox'
+	$grp_App_priority = New-Object 'System.Windows.Forms.GroupBox'
+	
+	#RadioButton
+	$Rbut_Enable_Console = New-Object 'System.Windows.Forms.RadioButton'
+	$Rbut_Disable_Console = New-Object 'System.Windows.Forms.RadioButton'
+	
+	#Button	
+	$but_less_priority = New-Object 'System.Windows.Forms.Button'
+	$but_more_priority = New-Object 'System.Windows.Forms.Button'
+	$But_Add_app_Delivery = New-Object 'System.Windows.Forms.Button'
+	$But_Rmv_app_Delivery = New-Object 'System.Windows.Forms.Button'
+	$but_export = New-Object 'System.Windows.Forms.Button'
+	$but_perm_report = New-Object 'System.Windows.Forms.Button'
+	$but_clear_field = New-Object 'System.Windows.Forms.Button'
+	$But_Add_Usr_Grp = New-Object 'System.Windows.Forms.Button'
+	$But_Rmv_usr_grp = New-Object 'System.Windows.Forms.Button'
+	$but_App_Uncheck = New-Object 'System.Windows.Forms.Button'
+	$but_App_Check = New-Object 'System.Windows.Forms.Button'
+	$But_Uncheck_delivery_group = New-Object 'System.Windows.Forms.Button'
+	$But_Check_delivery_group = New-Object 'System.Windows.Forms.Button'
+	$but_chk_search_app = New-Object 'System.Windows.Forms.Button'
+	$but_Search = New-Object 'System.Windows.Forms.Button'
+	$but_app_priority = New-Object 'System.Windows.Forms.Button'
+	$but_Update_FarmData = New-Object 'System.Windows.Forms.Button'
+	
+	#Textbox
+	$Text_App_Priority = New-Object 'System.Windows.Forms.TextBox'
+	$Text_Dom_usr_grp = New-Object 'System.Windows.Forms.TextBox'
+	$Text_Search_Result = New-Object 'System.Windows.Forms.TextBox'
+	$Text_perms_rep = New-Object 'System.Windows.Forms.TextBox'
+	$Text_search_field = New-Object 'System.Windows.Forms.TextBox'
+		
+	#TabControl	
+	$Tabctrl_apps = New-Object 'System.Windows.Forms.TabControl'
+	$Tabctrl_Del_grp = New-Object 'System.Windows.Forms.TabControl'
+	$tabctrl_Users_Search = New-Object 'System.Windows.Forms.TabControl'
+	
+	#Tab
+	$tab_Apps = New-Object 'System.Windows.Forms.TabPage'
+	$Tab_Del_Grp = New-Object 'System.Windows.Forms.TabPage'
+	$tab_Search = New-Object 'System.Windows.Forms.TabPage'
+	$Tab_users = New-Object 'System.Windows.Forms.TabPage'
+	
+	#CheckedListBox
+	$Applications_list = New-Object 'System.Windows.Forms.CheckedListBox'
+	$Delivery_groups_list = New-Object 'System.Windows.Forms.CheckedListBox'
+	
+	#Label	
+	$Lab_Dom_user = New-Object 'System.Windows.Forms.Label'
+	$lab_Search_app = New-Object 'System.Windows.Forms.Label'
+	$lab_SearchBy = New-Object 'System.Windows.Forms.Label'
+	$lab_SearchField = New-Object 'System.Windows.Forms.Label'
+	
+	#Combobox
+	$Cbox_Searh_by = New-Object 'System.Windows.Forms.ComboBox'
+	
+	#Tooltip
+	$Balloons = New-Object 'System.Windows.Forms.ToolTip'
+	
+	$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
+	#endregion Generated Form Objects
+	
+	If((Test-Path -path $scriptPath\delivery.csv)) {
+		$deliveries = import-csv $scriptPath\delivery.csv|sort-object Name
+	}
+	else {
+
+		$filename="delivery.csv"
+		$file = [string]"$scriptPath\$filename"
+		$deliveries=get-BrokerDesktopgroup | select Name,UUID,Description
+        $j=0
+        Foreach ($delivery in $deliveries){
+            $del=$delivery.Name
+            $users=Get-BrokerAccessPolicyRule|where {$_.DesktopGroupName -eq $del}|select IncludedUsers
+            $users=$users[0].IncludedUsers.name -join (";")
+            $deliveries[$j].Description=$users
+            $j++
+        }
+        $deliveries|Export-Csv $file -NoTypeInformation
+		$deliveries = import-csv $scriptPath\delivery.csv|sort-object Name 
+
+	}
+
+
+	If((Test-Path -path $scriptPath\apps.csv)) {
+		$apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName 
+	}
+	else {
+
+		$filename="apps.csv"
+		$file = [string]"$scriptPath\$filename"
+		$apps=get-BrokerApplication | select @{n="ApplicationName";e={[string]::join(" ; ", $_.ApplicationName)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, @{n="DistinguisedName";e={[string]::join(" ; ", $_.Name)}},ApplicationType, @{n="CommandLine";e={[string]::join(" ; ", $_.CommandLineExecutable)}}, @{n="WorkingDirectory";e={[string]::join(" ; ", $_.WorkingDirectory)}}, @{n="ClientFolder";e={[string]::join(" ; ", $_.ClientFolder)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.AssociatedUserNames)}}, @{n="DesktopGroups";e={[string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs)}}, @{n="Priorities";e={[string]::join(" ; ", $_.AssociatedDesktopGroupPriorities)}}
+		$apps|Export-Csv $file -NoTypeInformation
+		$apps = $apps|sort-object ApplicationName 
+	}
+	
+	#Add Applications to the list of Applications
+	
+	foreach($test in $apps)
+    {
+		$app=$test.ApplicationName
+		[void] $Applications_list.Items.Add("$app")
+    }
+	
+	#Add Delivery Groups to the list of Delivery Groups
+	
+    foreach($test in $deliveries)
+    {
+		$deliv=$test.Name
+		[void] $Delivery_groups_list.Items.Add("$deliv")
+    }	
+	Hide-Console
+	#----------------------------------------------
+	# User Generated Script
+	#----------------------------------------------
+	
+
+	#region Control Helper Functions
+
+
+	$More_Server_ADD_Click={
+		$prior = [int]$N_Machines.Text
+		try { $prior++ }
+		catch { }
+		$N_Machines.Text = $prior
+	}
+	
+	$Less_Server_Add_Click={
+		$prior = [int]$N_Machines.Text
+		try { $prior-- }
+		catch { }
+		if ($prior -lt "0") { $prior = 0 }
+		$N_Machines.Text = $prior
+	}
+	
+	$but_add_M_Catalog_Delivery_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$List_view_Servers_SelectedIndexChanged={
+		#TODO: Place custom script here
+		
+	}
+	
+	
+	$Data_Catalog_CellValueChanged=[System.Windows.Forms.DataGridViewCellEventHandler]{
+	#Event Argument: $_ = [System.Windows.Forms.DataGridViewCellEventArgs]
+		$Row = $Data_Catalog.CurrentCell.RowIndex
+		$row = $Data_Catalog.rows.count
+		
+		foreach ($RowIndex in 0..($Data_Catalog.rows.count - 1))
+		{
+			if ($RowIndex -ne $Row)
+			{
+				$Data_Catalog.Rows[$RowIndex].Cells[0].value = $false
+			}
+		}
+		
+	}
+	
+	
+	
+	$Data_server_CurrentCellDirtyStateChanged={
+		#Event Argument: $_ = [System.Windows.Forms.DataGridViewCellEventArgs]
+		$Row = $Data_server.CurrentCell.RowIndex
+		$row = $Data_server.rows.count
+		
+		foreach ($RowIndex in 0..($Data_server.rows.count - 1))
+		{
+			if ($RowIndex -ne $Row)
+			{
+				$Data_server.Rows[$RowIndex].Cells[0].value = $false
+			}
+		}
+		
+	}
+	
+	$Data_Catalog_CellContentClick=[System.Windows.Forms.DataGridViewCellEventHandler]{
+	#Event Argument: $_ = [System.Windows.Forms.DataGridViewCellEventArgs]
+		#TODO: Place custom script here
+		
+	}
+	
+	$Data_server_CellContentClick=[System.Windows.Forms.DataGridViewCellEventHandler]{
+	#Event Argument: $_ = [System.Windows.Forms.DataGridViewCellEventArgs]
+	#TODO: Place custom script here
+		
+	}
+	
+	$But_Rmv_From_Del_grp_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$control_Validated={
+		#Pass the calling control and clear error message
+		$errorprovider1.SetError($this, "");	
+	}
+	
+	$maskedtextboxBirthDate_TypeValidationCompleted=[System.Windows.Forms.TypeValidationEventHandler]{
+	#Event Argument: $_ = [System.Windows.Forms.TypeValidationEventArgs]
+		if($_.Cancel -eq $false)
+		{
+			$_.Cancel = -not $_.IsValidInput
+		}
+		
+		if($_.IsValidInput -eq $false)
+		{
+			$errorprovider1.SetError($maskedtextboxBirthDate, "Invalid Date Format");
+		}
+	}
+	
+	$chartDiskSpace_VisibleChanged={
+		if($this.Visible)
+		{
+			Load-DiskChart $this
+		}
+	}
+	
+	#Call Load-DiskChart function to load the chart
+	
+	$formMain_FormClosed=[System.Windows.Forms.FormClosedEventHandler]{
+	#Event Argument: $_ = [System.Windows.Forms.FormClosedEventArgs]
+		#Stop any pending jobs
+		Stop-JobTracker
+	}
+	
+	$timerJobTracker_Tick={
+		Update-JobTracker
+	}
+	
+	$form1_Load={
+		
+		#region Load Element Host
+		Add-Type -AssemblyName WindowsFormsIntegration
+		$script:elementhost = New-Object System.Windows.Forms.Integration.ElementHost
+		Replace-PlaceHolder -PlaceHolderControl $elementHostPlaceholder -ReplaceControl $elementhost
+	#Sample XAML Code
+		$xaml = @"
+<?xml version="1.0" encoding="utf-16"?>
+	<Canvas Name="MyPanel"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            >
+            <Button Name="WPFButton" Canvas.Top="10">Embedded WPF Control
+            </Button>
+	</Canvas>
+"@
+		
+		$script:WPFControl = Load-ElementHost -Elementhost $elementhost -XAML $xaml
+		if($WPFControl)
+		{
+			$wpfButton = $WPFControl.FindName("WPFButton")
+			
+			if($wpfButton)
+			{
+				$wpfButton.Add_Click({Write-Host "WPF Button was clicked"})
+			}
+		}
+		#endregion
+	}
+	
+	$labelPriority_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$but_more_priority_Click = {
+		$prior = [int]$Text_App_Priority.Text
+		try { $prior++ }
+		catch { }
+		$Text_App_Priority.Text = $prior
+	}
+	
+	$but_less_priority_Click= {
+		$prior = [int]$Text_App_Priority.Text
+		try { $prior-- }
+		catch { }
+		if ($prior -lt "0") { $prior = 0 }
+		$Text_App_Priority.Text = $prior
+	}
+	
+	$Lab_Applications_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$Lab_Dom_user_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$But_Uncheck_delivery_group_Click={
+		for ($i = 0; $i -lt $Delivery_groups_list.Items.count; $i++)
+		{
+			$Delivery_groups_list.SetItemchecked($i, $False)
+		}
+		
+	}
+	
+	$but_App_Check_Click={
+		for ($i = 0; $i -lt $Applications_list.Items.count; $i++)
+		{
+			$Applications_list.SetItemchecked($i, $True)
+		}
+	}
+	
+	$but_App_Uncheck_Click={
+		for ($i = 0; $i -lt $Applications_list.Items.count; $i++)
+		{
+			$Applications_list.SetItemchecked($i, $False)
+		}
+	}
+	
+	$But_Check_delivery_group_Click={
+		for ($i = 0; $i -lt $Delivery_groups_list.Items.count; $i++)
+		{
+			$Delivery_groups_list.SetItemchecked($i, $True)
+		}
+		
+	}
+	
+	$But_Rmv_app_Delivery_Click={
+		$appscheck = $Applications_list.CheckedItems
+		$delscheck = $Delivery_groups_list.CheckedItems
+		$countapp=$appscheck.count
+		$countdel=$delscheck.count
+		$applicationchecked=(1..$countapp)
+		$deliverychecked=(1..$countdel)
+		$i=0
+		$a = new-object -comobject wscript.shell
+		$Question = $a.popup("Are you sure to remove these applications from delivery groups?", 0,"Delete Files",4)
+		If ($Question -ne 6) {
+			$message = "Cancelled"
+			$a.Popup($message,0,"Cancelled",0x0)
+		}
+		Else {
+			foreach ($application in $Applications_list.CheckedItems) {
+				$applicationchecked[$i]=$application
+				$i++
+				$j=0
+				foreach ($delivery in $Delivery_groups_list.CheckedItems) {
+					$deliverychecked[$j]=$delivery
+					$app=[string]$application
+					$del=[string]$delivery
+					remove-brokerapplication "$app" -desktopgroup "$del"
+					}
+					$j++
+				}
+							
+			$message = [string]"Trying to remove Application/s " + "`r`n" + "$([char]34)$applicationchecked$([char]34)" + " to deliveries " + "`r`n" + "$([char]34)$deliverychecked$([char]34)"
+			$wshell = New-Object -ComObject Wscript.Shell
+			$wshell.Popup($message,0,"Done",0x0)
+		}
+	}
+	
+		
+	$But_Add_app_Delivery_Click={
+		$appscheck = $Applications_list.CheckedItems
+		$delscheck = $Delivery_groups_list.CheckedItems
+		$countapp=$appscheck.count
+		$countdel=$delscheck.count
+		$applicationchecked=(1..$countapp)
+		$deliverychecked=(1..$countdel)
+		$i=0
+		foreach ($application in $Applications_list.CheckedItems) {
+			$applicationchecked[$i]=$application
+			$i++
+			$j=0
+			foreach ($delivery in $Delivery_groups_list.CheckedItems) {
+				$deliverychecked[$j]=$delivery
+				$app=[string]$application
+				$del=[string]$delivery
+				IF ($text_app_priority -eq $null){
+					$app=[string]$Application
+					add-brokerapplication "$app" -desktopgroup "$del" -Priority 0
+				}
+				Else {
+					$priority=$text_app_priority.text
+					add-brokerapplication "$app" -desktopgroup "$del" -Priority $priority
+				}
+				$j++
+			}
+		}				
+		$message = [string]"Trying to add Application/s " + "`r`n" + "$([char]34)$applicationchecked$([char]34)" + " to deliveries " + "`r`n" + "$([char]34)$deliverychecked$([char]34)"
+		$wshell = New-Object -ComObject Wscript.Shell
+		$wshell.Popup($message,0,"Done",0x0)
+	}
+	
+	$but_export_Click={
+		IF ($text_perms_rep.text -ne $full){
+		$text_perms_rep.text|set-content $scriptpath\export.txt
+		}
+		
+	}
+	
+	$but_perm_report_Click={
+		
+
+    $n=0
+    $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName, Enabled
+    $dels = import-csv $scriptPath\delivery.csv|sort-object Name, Description
+    $numero=$Applications_list.CheckedItems.count
+    $numero2=$Delivery_groups_list.CheckedItems.count
+    $num=$numero+$numero2-1
+    $permiso = (0 .. $num)
+    foreach ($objItem in $Applications_list.CheckedItems)
+	{
+	    $app="$objItem"
+	    $datos = $apps|where {$_.ApplicationName -eq $app}|select UsersandGroups, Enabled
+	    $grupo = $datos.UsersandGroups
+	    $enabled = $datos.Enabled
+        IF ($enabled -eq "True") {$state = "Enabled"}
+	    else {$state = "Disabled"}
+	    $permiso[$n] = "Application permissions " + $app + ": " + $state + "`r`n" + $grupo + "`r`n" + "`r`n"
+	    $n++
+	}
+    foreach ($objItem in $Delivery_groups_list.CheckedItems)
+	{
+	    $del="$objItem"
+	    $datos = $dels|where {$_.Name -eq $del}|select Description
+	    $grupo = $datos.Description
+	    $permiso[$n] = "Delivery Group permissions " + $del + ": " + "`r`n" + $grupo + "`r`n" + "`r`n"
+	    $n++
+	}
+    $text_perms_rep.text = $permiso
+
+		
+	}
+	
+	$but_clear_field_Click={
+		$Text_Dom_usr_grp.Text=$null
+		
+	}
+	
+	$but_app_priority_Click={
+		$apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
+		$Del_csv = import-csv $scriptPath\delivery.csv
+		$resultado = @{}
+		$test = @{}
+        $names = @{}
+        $n=0
+		foreach ($app in $apps_csv){
+		    $names[$n]=$app.ApplicationName
+            $priorities=$app.priorities -split (" ; ")
+            $deliveries=$app.DesktopGroups -split (" ; ")
+            $x=0
+            foreach ($delivery in $deliveries){
+                $DG=$Del_csv|where {$_.UUID -eq $delivery}|select name
+                $deliveries[$x]=$DG.name
+                $x++
+            }
+            $resultado.priority=$priorities
+            $resultado.deliveries=$deliveries
+            $nombre=$names[$n]
+            $test.$nombre=$resultado
+            $n++
+        }
+        $count=$Applications_list.CheckedItems.count
+        $count=$count-1
+
+        $res=(0..$count)
+        $i=0
+        foreach ($objItem in $Applications_list.CheckedItems){
+	        $appname=$objItem
+            #$text_perms_rep.text=$objItem
+            $priors=$test.$appname.priority
+            $delivers=$test.$appname.deliveries
+            $x=0
+            $count=$priors.count -1
+            $array=(0..$count)
+            
+            foreach ($prior in $priors) {
+            $prior=$priors[$x]
+            $deliver=$delivers[$x]
+            $array[$x]="Priority " + "$prior" + " in Delivery " + "$deliver" + "`r`n"
+            $x++
+            }
+            $res[$i]="Application " + "$appname" + "`r`n" + "$array" + "`r`n"
+            $i++
+            }
+            $text_perms_rep.text=$res
+        }
+     
+			
+	$but_Search_Click={
+	
+	If ($Text_search_field.text -gt $null){
+		If ($Cbox_Searh_by.text -eq "User or group"){	   
+			$apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
+            $del_csv = import-csv $scriptPath\delivery.csv|sort-object Name
+			$grpOrigen = $Text_search_field.text
+			$permission = $apps_csv | where{$_.UsersandGroups -like "*$grpOrigen*"} | select ApplicationName
+            $permission2 = $del_csv | where{$_.Description -like "*$grpOrigen*"} | select Name
+			$result = $permission.applicationname|out-string
+            $result2 = $permission2.name|out-string
+
+			$Text_Search_Result.text = "Published applications for User/group " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" +"Application List: " + "`r`n" + "`r`n" + $result + "`r`n" + "`r`n" + "Permission in Delivery groups for User/group "
+
+}
+	If ($Cbox_Searh_by.text -eq "Delivery Group"){	   
+	   $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
+	   $Del_csv = import-csv $scriptPath\delivery.csv
+       $dskOrigen = $Text_search_field.text
+	   $DSKS = $Del_csv | where{$_.Name -like "*$dskOrigen*"} | select UUID,Name
+       $permission=$null
+       $permission=@{}
+       IF ($DSKS -ne $null){
+       foreach ($dsk in $DSKS){
+              $name=$dsk.name
+              $UID=$dsk.UUID
+              $permission.$name = $apps_csv | where{$_.DesktopGroups -like "*$UID*"} | select ApplicationName
+       }
+       }
+       $result = $permission.values.applicationname|sort|unique
+       $cuenta = $result.count
+       IF ($permission.count -eq $null){
+            $count = "0"
+       }
+       else {
+       $count = $result.count
+       }
+       $result=$result|out-string     
+       $Text_Search_Result.text = "Published applications for Delivery Group " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" +"Application List: " + "`r`n" + "`r`n" + $result
+}
+}
+}
+	
+	$but_chk_search_app_Click={
+	
+	If ($Text_search_field.text -gt $null){
+  If ($Cbox_Searh_by.text -eq "User or group"){	   
+	   $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
+       $grpOrigen = $Text_search_field.text
+       $permission = $apps_csv | where{$_.UsersandGroups -like "*$grpOrigen*"} | select ApplicationName
+	   for ($i=0;$i -lt $Applications_list.Items.count;$i++) {
+          $Applications_list.SetItemchecked($i,$False)
+       }
+       $i=0
+	   $count=$permission.count-1
+	   $resapps=(0..$count)
+	   $x=0
+	   IF ($count -gt "-1") {
+	   foreach ($objitem in $Applications_list.items) {
+	      foreach ($objitem2 in $permission) {
+			$var1=$objitem|out-string
+			$var2=$objitem2.applicationname|out-string
+		    IF ($var1 -eq $var2) {
+                $resapps[$x]=$i
+                $x++
+		    }
+		   }
+	   $i++
+	   }
+	   foreach ($objitem in $resapps){
+            $Applications_list.SetItemchecked($objitem,$True)
+          }
+   }
+		}
+    If ($Cbox_Searh_by.text -eq "Delivery Group"){
+       $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
+	   $Del_csv = import-csv $scriptPath\delivery.csv
+       $dskOrigen = $Text_search_field.text
+	   $DSKS = $Del_csv | where{$_.Name -like "*$dskOrigen*"} | select UUID,Name
+       $permission=$null
+       $permission=@{}
+       IF ($DSKS -ne $null){
+       foreach ($dsk in $DSKS){
+              $name=$dsk.name
+              $UID=$dsk.UUID
+              $permission.$name = $apps_csv | where{$_.DesktopGroups -like "*$UID*"}
+       }
+       }
+       $result = $permission.values.applicationname|sort|unique
+        for ($i=0;$i -lt $Applications_list.Items.count;$i++) {
+          $Applications_list.SetItemchecked($i,$False)
+       }
+        
+       $i=0
+	   $count=$result.count-1
+	   $resapps=@{}
+	   $x=0
+	   IF ($count -gt "-1") {
+	   foreach ($objitem in $Applications_list.items) {
+	      foreach ($objitem2 in $result) {
+			$var1=$objitem|out-string
+			$var2=$objitem2|out-string
+
+		    IF ($var1 -eq $var2) {
+             $resapps[$x]=$i
+             $x++
+		    }
+		   }
+	   $i++
+	   }
+       $tests=$resapps.values
+	   foreach ($objitem in $tests){
+            $Applications_list.SetItemchecked($objitem,$True)
+       }
+       }
+    }
+    }
+    }
+    
+	$Rbut_Enable_Console_OnClick ={
+	Show-Console
+	}
+	
+	$Rbut_Disable_Console_OnClick ={
+	Hide-Console
+	}
+	
+	$But_Add_Usr_Grp_Click={
+	
+    $appscheck = $Applications_list.CheckedItems
+	$delscheck = $Delivery_groups_list.CheckedItems
+    $countapp=$appscheck.count
+	$countdel=$delscheck.count
+    $applicationchecked=(1..$countapp)
+	$deliverychecked=(1..$countdel)
+    IF ($Text_Dom_usr_grp.Text -lt "0") {
+		$message = "Empty field" + "`r`n"
+		$wshell = New-Object -ComObject Wscript.Shell
+		$wshell.Popup($message,0,"Write a group name",0x0)
+	} 
+	else {
+        $i=0
+	    foreach ( $objItem in $appscheck ) {
+	      $app="$objItem"
+	      $groups = $Text_Dom_usr_grp.Text
+		  $groups=$groups -replace (" ; ",";")
+	      $groups=$groups -replace (" ;",";")
+		  $groups=$groups -replace ("; ",";")
+		  $groups=$groups.Split(';')
+		  foreach ($group in $groups) {
+			get-brokerapplication "$app"|Add-Brokeruser "$group" 
+			$applicationchecked[$i]=$app
+		  }
+          $i++
+	      }
+		  $i=0
+		foreach ( $objItem in $delscheck ) {
+	      $del="$objItem"
+	      $groups = $Text_Dom_usr_grp.Text
+		  $groups=$groups -replace (" ; ",";")
+	      $groups=$groups -replace (" ;",";")
+		  $groups=$groups -replace ("; ",";")
+		  $groups=$groups.Split(';')
+		  Get-BrokerAccessPolicyRule -DesktopGroupName $del | Set-BrokerAccessPolicyRule -AddIncludedUsers $Groups
+	      $deliverychecked[$i]=$del
+          $i++
+	      }
+		  
+		$applicationchecked=$applicationchecked|out-string
+		$deliverychecked=$deliverychecked|out-string
+		IF ($countapp -eq "0") {
+			if ($countdel -ne "0") {
+				$message = [string]"Trying to add User/group " + "$([char]34)$groups$([char]34)" + " to deliveries " + "`r`n" + "$deliverychecked"
+				$wshell = New-Object -ComObject Wscript.Shell
+				$wshell.Popup($message,0,"Done",0x0)
+			}
+			else {
+				$message = [string]"Please, select some Application and/or Delivery group"
+				$wshell = New-Object -ComObject Wscript.Shell
+				$wshell.Popup($message,0,"Done",0x0)
+			}
+		}
+		else {
+			if ($countdel -eq "0") {
+				$message = [string]"Trying to add User/group " +  "$([char]34)$groups$([char]34)" + " to applications " + "`r`n" + "$applicationchecked"
+				$wshell = New-Object -ComObject Wscript.Shell
+				$wshell.Popup($message,0,"Done",0x0)
+			}
+			else {
+				$message = [string]"Trying to add User/group " +  "$([char]34)$groups$([char]34)" + " to applications: " + "`r`n" + "$applicationchecked" + "`r`n" + " And to delivery groups: " + "`r`n" + "$deliverychecked"
+				$wshell = New-Object -ComObject Wscript.Shell
+				$wshell.Popup($message,0,"Done",0x0)
+			}
+			
+		}
+		
+    }
+  
+}
+	
+	$But_Rmv_Usr_Grp_Click={
+	
+	$appscheck = $Applications_list.CheckedItems
+	$delscheck = $Delivery_groups_list.CheckedItems
+    $countapp=$appscheck.count
+	$countdel=$delscheck.count
+    $applicationchecked=(1..$countapp)
+	$deliverychecked=(1..$countdel)
+    IF ($Text_Dom_usr_grp.Text -lt "0") {
+		$message = "Empty field" + "`r`n"
+		$wshell = New-Object -ComObject Wscript.Shell
+		$wshell.Popup($message,0,"Write a group name",0x0)
+	} 
+	else {
+        $i=0
+		$a = new-object -comobject wscript.shell
+		$Question = $a.popup("Are you sure to remove permission in $app to the user/group?", 0,"Delete Files",4)
+		If ($Question -eq 6) {
+		  foreach ( $objItem in $appscheck ) {
+			$app="$objItem"
+			$groups = $Text_Dom_usr_grp.Text
+			$groups=$groups -replace (" ; ",";")
+			$groups=$groups -replace (" ;",";")
+			$groups=$groups -replace ("; ",";")
+			$groups=$groups.Split(';')
+			foreach ($group in $groups) {
+				get-brokerapplication "$app"|Remove-Brokeruser "$group" 
+		  }
+		  $applicationchecked[$i]=$app
+          $i++
+	      }
+		  $l=0
+		foreach ( $objItem in $delscheck ) {
+	      $del="$objItem"
+	      $groups = $Text_Dom_usr_grp.Text
+		  $groups=$groups -replace (" ; ",";")
+	      $groups=$groups -replace (" ;",";")
+		  $groups=$groups -replace ("; ",";")
+		  $groups=$groups.Split(';')
+		  Get-BrokerAccessPolicyRule -DesktopGroupName $del | Set-BrokerAccessPolicyRule -RemoveIncludedUsers $Groups
+	      $deliverychecked[$l]=$del
+          $l++
+	      }
+		  }
+		  if ($i -eq 0){
+			if ($l -eq 0) {
+				$message = [string]"Cancelado"
+				$wshell = New-Object -ComObject Wscript.Shell
+				$wshell.Popup($message,0,"Done",0x0)
+			}
+          } 
+		   else {
+		   
+		$applicationchecked=$applicationchecked|out-string
+		$deliverychecked=$deliverychecked|out-string
+		IF ($countapp -eq "0") {
+			if ($countdel -ne "0") {
+				$message = [string]"Trying to Remove User/group " + "$([char]34)$groups$([char]34)" + " to deliveries " + "`r`n" + "$deliverychecked"
+				$wshell = New-Object -ComObject Wscript.Shell
+				$wshell.Popup($message,0,"Done",0x0)
+			}
+			else {
+				$message = [string]"Please, select some Application and/or Delivery group"
+				$wshell = New-Object -ComObject Wscript.Shell
+				$wshell.Popup($message,0,"Done",0x0)
+			}
+		}
+		else {
+			if ($countdel -eq "0") {
+				$message = [string]"Trying to Remove User/group " +  "$([char]34)$groups$([char]34)" + " to applications " + "`r`n" + "$applicationchecked"
+				$wshell = New-Object -ComObject Wscript.Shell
+				$wshell.Popup($message,0,"Done",0x0)
+			}
+			else {
+				$message = [string]"Trying to Remove User/group " +  "$([char]34)$groups$([char]34)" + " to applications: " + "`r`n" + "$applicationchecked" + "`r`n" + " And to delivery groups: " + "`r`n" + "$deliverychecked"
+				$wshell = New-Object -ComObject Wscript.Shell
+				$wshell.Popup($message,0,"Done",0x0)
+			}
+			
+		}
+		
+    }
+	
+	}
+	}
+	
+	$but_Update_FarmData_Click={
+		$Applications_list.Items.clear()
+		$Delivery_groups_list.Items.clear()
+		$filename="delivery.csv"
+		$file = [string]"$scriptPath\$filename"
+		$deliveries=get-BrokerDesktopgroup | select Name,UUID,Description
+        $j=0
+        Foreach ($delivery in $deliveries){
+            $del=$delivery.Name
+            $users=Get-BrokerAccessPolicyRule|where {$_.DesktopGroupName -eq $del}|select IncludedUsers
+            $users=$users[0].IncludedUsers.name -join (";")
+            $deliveries[$j].Description=$users
+            $j++
+        }
+        $deliveries|Export-Csv $file -NoTypeInformation
+		$deliveries = import-csv $scriptPath\delivery.csv|sort-object Name 
+
+		$filename="apps.csv"
+		$file = [string]"$scriptPath\$filename"
+		$apps=get-BrokerApplication | select @{n="ApplicationName";e={[string]::join(" ; ", $_.ApplicationName)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, @{n="DistinguisedName";e={[string]::join(" ; ", $_.Name)}},ApplicationType, @{n="CommandLine";e={[string]::join(" ; ", $_.CommandLineExecutable)}}, @{n="WorkingDirectory";e={[string]::join(" ; ", $_.WorkingDirectory)}}, @{n="ClientFolder";e={[string]::join(" ; ", $_.ClientFolder)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.AssociatedUserNames)}}, @{n="DesktopGroups";e={[string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs)}}, @{n="Priorities";e={[string]::join(" ; ", $_.AssociatedDesktopGroupPriorities)}}
+		$apps|Export-Csv $file -NoTypeInformation
+		$apps = $apps|sort-object ApplicationName 
+	
+	#Add Applications to the list of Applications
+	
+	foreach($test in $apps)
+    {
+		$app=$test.ApplicationName
+		[void] $Applications_list.Items.Add("$app")
+    }
+	
+	#Add Delivery Groups to the list of Delivery Groups
+	
+    foreach($test in $deliveries)
+    {
+		$deliv=$test.Name
+		[void] $Delivery_groups_list.Items.Add("$deliv")
+    }
+	
+	}
+	
+
+	
+	# --End User Generated Script--
+	#----------------------------------------------
+	#region Generated Events
+	#----------------------------------------------
+	
+	$Form_StateCorrection_Load=
+	{
+		#Correct the initial state of the form to prevent the .Net maximized form issue
+		$Citrix_tools.WindowState = $InitialFormWindowState
+	}
+	
+	$Form_Cleanup_FormClosed=
+	{
+		#Remove all event handlers from the controls
+		try
+		{
+			$but_app_priority.remove_Click($but_app_priority_Click)
+			$but_less_priority.remove_Click($but_less_priority_Click)
+			$but_more_priority.remove_Click($but_more_priority_Click)
+			$But_Add_app_Delivery.remove_Click($But_Add_app_Delivery_Click)
+			$But_Rmv_app_Delivery.remove_Click($But_Rmv_app_Delivery_Click)
+			$Applications_list.remove_SelectedIndexChanged($handler_checkedListBox1_SelectedIndexChanged)
+			$but_App_Uncheck.remove_Click($but_App_Uncheck_Click)
+			$but_App_Check.remove_Click($but_App_Check_Click)
+			$but_export.remove_Click($but_export_Click)
+			$but_perm_report.remove_Click($but_perm_report_Click)
+			$but_clear_field.remove_Click($but_clear_field_Click)
+			$Lab_Dom_user.remove_Click($Lab_Dom_user_Click)
+			$but_Search.remove_Click($but_Search_Click)
+			$but_chk_search_app.remove_Click($but_chk_search_app_Click)
+			$But_Uncheck_delivery_group.remove_Click($But_Uncheck_delivery_group_Click)
+			$But_Check_delivery_group.remove_Click($But_Check_delivery_group_Click)
+			$Citrix_tools.remove_Load($handler_Citrix_tools_Load)
+			$Balloons.remove_Popup($handler_toolTip1_Popup)
+			$Citrix_tools.remove_Load($Form_StateCorrection_Load)
+			$Citrix_tools.remove_FormClosed($Form_Cleanup_FormClosed)
+		}
+		catch [Exception]
+		{ }
+	}
+	#endregion Generated Events
+
+	#----------------------------------------------
+	#region Generated Form Code
+	#----------------------------------------------
+	$Citrix_tools.SuspendLayout()
+	$grp_App_priority.SuspendLayout()
+	$grpbox_PS_console.SuspendLayout()
+	$grpbox_app_deliv.SuspendLayout()
+	$Grpbox_Priority.SuspendLayout()
+	$Tabctrl_apps.SuspendLayout()
+	$tab_Apps.SuspendLayout()
+	$tabctrl_Users_Search.SuspendLayout()
+	$Tab_users.SuspendLayout()
+	$tab_Search.SuspendLayout()
+	$Tabctrl_Del_grp.SuspendLayout()
+	$Tab_Del_Grp.SuspendLayout()
+	#
+	# Citrix_tools
+	#
+	$Citrix_tools.Controls.Add($but_Update_FarmData)
+	$Citrix_tools.Controls.Add($grp_App_priority)
+	$Citrix_tools.Controls.Add($grpbox_PS_console)
+	$Citrix_tools.Controls.Add($grpbox_app_deliv)
+	$Citrix_tools.Controls.Add($Tabctrl_apps)
+	$Citrix_tools.Controls.Add($tabctrl_Users_Search)
+	$Citrix_tools.Controls.Add($Tabctrl_Del_grp)
+	$Citrix_tools.AutoScaleMode = 'None'
+	$Citrix_tools.BackColor = 'Control'
+	$Citrix_tools.ClientSize = '1148, 455'
+	$Citrix_tools.MaximizeBox = $False
+	$Citrix_tools.MinimizeBox = $False
+	$Citrix_tools.Name = "Citrix_tools"
+	$Citrix_tools.SizeGripStyle = 'Hide'
+	$Citrix_tools.Text = "Citrix Tools"
+	$Citrix_tools.add_Load($handler_Citrix_tools_Load)
+	#
+	# but_Update_FarmData
+	#
+	$but_Update_FarmData.Location = '257, 354'
+	$but_Update_FarmData.Name = "but_Update_FarmData"
+	$but_Update_FarmData.Size = '172, 52'
+	$but_Update_FarmData.TabIndex = 67
+	$but_Update_FarmData.Text = "Update Farm Data"
+	$but_Update_FarmData.UseVisualStyleBackColor = $True
+	$but_Update_FarmData.add_Click($but_Update_FarmData_Click)
+	#
+	# grp_App_priority
+	#
+	$grp_App_priority.Controls.Add($but_app_priority)
+	$grp_App_priority.Location = '257, 38'
+	$grp_App_priority.Name = "grp_App_priority"
+	$grp_App_priority.Size = '172, 64'
+	$grp_App_priority.TabIndex = 66
+	$grp_App_priority.TabStop = $False
+	$grp_App_priority.Text = "Check Application Priority"
+	#
+	# but_app_priority
+	#
+	$but_app_priority.Location = '6, 27'
+	$but_app_priority.Name = "but_app_priority"
+	$but_app_priority.Size = '75, 24'
+	$but_app_priority.TabIndex = 0
+	$but_app_priority.Text = "Check"
+	$but_app_priority.UseVisualStyleBackColor = $True
+	$but_app_priority.add_Click($but_app_priority_Click)
+	#
+	# grpbox_PS_console
+	#
+	$grpbox_PS_console.Controls.Add($Rbut_Enable_Console)
+	$grpbox_PS_console.Controls.Add($Rbut_Disable_Console)
+	$grpbox_PS_console.Location = '257, 267'
+	$grpbox_PS_console.Name = "grpbox_PS_console"
+	$grpbox_PS_console.Size = '172, 67'
+	$grpbox_PS_console.TabIndex = 65
+	$grpbox_PS_console.TabStop = $False
+	$grpbox_PS_console.Text = "Powershell Console"
+	#
+	# Rbut_Enable_Console
+	#
+	$Rbut_Enable_Console.Location = '6, 19'
+	$Rbut_Enable_Console.Name = "Rbut_Enable_Console"
+	$Rbut_Enable_Console.Size = '125, 18'
+	$Rbut_Enable_Console.TabIndex = 63
+	$Rbut_Enable_Console.TabStop = $True
+	$Rbut_Enable_Console.Text = "Enable"
+	$Rbut_Enable_Console.add_Click($Rbut_Enable_Console_OnClick)
+	$Rbut_Enable_Console.UseVisualStyleBackColor = $True
+	#
+	# Rbut_Disable_Console
+	#
+	$Rbut_Disable_Console.Location = '6, 43'
+	$Rbut_Disable_Console.Name = "Rbut_Disable_Console"
+	$Rbut_Disable_Console.Size = '125, 18'
+	$Rbut_Disable_Console.TabIndex = 64
+	$Rbut_Disable_Console.TabStop = $True
+	$Rbut_Disable_Console.Text = "Disable"
+	$Rbut_Disable_Console.Checked = $true
+	$Rbut_Disable_Console.add_Click($Rbut_Disable_Console_OnClick)
+	$Rbut_Disable_Console.UseVisualStyleBackColor = $True
+	#
+	# grpbox_app_deliv
+	#
+	$grpbox_app_deliv.Controls.Add($Grpbox_Priority)
+	$grpbox_app_deliv.Controls.Add($But_Add_app_Delivery)
+	$grpbox_app_deliv.Controls.Add($But_Rmv_app_Delivery)
+	$grpbox_app_deliv.Location = '257, 130'
+	$grpbox_app_deliv.Name = "grpbox_app_deliv"
+	$grpbox_app_deliv.Size = '172, 113'
+	$grpbox_app_deliv.TabIndex = 42
+	$grpbox_app_deliv.TabStop = $False
+	$grpbox_app_deliv.Text = "Publish application to Delivery Group"
+	#
+	# Grpbox_Priority
+	#
+	$Grpbox_Priority.Controls.Add($but_less_priority)
+	$Grpbox_Priority.Controls.Add($Text_App_Priority)
+	$Grpbox_Priority.Controls.Add($but_more_priority)
+	$Grpbox_Priority.Location = '85, 19'
+	$Grpbox_Priority.Name = "Grpbox_Priority"
+	$Grpbox_Priority.Size = '81, 78'
+	$Grpbox_Priority.TabIndex = 57
+	$Grpbox_Priority.TabStop = $False
+	$Grpbox_Priority.Text = "Priority"
+	#
+	# but_less_priority
+	#
+	$but_less_priority.Location = '44, 47'
+	$but_less_priority.Name = "but_less_priority"
+	$but_less_priority.Size = '28, 25'
+	$but_less_priority.TabIndex = 49
+	$but_less_priority.Text = "-"
+	$but_less_priority.UseVisualStyleBackColor = $True
+	$but_less_priority.add_Click($but_less_priority_Click)
+	#
+	# Text_App_Priority
+	#
+	$Text_App_Priority.BackColor = 'GradientInactiveCaption'
+	$Text_App_Priority.Location = '6, 34'
+	$Text_App_Priority.Name = "Text_App_Priority"
+	$Text_App_Priority.Size = '32, 20'
+	$Text_App_Priority.TabIndex = 48
+	#
+	# but_more_priority
+	#
+	$but_more_priority.Location = '44, 19'
+	$but_more_priority.Name = "but_more_priority"
+	$but_more_priority.Size = '28, 25'
+	$but_more_priority.TabIndex = 48
+	$but_more_priority.Text = "+"
+	$but_more_priority.UseVisualStyleBackColor = $True
+	$but_more_priority.add_Click($but_more_priority_Click)
+	#
+	# But_Add_app_Delivery
+	#
+	$But_Add_app_Delivery.Font = "Microsoft Sans Serif, 8.25pt"
+	$But_Add_app_Delivery.Location = '6, 34'
+	$But_Add_app_Delivery.Name = "But_Add_app_Delivery"
+	$But_Add_app_Delivery.Size = '55, 21'
+	$But_Add_app_Delivery.TabIndex = 38
+	$But_Add_app_Delivery.Text = "Add"
+	$But_Add_app_Delivery.UseVisualStyleBackColor = $True
+	$But_Add_app_Delivery.add_Click($But_Add_app_Delivery_Click)
+	#
+	# But_Rmv_app_Delivery
+	#
+	$But_Rmv_app_Delivery.Font = "Microsoft Sans Serif, 8.25pt"
+	$But_Rmv_app_Delivery.Location = '6, 61'
+	$But_Rmv_app_Delivery.Name = "But_Rmv_app_Delivery"
+	$But_Rmv_app_Delivery.Size = '55, 21'
+	$But_Rmv_app_Delivery.TabIndex = 37
+	$But_Rmv_app_Delivery.Text = "Remove"
+	$But_Rmv_app_Delivery.UseVisualStyleBackColor = $True
+	$But_Rmv_app_Delivery.add_Click($But_Rmv_app_Delivery_Click)
+	#
+	# Tabctrl_apps
+	#
+	$Tabctrl_apps.Controls.Add($tab_Apps)
+	$Tabctrl_apps.Appearance = 'Buttons'
+	$Tabctrl_apps.Location = '12, 13'
+	$Tabctrl_apps.Name = "Tabctrl_apps"
+	$Tabctrl_apps.SelectedIndex = 0
+	$Tabctrl_apps.Size = '239, 400'
+	$Tabctrl_apps.TabIndex = 62
+	#
+	# tab_Apps
+	#
+	$tab_Apps.Controls.Add($Applications_list)
+	$tab_Apps.Controls.Add($but_App_Uncheck)
+	$tab_Apps.Controls.Add($but_App_Check)
+	$tab_Apps.BackColor = 'Control'
+	$tab_Apps.Location = '4, 25'
+	$tab_Apps.Name = "tab_Apps"
+	$tab_Apps.Padding = '3, 3, 3, 3'
+	$tab_Apps.Size = '231, 371'
+	$tab_Apps.TabIndex = 0
+	$tab_Apps.Text = "Applications"
+	#
+	# Applications_list
+	#
+	$Applications_list.BackColor = 'GradientInactiveCaption'
+	$Applications_list.FormattingEnabled = $True
+	$Applications_list.Location = '5, 5'
+	$Applications_list.Name = "Applications_list"
+	$Applications_list.ScrollAlwaysVisible = $True
+	$Applications_list.HorizontalScrollBar = $True
+	$Applications_list.Size = '223, 334'
+	$Applications_list.TabIndex = 0
+	$Applications_list.add_SelectedIndexChanged($handler_checkedListBox1_SelectedIndexChanged)
+	#
+	# but_App_Uncheck
+	#
+	$but_App_Uncheck.BackColor = 'Control'
+	$but_App_Uncheck.Location = '6, 344'
+	$but_App_Uncheck.Name = "but_App_Uncheck"
+	$but_App_Uncheck.Size = '59, 21'
+	$but_App_Uncheck.TabIndex = 59
+	$but_App_Uncheck.Text = "Uncheck"
+	$but_App_Uncheck.UseVisualStyleBackColor = $True
+	$but_App_Uncheck.add_Click($but_App_Uncheck_Click)
+	#
+	# but_App_Check
+	#
+	$but_App_Check.BackColor = 'Control'
+	$but_App_Check.Location = '71, 344'
+	$but_App_Check.Name = "but_App_Check"
+	$but_App_Check.Size = '59, 21'
+	$but_App_Check.TabIndex = 60
+	$but_App_Check.Text = "Check"
+	$but_App_Check.UseVisualStyleBackColor = $True
+	$but_App_Check.add_Click($but_App_Check_Click)
+	#
+	# tabctrl_Users_Search
+	#
+	$tabctrl_Users_Search.Controls.Add($Tab_users)
+	$tabctrl_Users_Search.Controls.Add($tab_Search)
+	$tabctrl_Users_Search.Appearance = 'Buttons'
+	$tabctrl_Users_Search.Location = '684, 13'
+	$tabctrl_Users_Search.Name = "tabctrl_Users_Search"
+	$tabctrl_Users_Search.SelectedIndex = 0
+	$tabctrl_Users_Search.Size = '453, 401'
+	$tabctrl_Users_Search.TabIndex = 61
+	#
+	# Tab_users
+	#
+	$Tab_users.Controls.Add($but_export)
+	$Tab_users.Controls.Add($but_perm_report)
+	$Tab_users.Controls.Add($but_clear_field)
+	$Tab_users.Controls.Add($But_Add_Usr_Grp)
+	$Tab_users.Controls.Add($But_Rmv_usr_grp)
+	$Tab_users.Controls.Add($Text_Dom_usr_grp)
+	$Tab_users.Controls.Add($Lab_Dom_user)
+	$Tab_users.Controls.Add($Text_perms_rep)
+	$Tab_users.BackColor = 'Control'
+	$Tab_users.Location = '4, 25'
+	$Tab_users.Name = "Tab_users"
+	$Tab_users.Padding = '3, 3, 3, 3'
+	$Tab_users.Size = '445, 372'
+	$Tab_users.TabIndex = 1
+	$Tab_users.Text = "Users"
+	#
+	# but_export
+	#
+	$but_export.Location = '362, 316'
+	$but_export.Name = "but_export"
+	$but_export.Size = '75, 48'
+	$but_export.TabIndex = 62
+	$but_export.Text = "Export to file"
+	$but_export.UseVisualStyleBackColor = $True
+	$but_export.add_Click($but_export_Click)
+	#
+	# but_perm_report
+	#
+	$but_perm_report.Location = '281, 316'
+	$but_perm_report.Name = "but_perm_report"
+	$but_perm_report.Size = '75, 48'
+	$but_perm_report.TabIndex = 61
+	$but_perm_report.Text = "Permission report"
+	$but_perm_report.UseVisualStyleBackColor = $True
+	$but_perm_report.add_Click($but_perm_report_Click)
+	#
+	# but_clear_field
+	#
+	$but_clear_field.Location = '149, 303'
+	$but_clear_field.Name = "but_clear_field"
+	$but_clear_field.Size = '93, 21'
+	$but_clear_field.TabIndex = 60
+	$but_clear_field.Text = "Clear Field"
+	$but_clear_field.UseVisualStyleBackColor = $True
+	$but_clear_field.add_Click($but_clear_field_Click)
+	#
+	# But_Add_Usr_Grp
+	#
+	$But_Add_Usr_Grp.Font = "Microsoft Sans Serif, 8.25pt"
+	$But_Add_Usr_Grp.Location = '7, 316'
+	$But_Add_Usr_Grp.Name = "But_Add_Usr_Grp"
+	$But_Add_Usr_Grp.Size = '55, 21'
+	$But_Add_Usr_Grp.TabIndex = 59
+	$But_Add_Usr_Grp.Text = "Add"
+	$But_Add_Usr_Grp.UseVisualStyleBackColor = $True
+	$But_Add_Usr_Grp.add_Click($But_Add_Usr_Grp_Click)
+	#
+	# But_Rmv_usr_grp
+	#
+	$But_Rmv_usr_grp.Font = "Microsoft Sans Serif, 8.25pt"
+	$But_Rmv_usr_grp.Location = '7, 343'
+	$But_Rmv_usr_grp.Name = "But_Rmv_usr_grp"
+	$But_Rmv_usr_grp.Size = '55, 21'
+	$But_Rmv_usr_grp.TabIndex = 58
+	$But_Rmv_usr_grp.Text = "Remove"
+	$But_Rmv_usr_grp.UseVisualStyleBackColor = $True
+	$But_Rmv_usr_grp.add_Click($But_Rmv_usr_grp_Click)
+	#
+	# Text_Dom_usr_grp
+	#
+	$Text_Dom_usr_grp.BackColor = 'GradientActiveCaption'
+	$Text_Dom_usr_grp.Location = '7, 276'
+	$Text_Dom_usr_grp.Name = "Text_Dom_usr_grp"
+	$Text_Dom_usr_grp.Size = '427, 20'
+	$Text_Dom_usr_grp.TabIndex = 2
+	#
+	# Lab_Dom_user
+	#
+	$Lab_Dom_user.Location = '4, 259'
+	$Lab_Dom_user.Name = "Lab_Dom_user"
+	$Lab_Dom_user.Size = '430, 14'
+	$Lab_Dom_user.TabIndex = 1
+	$Lab_Dom_user.Text = "Domain groups or users (use with format Domain\login and ';' separator)"
+	$Lab_Dom_user.add_Click($Lab_Dom_user_Click)
+	#
+	# Text_perms_rep
+	#
+	$Text_perms_rep.BackColor = 'GradientInactiveCaption'
+	$Text_perms_rep.Location = '7, 7'
+	$Text_perms_rep.Multiline = $True
+	$Text_perms_rep.Name = "Text_perms_rep"
+	$Text_perms_rep.ReadOnly = $True
+	$Text_perms_rep.ScrollBars = 'Vertical'
+	$Text_perms_rep.Size = '427, 249'
+	$Text_perms_rep.TabIndex = 0
+	#
+	# tab_Search
+	#
+	$tab_Search.Controls.Add($but_Search)
+	$tab_Search.Controls.Add($but_chk_search_app)
+	$tab_Search.Controls.Add($Text_Search_Result)
+	$tab_Search.Controls.Add($lab_Search_app)
+	$tab_Search.Controls.Add($Cbox_Searh_by)
+	$tab_Search.Controls.Add($lab_SearchBy)
+	$tab_Search.Controls.Add($Text_search_field)
+	$tab_Search.Controls.Add($lab_SearchField)
+	$tab_Search.Location = '4, 25'
+	$tab_Search.Name = "tab_Search"
+	$tab_Search.Padding = '3, 3, 3, 3'
+	$tab_Search.Size = '445, 372'
+	$tab_Search.TabIndex = 2
+	$tab_Search.Text = "Search"
+	$tab_Search.UseVisualStyleBackColor = $True
+	#
+	# but_Search
+	#
+	$but_Search.Location = '267, 71'
+	$but_Search.Name = "but_Search"
+	$but_Search.Size = '73, 20'
+	$but_Search.TabIndex = 9
+	$but_Search.Text = "Search"
+	$but_Search.UseVisualStyleBackColor = $True
+	$but_Search.add_Click($but_Search_Click)
+	#
+	# but_chk_search_app
+	#
+	$but_chk_search_app.Location = '9, 345'
+	$but_chk_search_app.Name = "but_chk_search_app"
+	$but_chk_search_app.Size = '95, 20'
+	$but_chk_search_app.TabIndex = 8
+	$but_chk_search_app.Text = "Check Apps"
+	$but_chk_search_app.UseVisualStyleBackColor = $True
+	$but_chk_search_app.add_Click($but_chk_search_app_Click)
+	#
+	# Text_Search_Result
+	#
+	$Text_Search_Result.BackColor = 'GradientInactiveCaption'
+	$Text_Search_Result.Location = '9, 121'
+	$Text_Search_Result.Multiline = $True
+	$Text_Search_Result.Name = "Text_Search_Result"
+	$Text_Search_Result.ReadOnly = $True
+	$Text_Search_Result.ScrollBars = 'Vertical'
+	$Text_Search_Result.Size = '430, 218'
+	$Text_Search_Result.TabIndex = 7
+	#
+	# lab_Search_app
+	#
+	$lab_Search_app.Location = '7, 104'
+	$lab_Search_app.Name = "lab_Search_app"
+	$lab_Search_app.Size = '100, 14'
+	$lab_Search_app.TabIndex = 6
+	$lab_Search_app.Text = "Application List"
+	#
+	# Cbox_Searh_by
+	#
+	$Cbox_Searh_by.BackColor = 'GradientActiveCaption'
+	$Cbox_Searh_by.FormattingEnabled = $True
+	[void]$Cbox_Searh_by.Items.Add("User or Group")
+	[void]$Cbox_Searh_by.Items.Add("Delivery Group")
+	$Cbox_Searh_by.Location = '7, 70'
+	$Cbox_Searh_by.Name = "Cbox_Searh_by"
+	$Cbox_Searh_by.Size = '254, 21'
+	$Cbox_Searh_by.TabIndex = 5
+	#
+	# lab_SearchBy
+	#
+	$lab_SearchBy.Location = '7, 52'
+	$lab_SearchBy.Name = "lab_SearchBy"
+	$lab_SearchBy.Size = '98, 15'
+	$lab_SearchBy.TabIndex = 4
+	$lab_SearchBy.Text = "Search By"
+	#
+	# Text_search_field
+	#
+	$Text_search_field.BackColor = 'GradientActiveCaption'
+	$Text_search_field.Location = '7, 28'
+	$Text_search_field.Name = "Text_search_field"
+	$Text_search_field.Size = '430, 20'
+	$Text_search_field.TabIndex = 3
+	#
+	# lab_SearchField
+	#
+	$lab_SearchField.Location = '7, 6'
+	$lab_SearchField.Name = "lab_SearchField"
+	$lab_SearchField.Size = '98, 18'
+	$lab_SearchField.TabIndex = 0
+	$lab_SearchField.Text = "Search Field"
+	#
+	# Tabctrl_Del_grp
+	#
+	$Tabctrl_Del_grp.Controls.Add($Tab_Del_Grp)
+	$Tabctrl_Del_grp.Appearance = 'Buttons'
+	$Tabctrl_Del_grp.Location = '435, 13'
+	$Tabctrl_Del_grp.Name = "Tabctrl_Del_grp"
+	$Tabctrl_Del_grp.SelectedIndex = 0
+	$Tabctrl_Del_grp.Size = '243, 401'
+	$Tabctrl_Del_grp.TabIndex = 48
+	#
+	# Tab_Del_Grp
+	#
+	$Tab_Del_Grp.Controls.Add($Delivery_groups_list)
+	$Tab_Del_Grp.Controls.Add($But_Uncheck_delivery_group)
+	$Tab_Del_Grp.Controls.Add($But_Check_delivery_group)
+	$Tab_Del_Grp.BackColor = 'Control'
+	$Tab_Del_Grp.Location = '4, 25'
+	$Tab_Del_Grp.Name = "Tab_Del_Grp"
+	$Tab_Del_Grp.Padding = '3, 3, 3, 3'
+	$Tab_Del_Grp.Size = '235, 372'
+	$Tab_Del_Grp.TabIndex = 1
+	$Tab_Del_Grp.Text = "Delivery Groups"
+	#
+	# Delivery_groups_list
+	#
+	$Delivery_groups_list.BackColor = 'GradientInactiveCaption'
+	$Delivery_groups_list.FormattingEnabled = $True
+	$Delivery_groups_list.Location = '6, 7'
+	$Delivery_groups_list.Name = "Delivery_groups_list"
+	$Delivery_groups_list.ScrollAlwaysVisible = $True
+	$Delivery_groups_list.HorizontalScrollBar = $True
+	$Delivery_groups_list.Size = '223, 334'
+	$Delivery_groups_list.TabIndex = 12
+	#
+	# But_Uncheck_delivery_group
+	#
+	$But_Uncheck_delivery_group.BackColor = 'Control'
+	$But_Uncheck_delivery_group.Location = '6, 347'
+	$But_Uncheck_delivery_group.Name = "But_Uncheck_delivery_group"
+	$But_Uncheck_delivery_group.Size = '59, 21'
+	$But_Uncheck_delivery_group.TabIndex = 13
+	$But_Uncheck_delivery_group.Text = "Uncheck"
+	$But_Uncheck_delivery_group.UseVisualStyleBackColor = $True
+	$But_Uncheck_delivery_group.add_Click($But_Uncheck_delivery_group_Click)
+	#
+	# But_Check_delivery_group
+	#
+	$But_Check_delivery_group.BackColor = 'Control'
+	$But_Check_delivery_group.Location = '71, 347'
+	$But_Check_delivery_group.Name = "But_Check_delivery_group"
+	$But_Check_delivery_group.Size = '59, 21'
+	$But_Check_delivery_group.TabIndex = 14
+	$But_Check_delivery_group.Text = "Check"
+	$But_Check_delivery_group.UseVisualStyleBackColor = $True
+	$But_Check_delivery_group.add_Click($But_Check_delivery_group_Click)
+	#
+	# Balloons
+	#
+	$Balloons.IsBalloon = $True
+	$Balloons.add_Popup($handler_toolTip1_Popup)
+	$balloons.SetToolTip($but_Update_FarmData, "Reload all farm data")
+	$balloons.SetToolTip($Rbut_Enable_Console, "Enable Powershell Console")
+	$balloons.SetToolTip($Rbut_Disable_Console, "Disable Powershell Console")
+	$balloons.SetToolTip($but_less_priority, "Less application priority")
+	$balloons.SetToolTip($but_more_priority, "More application priority")
+	$balloons.SetToolTip($But_Add_app_Delivery, "Add checked applications to checked Delivery Groups")
+	$balloons.SetToolTip($But_Rmv_app_Delivery, "Remove checked applications from checked Delivery Groups")
+	$balloons.SetToolTip($but_export , "Export data to file")
+	$balloons.SetToolTip($but_perm_report, "Permission Report")
+	$balloons.SetToolTip($but_clear_field, "Clear User/Group Field")
+	$balloons.SetToolTip($But_Add_Usr_Grp, "Add Users/Groups to checked Applications and/or checked Delivery Groups")
+	$balloons.SetToolTip($But_Rmv_Usr_Grp, "Remove Users/Groups from checked Applications and/or checked Delivery Groups")
+	$balloons.SetToolTip($but_App_check, "Check all applications")
+	$balloons.SetToolTip($but_App_Uncheck , "Uncheck all applications")
+	$balloons.SetToolTip($But_Check_delivery_group, "Check all Delivery Groups")
+	$balloons.SetToolTip($But_Uncheck_delivery_group , "Uncheck all Delivery Groups")
+	$balloons.SetToolTip($but_chk_search_app, "Check applications from search")
+	$balloons.SetToolTip($but_Search, "Search Applications from Delivery Group or Domain User/group")
+	$balloons.SetToolTip($but_app_priority, "Report Application priority in Delivery Groups")
+	$balloons.SetToolTip($Text_App_Priority, "Application Priority to add in the Delivery groups")
+	$balloons.SetToolTip($Text_Dom_usr_grp, "Domain Users/Groups")
+	$balloons.SetToolTip($Text_Search_Result , "Search result")
+	$balloons.SetToolTip($Text_perms_rep, "Permission Report result")
+	$balloons.SetToolTip($Text_search_field, "Text Search Field")
+	$balloons.SetToolTip($Cbox_Searh_by, "Choose search by User/group or Delivery Group")
+	
+	$Tab_Del_Grp.ResumeLayout()
+	$Tabctrl_Del_grp.ResumeLayout()
+	$tab_Search.ResumeLayout()
+	$Tab_users.ResumeLayout()
+	$tabctrl_Users_Search.ResumeLayout()
+	$tab_Apps.ResumeLayout()
+	$Tabctrl_apps.ResumeLayout()
+	$Grpbox_Priority.ResumeLayout()
+	$grpbox_app_deliv.ResumeLayout()
+	$grpbox_PS_console.ResumeLayout()
+	$grp_App_priority.ResumeLayout()
+	$Citrix_tools.ResumeLayout()
+	#endregion Generated Form Code
+
+	#----------------------------------------------
+
+	#Save the initial state of the form
+	$InitialFormWindowState = $Citrix_tools.WindowState
+	#Init the OnLoad event to correct the initial state of the form
+	$Citrix_tools.add_Load($Form_StateCorrection_Load)
+	#Clean up the control events
+	$Citrix_tools.add_FormClosed($Form_Cleanup_FormClosed)
+	#Show the Form
+	return $Citrix_tools.ShowDialog()
+	
+} #End Function
+
+#Call the form
+Call-citrixtoolXA76v02_psf | Out-Null
