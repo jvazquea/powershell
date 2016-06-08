@@ -2153,6 +2153,7 @@ $tableHeader = @"
 	$balloons.SetToolTip($Text_perms_rep, "Permission Report result")
 	$balloons.SetToolTip($Text_search_field, "Text Search Field")
 	$balloons.SetToolTip($Cbox_Searh_by, "Choose search by User/group or Delivery Group")
+	$balloons.SetToolTip($but_Inventory , "Generate HTML with Farm Inventory")
 	
 	$Tab_Del_Grp.ResumeLayout()
 	$Tabctrl_Del_grp.ResumeLayout()
