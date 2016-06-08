@@ -1678,7 +1678,7 @@ $tableHeader = @"
 	$but_Update_FarmData.Name = "but_Update_FarmData"
 	$but_Update_FarmData.Size = '172, 41'
 	$but_Update_FarmData.TabIndex = 67
-	$but_Update_FarmData.Text = "Update Farm Data"
+	$but_Update_FarmData.Text = "Refresh Farm Data"
 	$but_Update_FarmData.UseVisualStyleBackColor = $True
 	$but_Update_FarmData.add_Click($but_Update_FarmData_Click)
 	#
