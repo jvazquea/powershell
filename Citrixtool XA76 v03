@@ -896,26 +896,26 @@ function Call-citrixtoolXA76v02_psf {
 	#Header for Table "ApplicationList"
 	$AppfirstheaderName = "ApplicationList"
 	$AppHeaderNames = "Enabled", "ApplicationType", "CommandLine", "CommandLineArguments", "WorkingDirectory", "Description", "Clientfolder", "UserandGroups", "DesktopGroups"
-	$AppHeaderWidths = "6" , "4", "4", "10", "10", "10", "4", "4", "4", "20"
-	$Apptablewidth = 1600
+	$AppHeaderWidths = "6" , "4", "4", "10", "10", "10", "4", "4", "4"
+	$Apptablewidth = 1200
 
 	#Header for Table "DeliveryGroups"
 	$DelfirstheaderName = "DeliveryGroups"
 	$DelHeaderNames = "Scopes", "DeliveryType", "InMaintenanceMode", "Servers"
-	$DelHeaderWidths = "20" , "6" , "6" , "6" , "20" 
-	$Deltablewidth = 1600
+	$DelHeaderWidths = "20" , "6" , "6"
+	$Deltablewidth = 900
 
 	#Header for Table "XenApp Licenses"
 	$LICfirstheaderName = "License Type"
 	$LICHeaderNames = "Installed", "InUse", "Available"
-	$LICHeaderWidths = "4", "4", "4", "4"
-	$LICtablewidth = 700
+	$LICHeaderWidths = "4", "4", "4"
+	$LICtablewidth = 900
 
 	#Header for Table "XD/XA Controllers" Get-BrokerController
 	$XDControllerFirstheaderName = "ControllerServer"
 	$XDControllerHeaderNames = "DesktopsRegistered", "ActiveSiteServices"
 	$XDControllerHeaderWidths = "2", "10"
-	$XDControllerTableWidth= 1200
+	$XDControllerTableWidth= 900
 
 	#Header for Table "MachineCatalogs" Get-BrokerCatalog
 	$CatalogHeaderName = "CatalogName"
@@ -923,11 +923,17 @@ function Call-citrixtoolXA76v02_psf {
 	$CatalogWidths = "4", "8", "8", "8", "8", "8"
 	$CatalogTablewidth = 900
 
+	#Header for Table "Machines" Get-BrokerMachine
+	$MachineHeaderName = "HostedMachineName"
+	$MachineHeaderNames = "IPAddress", "OSType", "CatalogName", "DesktopGroupName", "ProvisioningType", "HostingServerName", "InMaintenanceMode"
+	$MachineWidths = "4", "8", "8", "8", "8", "8", "8"
+	$MachineTablewidth = 900
+
 	#Header for Table "Policies"
 	$PolfirstheaderName = "Path"
 	$PolHeaderNames = "State", "Value"
 	$PolHeaderWidths = "20" , "7" , "20"
-	$Poltablewidth = 1600
+	$Poltablewidth = 900
 
 	#==============================================================================================
 	#==============================================================================================
@@ -1154,11 +1160,38 @@ $tableHeader = @"
 		$tests.InMaintenanceMode = "NEUTRAL", $DelMaintenance
 		$machines = Get-BrokerDesktop|where {$_.DesktopGroupName -eq "$Delname"}|select DnsName
 		
-		$Delservers = $machines.Dnsname -join ";"
+		$Delservers = $machines.Dnsname -join " ; "
 		$tests.Servers = "NEUTRAL", $Delservers
 		$DelReport.$Delname = $tests 
 	}
 
+	#== Machines Report ============================================================================================
+
+	$MachineReport = @{}
+	$Machines = get-brokermachine|select HostedMachineName, IPAddress, OSType, CatalogName, DesktopGroupName, ProvisioningType, HostingServerName, InMaintenanceMode
+
+	Foreach ($Machine in $Machines) {
+		$tests = @{}
+		$Machinename = $Machine.HostedMachineName
+		$tests.HostedMachineName = "NEUTRAL", $Machinename
+		$MachineIP = $Machine.IPAddress
+		$tests.IPAddress = "NEUTRAL", $MachineIP
+		$MachineOSType= $Machine.OSType
+		$tests.OSType = "NEUTRAL", $MachineOSType
+		$MachineCatName= $Machine.CatalogName
+		$tests.CatalogName = "NEUTRAL", $MachineCatName
+		$MachineDeskName= $Machine.DesktopGroupName
+		$tests.DesktopGroupName = "NEUTRAL", $MachineDeskName
+		$MachineProvType= $Machine.ProvisioningType
+		$tests.ProvisioningType = "NEUTRAL", $MachineProvType
+		$MachineHostServer= $Machine.HostingServerName
+		$tests.HostingServerName = "NEUTRAL", $MachineHostServer
+		$MachineMaintenance= $Machine.InMaintenanceMode
+		$tests.InMaintenanceMode = "NEUTRAL", $MachineMaintenance
+		
+		$MachineReport.$MachineName = $tests 
+	}
+	
 	#== Licenses Check ============================================================================================
 	  
 
@@ -1286,6 +1319,22 @@ $tableHeader = @"
 	writeTableHeader $resultsHTM $DelfirstheaderName $Delheadernames $DelHeaderWidths $Deltablewidth
 	$DelReport | sort-object -property Appname | %{ writeData $DelReport $resultsHTM $DelHeaderNames }
 	writeTableFooter $resultsHTM
+	
+	@"
+    </table>
+    <table width='1200'>
+    <tr bgcolor='#CCCCCC
+    
+    <font face='courier' color='#000000' size='4'><strong>Cuadro de</strong></font><font color='#005500' face='courier' size='4'> Servers VDA </font>
+    
+    </table>
+    </body>
+    </html>
+"@ | Out-File $resultsHTM -append
+ 
+writeTableHeader $resultsHTM $MachineheaderName $Machineheadernames $MachineWidths $Machinetablewidth
+$MachineReport | sort-object -property Appname | %{ writeData $MachineReport $resultsHTM $MachineHeaderNames }
+writeTableFooter $resultsHTM
 
 @"
 <br>
