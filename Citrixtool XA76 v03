@@ -770,7 +770,7 @@ function Call-citrixtoolXA76v02_psf {
 	else {
         $i=0
 		$a = new-object -comobject wscript.shell
-		$Question = $a.popup("Are you sure to remove permission in $app to the user/group?", 0,"Delete Files",4)
+		$Question = $a.popup("Are you sure to remove permission in applications or DG to the user/group?", 0,"Delete Files",4)
 		If ($Question -eq 6) {
 		  foreach ( $objItem in $appscheck ) {
 			$app="$objItem"
