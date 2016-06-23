@@ -563,10 +563,11 @@ function Call-citrixtoolXA76v02_psf {
 			$grpOrigen = $Text_search_field.text
 			$permission = $apps_csv | where{$_.UsersandGroups -like "*$grpOrigen*"} | select ApplicationName
             $permission2 = $del_csv | where{$_.Description -like "*$grpOrigen*"} | select Name
-			$result = $permission.applicationname|out-string
-            $result2 = $permission2.name|out-string
-
-			$Text_Search_Result.text = "Published applications for User/group " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" +"Application List: " + "`r`n" + "`r`n" + $result + "`r`n" + "`r`n" + "Permission in Delivery groups for User/group "
+			$count = $permission.count
+			$count2 = $permission2.count			
+			$result = $permission.applicationname|sort|unique|out-string
+            $result2 = $permission2.name|sort|unique|out-string
+			$Text_Search_Result.text = "Published applications for User/group " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" +"Application List: " + "`r`n" + "`r`n" + $result + "`r`n" + "`r`n" + "Permission in Delivery groups for User/group " + " : " + $count2 + "`r`n" + "`r`n" + $result2
 
 }
 	If ($Cbox_Searh_by.text -eq "Delivery Group"){	   
