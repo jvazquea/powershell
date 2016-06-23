@@ -28,7 +28,6 @@ function Hide-Console {
 }
 
 $x = @()
-
 #----------------------------------------------
 #region Application Functions
 #----------------------------------------------
@@ -38,7 +37,7 @@ $x = @()
 #----------------------------------------------
 # Generated Form Function
 #----------------------------------------------
-function Call-citrixtoolXA76v02_psf {
+function Call-citrixtoolXA76v03_psf {
 
 	#----------------------------------------------
 	#region Import the Assemblies
@@ -55,78 +54,63 @@ function Call-citrixtoolXA76v02_psf {
 	[void][reflection.assembly]::Load('System.Windows.Forms.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35')
 	#endregion Import Assemblies
 
-		#----------------------------------------------
+	#----------------------------------------------
 	#region Generated Form Objects
 	#----------------------------------------------
 	[System.Windows.Forms.Application]::EnableVisualStyles()
-	
-	#Form
 	$Citrix_tools = New-Object 'System.Windows.Forms.Form'
-	
-	#Groupbox
-	$grpbox_PS_console = New-Object 'System.Windows.Forms.GroupBox'
-	$grpbox_app_deliv = New-Object 'System.Windows.Forms.GroupBox'
-	$Grpbox_Priority = New-Object 'System.Windows.Forms.GroupBox'
+	$Grp_Farm_actions = New-Object 'System.Windows.Forms.GroupBox'
+	$but_Inventory = New-Object 'System.Windows.Forms.Button'
+	$but_Update_FarmData = New-Object 'System.Windows.Forms.Button'
+	$progressbar = New-Object 'System.Windows.Forms.ProgressBar'
+	$buttonCancelProcess = New-Object 'System.Windows.Forms.Button'
+	$buttonStartProcess = New-Object 'System.Windows.Forms.Button'
 	$grp_App_priority = New-Object 'System.Windows.Forms.GroupBox'
-	
-	#RadioButton
+	$but_app_priority = New-Object 'System.Windows.Forms.Button'
+	$grpbox_PS_console = New-Object 'System.Windows.Forms.GroupBox'
 	$Rbut_Enable_Console = New-Object 'System.Windows.Forms.RadioButton'
 	$Rbut_Disable_Console = New-Object 'System.Windows.Forms.RadioButton'
-	
-	#Button	
+	$grpbox_app_deliv = New-Object 'System.Windows.Forms.GroupBox'
+	$Grpbox_Priority = New-Object 'System.Windows.Forms.GroupBox'
 	$but_less_priority = New-Object 'System.Windows.Forms.Button'
+	$Text_App_Priority = New-Object 'System.Windows.Forms.TextBox'
 	$but_more_priority = New-Object 'System.Windows.Forms.Button'
+	$button2 = New-Object 'System.Windows.Forms.Button'
 	$But_Add_app_Delivery = New-Object 'System.Windows.Forms.Button'
+	$button1 = New-Object 'System.Windows.Forms.Button'
 	$But_Rmv_app_Delivery = New-Object 'System.Windows.Forms.Button'
+	$Tabctrl_apps = New-Object 'System.Windows.Forms.TabControl'
+	$tab_Apps = New-Object 'System.Windows.Forms.TabPage'
+	$Applications_list = New-Object 'System.Windows.Forms.CheckedListBox'
+	$but_App_Uncheck = New-Object 'System.Windows.Forms.Button'
+	$but_App_Check = New-Object 'System.Windows.Forms.Button'
+	$tabctrl_Users_Search = New-Object 'System.Windows.Forms.TabControl'
+	$Tab_users = New-Object 'System.Windows.Forms.TabPage'
 	$but_export = New-Object 'System.Windows.Forms.Button'
+	$buttonUncheck = New-Object 'System.Windows.Forms.Button'
+	$buttonCheck = New-Object 'System.Windows.Forms.Button'
 	$but_perm_report = New-Object 'System.Windows.Forms.Button'
 	$but_clear_field = New-Object 'System.Windows.Forms.Button'
 	$But_Add_Usr_Grp = New-Object 'System.Windows.Forms.Button'
 	$But_Rmv_usr_grp = New-Object 'System.Windows.Forms.Button'
-	$but_App_Uncheck = New-Object 'System.Windows.Forms.Button'
-	$but_App_Check = New-Object 'System.Windows.Forms.Button'
+	$Text_Dom_usr_grp = New-Object 'System.Windows.Forms.TextBox'
+	$Lab_Dom_user = New-Object 'System.Windows.Forms.Label'
+	$Text_perms_rep = New-Object 'System.Windows.Forms.TextBox'
+	$tab_Search = New-Object 'System.Windows.Forms.TabPage'
+	$but_Search = New-Object 'System.Windows.Forms.Button'
+	$but_chk_search_app = New-Object 'System.Windows.Forms.Button'
+	$Text_Search_Result = New-Object 'System.Windows.Forms.TextBox'
+	$lab_Search_app = New-Object 'System.Windows.Forms.Label'
+	$Cbox_Searh_by = New-Object 'System.Windows.Forms.ComboBox'
+	$lab_SearchBy = New-Object 'System.Windows.Forms.Label'
+	$Text_search_field = New-Object 'System.Windows.Forms.TextBox'
+	$lab_SearchField = New-Object 'System.Windows.Forms.Label'
+	$Tabctrl_Del_grp = New-Object 'System.Windows.Forms.TabControl'
+	$Tab_Del_Grp = New-Object 'System.Windows.Forms.TabPage'
+	$Delivery_groups_list = New-Object 'System.Windows.Forms.CheckedListBox'
 	$But_Uncheck_delivery_group = New-Object 'System.Windows.Forms.Button'
 	$But_Check_delivery_group = New-Object 'System.Windows.Forms.Button'
-	$but_chk_search_app = New-Object 'System.Windows.Forms.Button'
-	$but_Search = New-Object 'System.Windows.Forms.Button'
-	$but_app_priority = New-Object 'System.Windows.Forms.Button'
-	$but_Update_FarmData = New-Object 'System.Windows.Forms.Button'
-	$but_Inventory = New-Object 'System.Windows.Forms.Button'
-	
-	#Textbox
-	$Text_App_Priority = New-Object 'System.Windows.Forms.TextBox'
-	$Text_Dom_usr_grp = New-Object 'System.Windows.Forms.TextBox'
-	$Text_Search_Result = New-Object 'System.Windows.Forms.TextBox'
-	$Text_perms_rep = New-Object 'System.Windows.Forms.TextBox'
-	$Text_search_field = New-Object 'System.Windows.Forms.TextBox'
-		
-	#TabControl	
-	$Tabctrl_apps = New-Object 'System.Windows.Forms.TabControl'
-	$Tabctrl_Del_grp = New-Object 'System.Windows.Forms.TabControl'
-	$tabctrl_Users_Search = New-Object 'System.Windows.Forms.TabControl'
-	
-	#Tab
-	$tab_Apps = New-Object 'System.Windows.Forms.TabPage'
-	$Tab_Del_Grp = New-Object 'System.Windows.Forms.TabPage'
-	$tab_Search = New-Object 'System.Windows.Forms.TabPage'
-	$Tab_users = New-Object 'System.Windows.Forms.TabPage'
-	
-	#CheckedListBox
-	$Applications_list = New-Object 'System.Windows.Forms.CheckedListBox'
-	$Delivery_groups_list = New-Object 'System.Windows.Forms.CheckedListBox'
-	
-	#Label	
-	$Lab_Dom_user = New-Object 'System.Windows.Forms.Label'
-	$lab_Search_app = New-Object 'System.Windows.Forms.Label'
-	$lab_SearchBy = New-Object 'System.Windows.Forms.Label'
-	$lab_SearchField = New-Object 'System.Windows.Forms.Label'
-	
-	#Combobox
-	$Cbox_Searh_by = New-Object 'System.Windows.Forms.ComboBox'
-	
-	#Tooltip
-	$Balloons = New-Object 'System.Windows.Forms.ToolTip'
-	
+	$toolTip1 = New-Object 'System.Windows.Forms.ToolTip'
 	$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
 	#endregion Generated Form Objects
 	
@@ -180,14 +164,850 @@ function Call-citrixtoolXA76v02_psf {
 		[void] $Delivery_groups_list.Items.Add("$deliv")
     }	
 	Hide-Console
+
 	#----------------------------------------------
 	# User Generated Script
 	#----------------------------------------------
 	
-
+	$handler_listView1_SelectedIndexChanged={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_Lab_Delivery_groups_users={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_textBox1_TextChanged={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_button7_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_button3_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_textBox4_TextChanged={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_Cli_app_folder_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_label6_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_label2_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_button1_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_checkedListBox1_SelectedIndexChanged={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_Citrix_tools_Load={
+		#TODO: Place custom script here
+		
+	}
+	
+	$handler_toolTip1_Popup=[System.Windows.Forms.PopupEventHandler]{
+	#Event Argument: $_ = [System.Windows.Forms.PopupEventArgs]
+		#TODO: Place custom script here
+		
+	}
+	
 	#region Control Helper Functions
-
-
+	function Load-ComboBox 
+	{
+	<#
+		.SYNOPSIS
+			This functions helps you load items into a ComboBox.
+	
+		.DESCRIPTION
+			Use this function to dynamically load items into the ComboBox control.
+	
+		.PARAMETER  ComboBox
+			The ComboBox control you want to add items to.
+	
+		.PARAMETER  Items
+			The object or objects you wish to load into the ComboBox's Items collection.
+	
+		.PARAMETER  DisplayMember
+			Indicates the property to display for the items in this control.
+		
+		.PARAMETER  Append
+			Adds the item(s) to the ComboBox without clearing the Items collection.
+		
+		.EXAMPLE
+			Load-ComboBox $combobox1 "Red", "White", "Blue"
+		
+		.EXAMPLE
+			Load-ComboBox $combobox1 "Red" -Append
+			Load-ComboBox $combobox1 "White" -Append
+			Load-ComboBox $combobox1 "Blue" -Append
+		
+		.EXAMPLE
+			Load-ComboBox $combobox1 (Get-Process) "ProcessName"
+	#>
+		Param (
+			[ValidateNotNull()]
+			[Parameter(Mandatory=$true)]
+			[System.Windows.Forms.ComboBox]$ComboBox,
+			[ValidateNotNull()]
+			[Parameter(Mandatory=$true)]
+			$Items,
+		    [Parameter(Mandatory=$false)]
+			[string]$DisplayMember,
+			[switch]$Append
+		)
+		
+		if(-not $Append)
+		{
+			$ComboBox.Items.Clear()	
+		}
+		
+		if($Items -is [Object[]])
+		{
+			$ComboBox.Items.AddRange($Items)
+		}
+		elseif ($Items -is [Array])
+		{
+			$ComboBox.BeginUpdate()
+			foreach($obj in $Items)
+			{
+				$ComboBox.Items.Add($obj)	
+			}
+			$ComboBox.EndUpdate()
+		}
+		else
+		{
+			$ComboBox.Items.Add($Items)	
+		}
+	
+		$ComboBox.DisplayMember = $DisplayMember	
+	}
+	
+	function Replace-PlaceHolder 
+	{
+		<#
+		.SYNOPSIS
+			Replaces the place holder control with another.
+	
+		.DESCRIPTION
+			Replaces the place holder control with another.
+		
+		.PARAMETER PlaceHolderControl
+			The control you wish to replace.
+	
+		.PARAMETER ReplaceControl
+			The control that replaces the place holder.
+		
+		.EXAMPLE
+			Replace-PlaceHolder -PlaceHolderControl $elementHostPlaceholder -ReplaceControl $elementhost
+	#>
+		Param([System.Windows.Forms.Control]$PlaceHolderControl,
+			[System.Windows.Forms.Control]$ReplaceControl)
+		
+		$ReplaceControl.Location = $PlaceHolderControl.Location;
+		$ReplaceControl.Size = $PlaceHolderControl.Size;
+		$ReplaceControl.TabIndex = $PlaceHolderControl.TabIndex;
+		$ReplaceControl.Dock = $PlaceHolderControl.Dock 
+		$ReplaceControl.Anchor = $PlaceHolderControl.Anchor
+		$PlaceHolderControl.Parent.Controls.Add($ReplaceControl)
+		$PlaceHolderControl.Parent.Controls.Remove($PlaceHolderControl)
+		$PlaceHolderControl.Visible = $false
+	}
+	
+	function Load-ElementHost
+	{
+	<#
+		.SYNOPSIS
+			Loads XAML into a ElementHost
+	
+		.DESCRIPTION
+			Loads XAML into a ElementHost, which then displays the WPF control.
+	
+		.RETURNS
+			Returns the WPF control
+		
+		.PARAMETER ElementHost
+			The ElementHost control to load the XAML.
+	
+		.PARAMETER XAML
+			The XAML to create the WPF Control
+		
+		.EXAMPLE
+			Load-ElementHost -Elementhost $elementhost1 -XAML $xaml | Out-Null
+	#>
+		Param(
+			[ValidateNotNull()]
+			[Parameter(Mandatory=$true)]
+			[System.Windows.Forms.Integration.ElementHost]$Elementhost,
+			[ValidateNotNull()]
+			[Parameter(Mandatory=$true)]
+			[Xml]$XAML)
+			
+		$reader = New-Object System.Xml.XmlNodeReader $XAML
+		
+		if(-not $reader)
+		{
+			return
+		}
+		
+		$WPFControl = [Windows.Markup.XamlReader]::Load( $reader )
+		$Elementhost.Child = $WPFControl
+		
+		return $WPFControl
+	}
+	
+	function Load-Chart
+	{
+	<#
+		.SYNOPSIS
+			This functions helps you plot points on a chart
+	
+		.DESCRIPTION
+			Use the function to plot points on a chart or add more charts to a chart control
+	
+		.PARAMETER  ChartControl
+			The Chart Control you when to add points to
+	
+		.PARAMETER  XPoints
+			Set the X Axis Points. These can be strings or numerical values.
+	
+		.PARAMETER  YPoints
+			Set the Y Axis Points. These can be strings or numerical values.
+		
+		.PARAMETER  XTitle
+			Set the Title for the X Axis.
+	
+		.PARAMETER  YTitle
+			Set the Title for the Y Axis.
+		
+		.PARAMETER  Title
+			Set the Title for the chart.
+		
+		.PARAMETER  ChartType
+			Set the Style of the chart. See System.Windows.Forms.DataVisualization.Charting.SeriesChartType Enum
+	
+		.PARAMETER SeriesIndex
+			Set the settings of a particular Series and corresponding ChartArea
+	
+		.PARAMETER TitleIndex
+			Set the settings of a particular Title
+		
+		.PARAMETER SeriesName
+			Set the settings of a particular Series using its name and corresponding ChartArea. 
+			The Series will be created if not found.
+			If SeriesIndex is set, it will replace the Series' name if the Series does not exist
+		
+		.PARAMETER Enable3D
+			The chart will be rendered in 3D.
+		
+		.PARAMETER Disable3D
+			The chart will be rendered in 2D.	
+		
+		.PARAMETER Append
+			When this switch is used, a new ChartArea is added to Chart Control.
+	
+		.LINK
+			http://www.sapien.com/blog/2011/05/05/primalforms-2011-designing-charts-for-powershell/
+		
+	#>
+		Param( #$XPoints, $YPoints, $XTitle, $YTitle, $Title, $ChartStyle)
+		 	[ValidateNotNull()]
+			[Parameter(Position=1,Mandatory=$true)]
+	  		[System.Windows.Forms.DataVisualization.Charting.Chart]$ChartControl
+			,
+			[ValidateNotNull()]
+			[Parameter(Position=2,Mandatory=$true)]
+	  		$XPoints
+			,
+			[Parameter(Position=3,Mandatory=$true)]
+	  		$YPoints
+			,
+			[Parameter(Position=4,Mandatory=$false)]
+	  		[string]$XTitle
+			,
+			[Parameter(Position=5,Mandatory=$false)]
+	  		[string]$YTitle
+			,
+			[Parameter(Position=6,Mandatory=$false)]
+	  		[string]$Title
+			,
+			[Parameter(Position=7,Mandatory=$false)]
+	  		[System.Windows.Forms.DataVisualization.Charting.SeriesChartType]$ChartType
+			,
+			[Parameter(Position=8,Mandatory=$false)]
+	  		$SeriesIndex = -1
+			,
+			[Parameter(Position=9,Mandatory=$false)]
+	  		$TitleIndex = 0,
+			[Parameter(Mandatory=$false)]
+	  		[string]$SeriesName = $null,
+			[switch]$Enable3D,
+			[switch]$Disable3D,
+			[switch]$Append)
+	
+		$ChartAreaIndex = 0
+		if($Append)
+		{
+			$name = "ChartArea " + ($ChartControl.ChartAreas.Count + 1).ToString();
+			$ChartArea = $ChartControl.ChartAreas.Add($name)
+			$ChartAreaIndex = $ChartControl.ChartAreas.Count - 1
+			
+			$name = "Series " + ($ChartControl.Series.Count + 1).ToString();
+			$Series = $ChartControl.Series.Add($name) 
+			$SeriesIndex = $ChartControl.Series.Count - 1
+	
+			$Series.ChartArea = $ChartArea.Name
+			
+			if($Title)
+			{
+				$name = "Title " + ($ChartControl.Titles.Count + 1).ToString();
+				$TitleObj = $ChartControl.Titles.Add($Title)
+				$TitleIndex = $ChartControl.Titles.Count - 1	
+				$TitleObj.DockedToChartArea = $ChartArea.Name
+				$TitleObj.IsDockedInsideChartArea = $false
+			}
+		}
+		else
+		{
+			if($ChartControl.ChartAreas.Count -eq  0)
+			{
+				$name = "ChartArea " + ($ChartControl.ChartAreas.Count + 1).ToString();
+				[void]$ChartControl.ChartAreas.Add($name)
+				$ChartAreaIndex = $ChartControl.ChartAreas.Count - 1
+			}	
+			
+			if($ChartControl.Series.Count -eq 0)
+			{
+				if(-not $SeriesName)
+				{
+					$SeriesName = "Series " + ($ChartControl.Series.Count + 1).ToString();
+				}
+				
+				$Series = $ChartControl.Series.Add($SeriesName) 
+				$SeriesIndex = $ChartControl.Series.Count - 1
+				$Series.ChartArea = $ChartControl.ChartAreas[$ChartAreaIndex].Name
+			}
+			elseif($SeriesName)
+			{
+				$Series = $ChartControl.Series.FindByName($SeriesName)
+					
+				if($Series -eq $null)
+				{
+					if(($SeriesIndex -gt -1) -and ($SeriesIndex -lt $ChartControl.Series.Count))
+					{
+						$Series = $ChartControl.Series[$SeriesIndex]
+						$Series.Name = $SeriesName
+					}
+					else
+					{
+						$Series = $ChartControl.Series.Add($SeriesName)
+						$SeriesIndex = $ChartControl.Series.Count - 1
+					}
+					
+					$Series.ChartArea = $ChartControl.ChartAreas[$ChartAreaIndex].Name
+				}
+				else
+				{
+					$SeriesIndex = $ChartControl.Series.IndexOf($Series)
+					$ChartAreaIndex = $ChartControl.ChartAreas.IndexOf($Series.ChartArea)
+				}		
+			}
+		}
+		
+		if(($SeriesIndex -lt 0) -or ($SeriesIndex -ge $ChartControl.Series.Count))
+		{
+			$SeriesIndex = 0
+		}
+		
+		$Series = $ChartControl.Series[$SeriesIndex]
+		$Series.Points.Clear()
+		$ChartArea = $ChartControl.ChartAreas[$Series.ChartArea]
+		
+		if($Enable3D)
+		{
+			$ChartArea.Area3DStyle.Enable3D = $true
+		}
+		elseif($Disable3D)
+		{
+			$ChartArea.Area3DStyle.Enable3D = $false
+		}
+		
+		if($Title)
+		{
+			if($ChartControl.Titles.Count -eq 0)
+			{
+				#$name = "Title " + ($ChartControl.Titles.Count + 1).ToString();
+				$TitleObj = $ChartControl.Titles.Add($Title)
+				$TitleIndex = $ChartControl.Titles.Count - 1
+				$TitleObj.DockedToChartArea = $ChartArea.Name
+				$TitleObj.IsDockedInsideChartArea = $false
+			}
+			
+			$ChartControl.Titles[$TitleIndex].Text = $Title
+		}
+		
+		if($ChartType)
+		{
+			$Series.ChartType = $ChartType
+		}
+		
+		if($XTitle)
+		{
+			$ChartArea.AxisX.Title = $XTitle
+		}
+		
+		if($YTitle)
+		{
+			$ChartArea.AxisY.Title = $YTitle
+		}
+		
+		if($XPoints -isnot [Array] -or $XPoints -isnot [System.Collections.IEnumerable])
+		{
+			$array = New-Object System.Collections.ArrayList
+			$array.Add($XPoints)
+			$XPoints = $array
+		}
+		
+		if($YPoints -isnot [Array] -or $YPoints -isnot [System.Collections.IEnumerable])
+		{
+			$array = New-Object System.Collections.ArrayList
+			$array.Add($YPoints)
+			$YPoints = $array
+		}
+		
+		$Series.Points.DataBindXY($XPoints, $YPoints)
+	
+	}
+	
+	
+	function Clear-Chart
+	{
+	<#
+		.SYNOPSIS
+			This function clears the contents of the chart
+	
+		.DESCRIPTION
+			Use the function to remove contents from the chart control
+	
+		.PARAMETER  ChartControl
+			The Chart Control to clear
+	
+		.PARAMETER  LeaveSingleChart
+			Leaves the first chart and removes all others from the control
+		
+		.LINK
+			http://www.sapien.com/blog/2011/05/05/primalforms-2011-designing-charts-for-powershell/
+	#>
+		Param (	
+		[ValidateNotNull()]
+		[Parameter(Position=1,Mandatory=$true)]
+	  	[System.Windows.Forms.DataVisualization.Charting.Chart]$ChartControl
+		,
+		[Parameter(Position=2, Mandatory=$false)]
+		[Switch]$LeaveSingleChart
+		)
+		
+		$count = 0	
+		if($LeaveSingleChart)
+		{
+			$count = 1
+		}
+		
+		while($ChartControl.Series.Count -gt $count)
+		{
+			$ChartControl.Series.RemoveAt($ChartControl.Series.Count - 1)
+		}
+		
+		while($ChartControl.ChartAreas.Count -gt $count)
+		{
+			$ChartControl.ChartAreas.RemoveAt($ChartControl.ChartAreas.Count - 1)
+		}
+		
+		while($ChartControl.Titles.Count -gt $count)
+		{
+			$ChartControl.Titles.RemoveAt($ChartControl.Titles.Count - 1)
+		}
+		
+		if($ChartControl.Series.Count -gt 0)
+		{
+			$ChartControl.Series[0].Points.Clear()
+		}
+	}
+	
+	function Load-DataGridView
+	{
+		<#
+		.SYNOPSIS
+			This functions helps you load items into a DataGridView.
+	
+		.DESCRIPTION
+			Use this function to dynamically load items into the DataGridView control.
+	
+		.PARAMETER  DataGridView
+			The ComboBox control you want to add items to.
+	
+		.PARAMETER  Item
+			The object or objects you wish to load into the ComboBox's items collection.
+		
+		.PARAMETER  DataMember
+			Sets the name of the list or table in the data source for which the DataGridView is displaying data.
+	
+		#>
+		Param (
+			[ValidateNotNull()]
+			[Parameter(Mandatory=$true)]
+			[System.Windows.Forms.DataGridView]$DataGridView,
+			[ValidateNotNull()]
+			[Parameter(Mandatory=$true)]
+			$Item,
+		    [Parameter(Mandatory=$false)]
+			[string]$DataMember
+		)
+		$DataGridView.SuspendLayout()
+		$DataGridView.DataMember = $DataMember
+		
+		if ($Item -is [System.ComponentModel.IListSource]`
+		-or $Item -is [System.ComponentModel.IBindingList] -or $Item -is [System.ComponentModel.IBindingListView] )
+		{
+			$DataGridView.DataSource = $Item
+		}
+		else
+		{
+			$array = New-Object System.Collections.ArrayList
+			
+			if ($Item -is [System.Collections.IList])
+			{
+				$array.AddRange($Item)
+			}
+			else
+			{	
+				$array.Add($Item)	
+			}
+			$DataGridView.DataSource = $array
+		}
+		
+		$DataGridView.ResumeLayout()
+	}
+	
+	function Sort-ListViewColumn 
+	{
+		<#
+		.SYNOPSIS
+			Sort the ListView's item using the specified column.
+	
+		.DESCRIPTION
+			Sort the ListView's item using the specified column.
+			This function uses Add-Type to define a class that sort the items.
+			The ListView's Tag property is used to keep track of the sorting.
+	
+		.PARAMETER ListView
+			The ListView control to sort.
+	
+		.PARAMETER ColumnIndex
+			The index of the column to use for sorting.
+			
+		.PARAMETER  SortOrder
+			The direction to sort the items. If not specified or set to None, it will toggle.
+		
+		.EXAMPLE
+			Sort-ListViewColumn -ListView $listview1 -ColumnIndex 0
+	#>
+		param(	
+				[ValidateNotNull()]
+				[Parameter(Mandatory=$true)]
+				[System.Windows.Forms.ListView]$ListView,
+				[Parameter(Mandatory=$true)]
+				[int]$ColumnIndex,
+				[System.Windows.Forms.SortOrder]$SortOrder = 'None')
+		
+		if(($ListView.Items.Count -eq 0) -or ($ColumnIndex -lt 0) -or ($ColumnIndex -ge $ListView.Columns.Count))
+		{
+			return;
+		}
+		
+		#region Define ListViewItemComparer
+			try{
+			$local:type = [ListViewItemComparer]
+		}
+		catch{
+		Add-Type -ReferencedAssemblies ('System.Windows.Forms') -TypeDefinition  @" 
+	using System;
+	using System.Windows.Forms;
+	using System.Collections;
+	public class ListViewItemComparer : IComparer
+	{
+	    public int column;
+	    public SortOrder sortOrder;
+	    public ListViewItemComparer()
+	    {
+	        column = 0;
+			sortOrder = SortOrder.Ascending;
+	    }
+	    public ListViewItemComparer(int column, SortOrder sort)
+	    {
+	        this.column = column;
+			sortOrder = sort;
+	    }
+	    public int Compare(object x, object y)
+	    {
+			if(column >= ((ListViewItem)x).SubItems.Count)
+				return  sortOrder == SortOrder.Ascending ? -1 : 1;
+		
+			if(column >= ((ListViewItem)y).SubItems.Count)
+				return sortOrder == SortOrder.Ascending ? 1 : -1;
+		
+			if(sortOrder == SortOrder.Ascending)
+	        	return String.Compare(((ListViewItem)x).SubItems[column].Text, ((ListViewItem)y).SubItems[column].Text);
+			else
+				return String.Compare(((ListViewItem)y).SubItems[column].Text, ((ListViewItem)x).SubItems[column].Text);
+	    }
+	}
+"@  | Out-Null
+		}
+		#endregion
+		
+		if($ListView.Tag -is [ListViewItemComparer])
+		{
+			#Toggle the Sort Order
+			if($SortOrder -eq [System.Windows.Forms.SortOrder]::None)
+			{
+				if($ListView.Tag.column -eq $ColumnIndex -and $ListView.Tag.sortOrder -eq 'Ascending')
+				{
+					$ListView.Tag.sortOrder = 'Descending'
+				}
+				else
+				{
+					$ListView.Tag.sortOrder = 'Ascending'
+				}
+			}
+			else
+			{
+				$ListView.Tag.sortOrder = $SortOrder
+			}
+			
+			$ListView.Tag.column = $ColumnIndex
+			$ListView.Sort()#Sort the items
+		}
+		else
+		{
+			if($SortOrder -eq [System.Windows.Forms.SortOrder]::None)
+			{
+				$SortOrder = [System.Windows.Forms.SortOrder]::Ascending	
+			}
+			
+			#Set to Tag because for some reason in PowerShell ListViewItemSorter prop returns null
+			$ListView.Tag = New-Object ListViewItemComparer ($ColumnIndex, $SortOrder) 
+			$ListView.ListViewItemSorter = $ListView.Tag #Automatically sorts
+		}
+	}
+	
+	
+	function Add-ListViewItem
+	{
+	<#
+		.SYNOPSIS
+			Adds the item(s) to the ListView and stores the object in the ListViewItem's Tag property.
+	
+		.DESCRIPTION
+			Adds the item(s) to the ListView and stores the object in the ListViewItem's Tag property.
+	
+		.PARAMETER ListView
+			The ListView control to add the items to.
+	
+		.PARAMETER Items
+			The object or objects you wish to load into the ListView's Items collection.
+			
+		.PARAMETER  ImageIndex
+			The index of a predefined image in the ListView's ImageList.
+		
+		.PARAMETER  SubItems
+			List of strings to add as Subitems.
+		
+		.PARAMETER Group
+			The group to place the item(s) in.
+		
+		.PARAMETER Clear
+			This switch clears the ListView's Items before adding the new item(s).
+		
+		.EXAMPLE
+			Add-ListViewItem -ListView $listview1 -Items "Test" -Group $listview1.Groups[0] -ImageIndex 0 -SubItems "Installed"
+	#>
+		
+		Param( 
+		[ValidateNotNull()]
+		[Parameter(Mandatory=$true)]
+		[System.Windows.Forms.ListView]$ListView,
+		[ValidateNotNull()]
+		[Parameter(Mandatory=$true)]
+		$Items,
+		[int]$ImageIndex = -1,
+		[string[]]$SubItems,
+		$Group,
+		[switch]$Clear)
+		
+		if($Clear)
+		{
+			$ListView.Items.Clear();
+	    }
+	    
+	    $lvGroup = $null
+	    if ($Group -is [System.Windows.Forms.ListViewGroup])
+	    {
+	        $lvGroup = $Group
+	    }
+	    elseif ($Group -is [string])
+	    {
+	        #$lvGroup = $ListView.Group[$Group] # Case sensitive
+	        foreach ($groupItem in $ListView.Groups)
+	        {
+	            if ($groupItem.Name -eq $Group)
+	            {
+	                $lvGroup = $groupItem
+	                break
+	            }
+	        }
+	        
+	        if ($lvGroup -eq $null)
+	        {
+	            $lvGroup = $ListView.Groups.Add($Group, $Group)
+	        }
+	    }
+	    
+		if($Items -is [Array])
+		{
+			$ListView.BeginUpdate()
+			foreach ($item in $Items)
+			{		
+				$listitem  = $ListView.Items.Add($item.ToString(), $ImageIndex)
+				#Store the object in the Tag
+				$listitem.Tag = $item
+				
+				if($SubItems -ne $null)
+				{
+					$listitem.SubItems.AddRange($SubItems)
+				}
+				
+				if($lvGroup -ne $null)
+				{
+					$listitem.Group = $lvGroup
+				}
+			}
+			$ListView.EndUpdate()
+		}
+		else
+		{
+			#Add a new item to the ListView
+			$listitem  = $ListView.Items.Add($Items.ToString(), $ImageIndex)
+			#Store the object in the Tag
+			$listitem.Tag = $Items
+			
+			if($SubItems -ne $null)
+			{
+				$listitem.SubItems.AddRange($SubItems)
+			}
+			
+			if($lvGroup -ne $null)
+			{
+				$listitem.Group = $lvGroup
+			}
+		}
+	}
+	
+	
+	function Load-ListBox 
+	{
+	<#
+		.SYNOPSIS
+			This functions helps you load items into a ListBox or CheckedListBox.
+	
+		.DESCRIPTION
+			Use this function to dynamically load items into the ListBox control.
+	
+		.PARAMETER  ListBox
+			The ListBox control you want to add items to.
+	
+		.PARAMETER  Items
+			The object or objects you wish to load into the ListBox's Items collection.
+	
+		.PARAMETER  DisplayMember
+			Indicates the property to display for the items in this control.
+		
+		.PARAMETER  Append
+			Adds the item(s) to the ListBox without clearing the Items collection.
+		
+		.EXAMPLE
+			Load-ListBox $ListBox1 "Red", "White", "Blue"
+		
+		.EXAMPLE
+			Load-ListBox $listBox1 "Red" -Append
+			Load-ListBox $listBox1 "White" -Append
+			Load-ListBox $listBox1 "Blue" -Append
+		
+		.EXAMPLE
+			Load-ListBox $listBox1 (Get-Process) "ProcessName"
+	#>
+		Param (
+			[ValidateNotNull()]
+			[Parameter(Mandatory=$true)]
+			[System.Windows.Forms.ListBox]$ListBox,
+			[ValidateNotNull()]
+			[Parameter(Mandatory=$true)]
+			$Items,
+		    [Parameter(Mandatory=$false)]
+			[string]$DisplayMember,
+			[switch]$Append
+		)
+		
+		if(-not $Append)
+		{
+			$listBox.Items.Clear()	
+		}
+		
+		if($Items -is [System.Windows.Forms.ListBox+ObjectCollection])
+		{
+			$listBox.Items.AddRange($Items)
+		}
+		elseif ($Items -is [Array])
+		{
+			$listBox.BeginUpdate()
+			foreach($obj in $Items)
+			{
+				$listBox.Items.Add($obj)
+			}
+			$listBox.EndUpdate()
+		}
+		else
+		{
+			$listBox.Items.Add($Items)	
+		}
+	
+		$listBox.DisplayMember = $DisplayMember	
+	}
+	#endregion
+	
 	$More_Server_ADD_Click={
 		$prior = [int]$N_Machines.Text
 		try { $prior++ }
@@ -289,6 +1109,32 @@ function Call-citrixtoolXA76v02_psf {
 	}
 	
 	#Call Load-DiskChart function to load the chart
+	function Load-DiskChart
+	{
+		Param ( [Parameter(Position=1,Mandatory=$true)]
+				[System.Windows.Forms.DataVisualization.Charting.Chart]$Chart)
+		#Get Disk space using WMI and make sure it is an array
+		$Disks = @(Get-WMIObject Win32_LogicalDisk -filter "DriveType=3" )
+			
+		#Remove all the current charts
+		Clear-Chart $Chart 
+		
+		#Loop through each drive
+		foreach($disk in $Disks)
+		{	
+			$UsedSpace =(($disk.size - $disk.freespace)/1gb)
+			$FreeSpace = ($disk.freespace/1gb)
+	
+			#Load a Chart for each Drive
+			Load-Chart $Chart -XPoints ("Used ({0:N1} GB)" -f $UsedSpace), ("Free Space ({0:N1} GB)" -f $FreeSpace) -YPoints $UsedSpace, $FreeSpace -ChartType "Pie" -Title ("Volume: {0} ({1:N1} GB)" -f $disk.VolumeName, ($disk.size/1gb) ) -Append	
+		}
+		
+		#Set Custom Style
+		foreach ($Series in $chartDiskSpace.Series)
+		{
+			$Series.CustomProperties = "PieDrawingStyle=Concave"
+		}
+	}
 	
 	$formMain_FormClosed=[System.Windows.Forms.FormClosedEventHandler]{
 	#Event Argument: $_ = [System.Windows.Forms.FormClosedEventArgs]
@@ -299,6 +1145,170 @@ function Call-citrixtoolXA76v02_psf {
 	$timerJobTracker_Tick={
 		Update-JobTracker
 	}
+	
+	#region Job Tracker
+	$JobTrackerList = New-Object System.Collections.ArrayList
+	function Add-JobTracker
+	{
+		<#
+			.SYNOPSIS
+				Add a new job to the JobTracker and starts the timer.
+		
+			.DESCRIPTION
+				Add a new job to the JobTracker and starts the timer.
+		
+			.PARAMETER  Name
+				The name to assign to the Job
+		
+			.PARAMETER  JobScript
+				The script block that the Job will be performing. 
+				Important: Do not access form controls from this script block.
+		
+			.PARAMETER ArgumentList
+				The arguments to pass to the job
+		
+			.PARAMETER  CompleteScript
+				The script block that will be called when the job is complete.
+				The job is passed as an argument. The Job argument is null when the job fails.
+		
+			.PARAMETER  UpdateScript
+				The script block that will be called each time the timer ticks. 
+				The job is passed as an argument. Use this to get the Job's progress.
+		
+			.EXAMPLE
+				Job-Begin -Name "JobName" `
+				-JobScript {	
+					Param($Argument1)#Pass any arguments using the ArgumentList parameter
+					#Important: Do not access form controls from this script block.
+					Get-WmiObject Win32_Process -Namespace "root\CIMV2"
+				}`
+				-CompletedScript {
+					Param($Job)		
+					$results = Receive-Job -Job $Job		
+				}`
+				-UpdateScript {
+					Param($Job)
+					#$results = Receive-Job -Job $Job -Keep
+				}
+		
+			.LINK
+				
+		#>
+		
+		Param(
+		[ValidateNotNull()]
+		[Parameter(Mandatory=$true)]
+		[string]$Name, 
+		[ValidateNotNull()]
+		[Parameter(Mandatory=$true)]
+		[ScriptBlock]$JobScript,
+		$ArgumentList = $null,
+		[ScriptBlock]$CompletedScript,
+		[ScriptBlock]$UpdateScript)
+		
+		#Start the Job
+		$job = Start-Job -Name $Name -ScriptBlock $JobScript -ArgumentList $ArgumentList
+		
+		if($job -ne $null)
+		{
+			#Create a Custom Object to keep track of the Job & Script Blocks
+			$members = @{	'Job' = $Job;
+							'CompleteScript' = $CompletedScript;
+							'UpdateScript' = $UpdateScript}
+			
+			$psObject = New-Object System.Management.Automation.PSObject -Property $members
+			
+			[void]$JobTrackerList.Add($psObject)	
+			
+			#Start the Timer
+			if(-not $timerJobTracker.Enabled)
+			{
+				$timerJobTracker.Start()
+			}
+		}
+		elseif($CompletedScript -ne $null)
+		{
+			#Failed
+			Invoke-Command -ScriptBlock $CompletedScript -ArgumentList $null
+		}
+	
+	}
+	
+	function Update-JobTracker
+	{
+		<#
+			.SYNOPSIS
+				Checks the status of each job on the list.
+		#>
+		
+		#Poll the jobs for status updates
+		$timerJobTracker.Stop() #Freeze the Timer
+		
+		for($index = 0; $index -lt $JobTrackerList.Count; $index++)
+		{
+			$psObject = $JobTrackerList[$index]
+			
+			if($psObject -ne $null) 
+			{
+				if($psObject.Job -ne $null)
+				{
+					if ($psObject.Job.State -eq 'Blocked')
+	                {
+	                    #Try to unblock the job
+	                    Receive-Job $psObject.Job | Out-Null
+	                }
+	                elseif($psObject.Job.State -ne 'Running')
+					{				
+						#Call the Complete Script Block
+						if($psObject.CompleteScript -ne $null)
+						{
+							#$results = Receive-Job -Job $psObject.Job
+							Invoke-Command -ScriptBlock $psObject.CompleteScript -ArgumentList $psObject.Job
+						}
+						
+						$JobTrackerList.RemoveAt($index)
+						Remove-Job -Job $psObject.Job
+						$index-- #Step back so we don't skip a job
+					}
+					elseif($psObject.UpdateScript -ne $null)
+					{
+						#Call the Update Script Block
+						Invoke-Command -ScriptBlock $psObject.UpdateScript -ArgumentList $psObject.Job
+					}
+				}
+			}
+			else
+			{
+				$JobTrackerList.RemoveAt($index)
+				$index-- #Step back so we don't skip a job
+			}
+		}
+		
+		if($JobTrackerList.Count -gt 0)
+		{
+			$timerJobTracker.Start()#Resume the timer	
+		}	
+	}
+	
+	function Stop-JobTracker
+	{
+		<#
+			.SYNOPSIS
+				Stops and removes all Jobs from the list.
+		#>
+		#Stop the timer
+		$timerJobTracker.Stop()
+		
+		#Remove all the jobs
+		while($JobTrackerList.Count -gt 0)
+		{
+			$job = $JobTrackerList[0].Job
+			$JobTrackerList.RemoveAt(0)
+			Stop-Job $job
+			Remove-Job $job
+		}
+	}
+	#endregion
 	
 	$form1_Load={
 		
@@ -394,555 +1404,426 @@ function Call-citrixtoolXA76v02_psf {
 	$But_Rmv_app_Delivery_Click={
 		$appscheck = $Applications_list.CheckedItems
 		$delscheck = $Delivery_groups_list.CheckedItems
-		$countapp=$appscheck.count
-		$countdel=$delscheck.count
-		$applicationchecked=(1..$countapp)
-		$deliverychecked=(1..$countdel)
-		$i=0
+		$countapp = $appscheck.count
+		$countdel = $delscheck.count
+		$applicationchecked = (1..$countapp)
+		$deliverychecked = (1..$countdel)
+		$i = 0
 		$a = new-object -comobject wscript.shell
-		$Question = $a.popup("Are you sure to remove these applications from delivery groups?", 0,"Delete Files",4)
-		If ($Question -ne 6) {
+		$Question = $a.popup("Are you sure to remove these applications from delivery groups?", 0, "Delete Files", 4)
+		If ($Question -ne 6)
+		{
 			$message = "Cancelled"
-			$a.Popup($message,0,"Cancelled",0x0)
+			$a.Popup($message, 0, "Cancelled", 0x0)
 		}
-		Else {
-			foreach ($application in $Applications_list.CheckedItems) {
-				$applicationchecked[$i]=$application
+		Else
+		{
+			foreach ($application in $Applications_list.CheckedItems)
+			{
+				$applicationchecked[$i] = $application
 				$i++
-				$j=0
-				foreach ($delivery in $Delivery_groups_list.CheckedItems) {
-					$deliverychecked[$j]=$delivery
-					$app=[string]$application
-					$del=[string]$delivery
+				$j = 0
+				foreach ($delivery in $Delivery_groups_list.CheckedItems)
+				{
+					$deliverychecked[$j] = $delivery
+					$app = [string]$application
+					$del = [string]$delivery
 					remove-brokerapplication "$app" -desktopgroup "$del"
-					}
-					$j++
 				}
-							
+				$j++
+			}
+			
 			$message = [string]"Trying to remove Application/s " + "`r`n" + "$([char]34)$applicationchecked$([char]34)" + " to deliveries " + "`r`n" + "$([char]34)$deliverychecked$([char]34)"
 			$wshell = New-Object -ComObject Wscript.Shell
-			$wshell.Popup($message,0,"Done",0x0)
+			$wshell.Popup($message, 0, "Done", 0x0)
 		}
+		
 	}
 	
-		
 	$But_Add_app_Delivery_Click={
 		$appscheck = $Applications_list.CheckedItems
 		$delscheck = $Delivery_groups_list.CheckedItems
-		$countapp=$appscheck.count
-		$countdel=$delscheck.count
-		$applicationchecked=(1..$countapp)
-		$deliverychecked=(1..$countdel)
-		$i=0
-		foreach ($application in $Applications_list.CheckedItems) {
-			$applicationchecked[$i]=$application
+		$countapp = $appscheck.count
+		$countdel = $delscheck.count
+		$applicationchecked = (1..$countapp)
+		$deliverychecked = (1..$countdel)
+		$i = 0
+		foreach ($application in $Applications_list.CheckedItems)
+		{
+			$applicationchecked[$i] = $application
 			$i++
-			$j=0
-			foreach ($delivery in $Delivery_groups_list.CheckedItems) {
-				$deliverychecked[$j]=$delivery
-				$app=[string]$application
-				$del=[string]$delivery
-				IF ($text_app_priority -eq $null){
-					$app=[string]$Application
+			$j = 0
+			foreach ($delivery in $Delivery_groups_list.CheckedItems)
+			{
+				$deliverychecked[$j] = $delivery
+				$app = [string]$application
+				$del = [string]$delivery
+				IF ($text_app_priority -eq $null)
+				{
+					$app = [string]$Application
 					add-brokerapplication "$app" -desktopgroup "$del" -Priority 0
 				}
-				Else {
-					$priority=$text_app_priority.text
+				Else
+				{
+					$priority = $text_app_priority.text
 					add-brokerapplication "$app" -desktopgroup "$del" -Priority $priority
 				}
 				$j++
 			}
-		}				
+		}
 		$message = [string]"Trying to add Application/s " + "`r`n" + "$([char]34)$applicationchecked$([char]34)" + " to deliveries " + "`r`n" + "$([char]34)$deliverychecked$([char]34)"
 		$wshell = New-Object -ComObject Wscript.Shell
-		$wshell.Popup($message,0,"Done",0x0)
+		$wshell.Popup($message, 0, "Done", 0x0)
 	}
 	
-	$but_export_Click={
-		IF ($text_perms_rep.text -ne $full){
-		$text_perms_rep.text|set-content $scriptpath\export.txt
+	$but_export_Click = {
+		IF ($text_perms_rep.text -ne $full)
+		{
+			$text_perms_rep.text | set-content $scriptpath\export.txt
 		}
 		
 	}
 	
-	$but_perm_report_Click={
+	$but_perm_report_Click = {
 		
-
-    $n=0
-    $apps = import-csv $scriptPath\apps.csv|sort-object ApplicationName, Enabled
-    $dels = import-csv $scriptPath\delivery.csv|sort-object Name, Description
-    $numero=$Applications_list.CheckedItems.count
-    $numero2=$Delivery_groups_list.CheckedItems.count
-    $num=$numero+$numero2-1
-    $permiso = (0 .. $num)
-    foreach ($objItem in $Applications_list.CheckedItems)
-	{
-	    $app="$objItem"
-	    $datos = $apps|where {$_.ApplicationName -eq $app}|select UsersandGroups, Enabled
-	    $grupo = $datos.UsersandGroups
-	    $enabled = $datos.Enabled
-        IF ($enabled -eq "True") {$state = "Enabled"}
-	    else {$state = "Disabled"}
-	    $permiso[$n] = "Application permissions " + $app + ": " + $state + "`r`n" + $grupo + "`r`n" + "`r`n"
-	    $n++
-	}
-    foreach ($objItem in $Delivery_groups_list.CheckedItems)
-	{
-	    $del="$objItem"
-	    $datos = $dels|where {$_.Name -eq $del}|select Description
-	    $grupo = $datos.Description
-	    $permiso[$n] = "Delivery Group permissions " + $del + ": " + "`r`n" + $grupo + "`r`n" + "`r`n"
-	    $n++
-	}
-    $text_perms_rep.text = $permiso
-
+		$n = 0
+		$apps = import-csv $scriptPath\apps.csv | sort-object ApplicationName, Enabled
+		$dels = import-csv $scriptPath\delivery.csv | sort-object Name, Description
+		$numero = $Applications_list.CheckedItems.count
+		$numero2 = $Delivery_groups_list.CheckedItems.count
+		$num = $numero + $numero2 - 1
+		$permiso = (0 .. $num)
+		foreach ($objItem in $Applications_list.CheckedItems)
+		{
+			$app = "$objItem"
+			$datos = $apps | where { $_.ApplicationName -eq $app } | select UsersandGroups, Enabled
+			$grupo = $datos.UsersandGroups
+			$enabled = $datos.Enabled
+			IF ($enabled -eq "True") { $state = "Enabled" }
+			else { $state = "Disabled" }
+			$permiso[$n] = "Application permissions " + $app + ": " + $state + "`r`n" + $grupo + "`r`n" + "`r`n"
+			$n++
+		}
+		foreach ($objItem in $Delivery_groups_list.CheckedItems)
+		{
+			$del = "$objItem"
+			$datos = $dels | where { $_.Name -eq $del } | select Description
+			$grupo = $datos.Description
+			$permiso[$n] = "Delivery Group permissions " + $del + ": " + "`r`n" + $grupo + "`r`n" + "`r`n"
+			$n++
+		}
+		$text_perms_rep.text = $permiso
+		
 		
 	}
 	
 	$but_clear_field_Click={
-		$Text_Dom_usr_grp.Text=$null
+		$Text_Dom_usr_grp.Text = $null
 		
 	}
 	
 	$but_app_priority_Click={
-		$apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
+		$apps_csv = import-csv $scriptPath\apps.csv | sort-object ApplicationName
 		$Del_csv = import-csv $scriptPath\delivery.csv
-		$resultado = @{}
-		$test = @{}
-        $names = @{}
-        $n=0
-		foreach ($app in $apps_csv){
-		    $names[$n]=$app.ApplicationName
-            $priorities=$app.priorities -split (" ; ")
-            $deliveries=$app.DesktopGroups -split (" ; ")
-            $x=0
-            foreach ($delivery in $deliveries){
-                $DG=$Del_csv|where {$_.UUID -eq $delivery}|select name
-                $deliveries[$x]=$DG.name
-                $x++
-            }
-            $resultado.priority=$priorities
-            $resultado.deliveries=$deliveries
-            $nombre=$names[$n]
-            $test.$nombre=$resultado
-            $n++
-        }
-        $count=$Applications_list.CheckedItems.count
-        $count=$count-1
-
-        $res=(0..$count)
-        $i=0
-        foreach ($objItem in $Applications_list.CheckedItems){
-	        $appname=$objItem
-            #$text_perms_rep.text=$objItem
-            $priors=$test.$appname.priority
-            $delivers=$test.$appname.deliveries
-            $x=0
-            $count=$priors.count -1
-            $array=(0..$count)
-            
-            foreach ($prior in $priors) {
-            $prior=$priors[$x]
-            $deliver=$delivers[$x]
-            $array[$x]="Priority " + "$prior" + " in Delivery " + "$deliver" + "`r`n"
-            $x++
-            }
-            $res[$i]="Application " + "$appname" + "`r`n" + "$array" + "`r`n"
-            $i++
-            }
-            $text_perms_rep.text=$res
-        }
-     
+		$resultado = @{ }
+		$test = @{ }
+		$names = @{ }
+		$n = 0
+		foreach ($app in $apps_csv)
+		{
+			$names[$n] = $app.ApplicationName
+			$priorities = $app.priorities -split (" ; ")
+			$deliveries = $app.DesktopGroups -split (" ; ")
+			$x = 0
+			foreach ($delivery in $deliveries)
+			{
+				$DG = $Del_csv | where { $_.UUID -eq $delivery } | select name
+				$deliveries[$x] = $DG.name
+				$x++
+			}
+			$resultado.priority = $priorities
+			$resultado.deliveries = $deliveries
+			$nombre = $names[$n]
+			$test.$nombre = $resultado
+			$n++
+		}
+		$count = $Applications_list.CheckedItems.count
+		$count = $count - 1
+		
+		$res = (0..$count)
+		$i = 0
+		foreach ($objItem in $Applications_list.CheckedItems)
+		{
+			$appname = $objItem
+			#$text_perms_rep.text=$objItem
+			$priors = $test.$appname.priority
+			$delivers = $test.$appname.deliveries
+			$x = 0
+			$count = $priors.count - 1
+			$array = (0..$count)
 			
-	$but_Search_Click={
+			foreach ($prior in $priors)
+			{
+				$prior = $priors[$x]
+				$deliver = $delivers[$x]
+				$array[$x] = "Priority " + "$prior" + " in Delivery " + "$deliver" + "`r`n"
+				$x++
+			}
+			$res[$i] = "Application " + "$appname" + "`r`n" + "$array" + "`r`n"
+			$i++
+		}
+		$text_perms_rep.text = $res
+		
+	}
 	
-	If ($Text_search_field.text -gt $null){
-		If ($Cbox_Searh_by.text -eq "User or group"){	   
-			$apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
-            $del_csv = import-csv $scriptPath\delivery.csv|sort-object Name
-			$grpOrigen = $Text_search_field.text
-			$permission = $apps_csv | where{$_.UsersandGroups -like "*$grpOrigen*"} | select ApplicationName
-            $permission2 = $del_csv | where{$_.Description -like "*$grpOrigen*"} | select Name
-			$count = $permission.count
-			$count2 = $permission2.count			
-			$result = $permission.applicationname|sort|unique|out-string
-            $result2 = $permission2.name|sort|unique|out-string
-			$Text_Search_Result.text = "Published applications for User/group " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" +"Application List: " + "`r`n" + "`r`n" + $result + "`r`n" + "`r`n" + "Permission in Delivery groups for User/group " + " : " + $count2 + "`r`n" + "`r`n" + $result2
-
-}
-	If ($Cbox_Searh_by.text -eq "Delivery Group"){	   
-	   $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
-	   $Del_csv = import-csv $scriptPath\delivery.csv
-       $dskOrigen = $Text_search_field.text
-	   $DSKS = $Del_csv | where{$_.Name -like "*$dskOrigen*"} | select UUID,Name
-       $permission=$null
-       $permission=@{}
-       IF ($DSKS -ne $null){
-       foreach ($dsk in $DSKS){
-              $name=$dsk.name
-              $UID=$dsk.UUID
-              $permission.$name = $apps_csv | where{$_.DesktopGroups -like "*$UID*"} | select ApplicationName
-       }
-       }
-       $result = $permission.values.applicationname|sort|unique
-       $cuenta = $result.count
-       IF ($permission.count -eq $null){
-            $count = "0"
-       }
-       else {
-       $count = $result.count
-       }
-       $result=$result|out-string     
-       $Text_Search_Result.text = "Published applications for Delivery Group " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" +"Application List: " + "`r`n" + "`r`n" + $result
-}
-}
-}
+	$but_Search_Click = {
+		
+		If ($Text_search_field.text -gt $null)
+		{
+			If ($Cbox_Searh_by.text -eq "User or group")
+			{
+				$apps_csv = import-csv $scriptPath\apps.csv | sort-object ApplicationName
+				$del_csv = import-csv $scriptPath\delivery.csv | sort-object Name
+				$grpOrigen = $Text_search_field.text
+				$permission = $apps_csv | where{ $_.UsersandGroups -like "*$grpOrigen*" } | select ApplicationName
+				$permission2 = $del_csv | where{ $_.Description -like "*$grpOrigen*" } | select Name
+				$count = $permission.count
+				$count2 = $permission2.count
+				$result = $permission.applicationname | sort | unique | out-string
+				$result2 = $permission2.name | sort | unique | out-string
+				$Text_Search_Result.text = "Published applications for User/group " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" + "Application List: " + "`r`n" + "`r`n" + $result + "`r`n" + "`r`n" + "Permission in Delivery groups for User/group " + " : " + $count2 + "`r`n" + "`r`n" + $result2
+				
+			}
+			If ($Cbox_Searh_by.text -eq "Delivery Group")
+			{
+				$apps_csv = import-csv $scriptPath\apps.csv | sort-object ApplicationName
+				$Del_csv = import-csv $scriptPath\delivery.csv
+				$dskOrigen = $Text_search_field.text
+				$DSKS = $Del_csv | where{ $_.Name -like "*$dskOrigen*" } | select UUID, Name
+				$permission = $null
+				$permission = @{ }
+				IF ($DSKS -ne $null)
+				{
+					foreach ($dsk in $DSKS)
+					{
+						$name = $dsk.name
+						$UID = $dsk.UUID
+						$permission.$name = $apps_csv | where{ $_.DesktopGroups -like "*$UID*" } | select ApplicationName
+					}
+				}
+				$result = $permission.values.applicationname | sort | unique
+				$cuenta = $result.count
+				IF ($permission.count -eq $null)
+				{
+					$count = "0"
+				}
+				else
+				{
+					$count = $result.count
+				}
+				$result = $result | out-string
+				$Text_Search_Result.text = "Published applications for Delivery Group " + $grpOrigen + " : " + $count + "`r`n" + "`r`n" + "Application List: " + "`r`n" + "`r`n" + $result
+			}
+		}
+	}
 	
 	$but_chk_search_app_Click={
-	
-	If ($Text_search_field.text -gt $null){
-  If ($Cbox_Searh_by.text -eq "User or group"){	   
-	   $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
-       $grpOrigen = $Text_search_field.text
-       $permission = $apps_csv | where{$_.UsersandGroups -like "*$grpOrigen*"} | select ApplicationName
-	   for ($i=0;$i -lt $Applications_list.Items.count;$i++) {
-          $Applications_list.SetItemchecked($i,$False)
-       }
-       $i=0
-	   $count=$permission.count-1
-	   $resapps=(0..$count)
-	   $x=0
-	   IF ($count -gt "-1") {
-	   foreach ($objitem in $Applications_list.items) {
-	      foreach ($objitem2 in $permission) {
-			$var1=$objitem|out-string
-			$var2=$objitem2.applicationname|out-string
-		    IF ($var1 -eq $var2) {
-                $resapps[$x]=$i
-                $x++
-		    }
-		   }
-	   $i++
-	   }
-	   foreach ($objitem in $resapps){
-            $Applications_list.SetItemchecked($objitem,$True)
-          }
-   }
-		}
-    If ($Cbox_Searh_by.text -eq "Delivery Group"){
-       $apps_csv = import-csv $scriptPath\apps.csv|sort-object ApplicationName
-	   $Del_csv = import-csv $scriptPath\delivery.csv
-       $dskOrigen = $Text_search_field.text
-	   $DSKS = $Del_csv | where{$_.Name -like "*$dskOrigen*"} | select UUID,Name
-       $permission=$null
-       $permission=@{}
-       IF ($DSKS -ne $null){
-       foreach ($dsk in $DSKS){
-              $name=$dsk.name
-              $UID=$dsk.UUID
-              $permission.$name = $apps_csv | where{$_.DesktopGroups -like "*$UID*"}
-       }
-       }
-       $result = $permission.values.applicationname|sort|unique
-        for ($i=0;$i -lt $Applications_list.Items.count;$i++) {
-          $Applications_list.SetItemchecked($i,$False)
-       }
-        
-       $i=0
-	   $count=$result.count-1
-	   $resapps=@{}
-	   $x=0
-	   IF ($count -gt "-1") {
-	   foreach ($objitem in $Applications_list.items) {
-	      foreach ($objitem2 in $result) {
-			$var1=$objitem|out-string
-			$var2=$objitem2|out-string
-
-		    IF ($var1 -eq $var2) {
-             $resapps[$x]=$i
-             $x++
-		    }
-		   }
-	   $i++
-	   }
-       $tests=$resapps.values
-	   foreach ($objitem in $tests){
-            $Applications_list.SetItemchecked($objitem,$True)
-       }
-       }
-    }
-    }
-    }
-    
-	$Rbut_Enable_Console_OnClick ={
-	Show-Console
-	}
-	
-	$Rbut_Disable_Console_OnClick ={
-	Hide-Console
-	}
-	
-	$But_Add_Usr_Grp_Click={
-	
-    $appscheck = $Applications_list.CheckedItems
-	$delscheck = $Delivery_groups_list.CheckedItems
-    $countapp=$appscheck.count
-	$countdel=$delscheck.count
-    $applicationchecked=(1..$countapp)
-	$deliverychecked=(1..$countdel)
-    IF ($Text_Dom_usr_grp.Text -lt "0") {
-		$message = "Empty field" + "`r`n"
-		$wshell = New-Object -ComObject Wscript.Shell
-		$wshell.Popup($message,0,"Write a group name",0x0)
-	} 
-	else {
-        $i=0
-	    foreach ( $objItem in $appscheck ) {
-	      $app="$objItem"
-	      $groups = $Text_Dom_usr_grp.Text
-		  $groups=$groups -replace (" ; ",";")
-	      $groups=$groups -replace (" ;",";")
-		  $groups=$groups -replace ("; ",";")
-		  $groups=$groups.Split(';')
-		  foreach ($group in $groups) {
-			get-brokerapplication "$app"|Add-Brokeruser "$group" 
-			$applicationchecked[$i]=$app
-		  }
-          $i++
-	      }
-		  $i=0
-		foreach ( $objItem in $delscheck ) {
-	      $del="$objItem"
-	      $groups = $Text_Dom_usr_grp.Text
-		  $groups=$groups -replace (" ; ",";")
-	      $groups=$groups -replace (" ;",";")
-		  $groups=$groups -replace ("; ",";")
-		  $groups=$groups.Split(';')
-		  Get-BrokerAccessPolicyRule -DesktopGroupName $del | Set-BrokerAccessPolicyRule -AddIncludedUsers $Groups
-	      $deliverychecked[$i]=$del
-          $i++
-	      }
-		  
-		$applicationchecked=$applicationchecked|out-string
-		$deliverychecked=$deliverychecked|out-string
-		IF ($countapp -eq "0") {
-			if ($countdel -ne "0") {
-				$message = [string]"Trying to add User/group " + "$([char]34)$groups$([char]34)" + " to deliveries " + "`r`n" + "$deliverychecked"
-				$wshell = New-Object -ComObject Wscript.Shell
-				$wshell.Popup($message,0,"Done",0x0)
+		If ($Text_search_field.text -gt $null)
+		{
+			If ($Cbox_Searh_by.text -eq "User or group")
+			{
+				$apps_csv = import-csv $scriptPath\apps.csv | sort-object ApplicationName
+				$grpOrigen = $Text_search_field.text
+				$permission = $apps_csv | where{ $_.UsersandGroups -like "*$grpOrigen*" } | select ApplicationName
+				for ($i = 0; $i -lt $Applications_list.Items.count; $i++)
+				{
+					$Applications_list.SetItemchecked($i, $False)
+				}
+				$i = 0
+				$count = $permission.count - 1
+				$resapps = (0..$count)
+				$x = 0
+				IF ($count -gt "-1")
+				{
+					foreach ($objitem in $Applications_list.items)
+					{
+						foreach ($objitem2 in $permission)
+						{
+							$var1 = $objitem | out-string
+							$var2 = $objitem2.applicationname | out-string
+							IF ($var1 -eq $var2)
+							{
+								$resapps[$x] = $i
+								$x++
+							}
+						}
+						$i++
+					}
+					foreach ($objitem in $resapps)
+					{
+						$Applications_list.SetItemchecked($objitem, $True)
+					}
+				}
 			}
-			else {
-				$message = [string]"Please, select some Application and/or Delivery group"
-				$wshell = New-Object -ComObject Wscript.Shell
-				$wshell.Popup($message,0,"Done",0x0)
+			If ($Cbox_Searh_by.text -eq "Delivery Group")
+			{
+				$apps_csv = import-csv $scriptPath\apps.csv | sort-object ApplicationName
+				$Del_csv = import-csv $scriptPath\delivery.csv
+				$dskOrigen = $Text_search_field.text
+				$DSKS = $Del_csv | where{ $_.Name -like "*$dskOrigen*" } | select UUID, Name
+				$permission = $null
+				$permission = @{ }
+				IF ($DSKS -ne $null)
+				{
+					foreach ($dsk in $DSKS)
+					{
+						$name = $dsk.name
+						$UID = $dsk.UUID
+						$permission.$name = $apps_csv | where{ $_.DesktopGroups -like "*$UID*" }
+					}
+				}
+				$result = $permission.values.applicationname | sort | unique
+				for ($i = 0; $i -lt $Applications_list.Items.count; $i++)
+				{
+					$Applications_list.SetItemchecked($i, $False)
+				}
+				
+				$i = 0
+				$count = $result.count - 1
+				$resapps = @{ }
+				$x = 0
+				IF ($count -gt "-1")
+				{
+					foreach ($objitem in $Applications_list.items)
+					{
+						foreach ($objitem2 in $result)
+						{
+							$var1 = $objitem | out-string
+							$var2 = $objitem2 | out-string
+							
+							IF ($var1 -eq $var2)
+							{
+								$resapps[$x] = $i
+								$x++
+							}
+						}
+						$i++
+					}
+					$tests = $resapps.values
+					foreach ($objitem in $tests)
+					{
+						$Applications_list.SetItemchecked($objitem, $True)
+					}
+				}
 			}
-		}
-		else {
-			if ($countdel -eq "0") {
-				$message = [string]"Trying to add User/group " +  "$([char]34)$groups$([char]34)" + " to applications " + "`r`n" + "$applicationchecked"
-				$wshell = New-Object -ComObject Wscript.Shell
-				$wshell.Popup($message,0,"Done",0x0)
-			}
-			else {
-				$message = [string]"Trying to add User/group " +  "$([char]34)$groups$([char]34)" + " to applications: " + "`r`n" + "$applicationchecked" + "`r`n" + " And to delivery groups: " + "`r`n" + "$deliverychecked"
-				$wshell = New-Object -ComObject Wscript.Shell
-				$wshell.Popup($message,0,"Done",0x0)
-			}
-			
 		}
 		
-    }
-  
-}
+	}
 	
-	$But_Rmv_Usr_Grp_Click={
+	$progressbar_Click={
+				
+	}
 	
-	$appscheck = $Applications_list.CheckedItems
-	$delscheck = $Delivery_groups_list.CheckedItems
-    $countapp=$appscheck.count
-	$countdel=$delscheck.count
-    $applicationchecked=(1..$countapp)
-	$deliverychecked=(1..$countdel)
-    IF ($Text_Dom_usr_grp.Text -lt "0") {
-		$message = "Empty field" + "`r`n"
-		$wshell = New-Object -ComObject Wscript.Shell
-		$wshell.Popup($message,0,"Write a group name",0x0)
-	} 
-	else {
-        $i=0
-		$a = new-object -comobject wscript.shell
-		$Question = $a.popup("Are you sure to remove permission in applications or DG to the user/group?", 0,"Delete Files",4)
-		If ($Question -eq 6) {
-		  foreach ( $objItem in $appscheck ) {
-			$app="$objItem"
-			$groups = $Text_Dom_usr_grp.Text
-			$groups=$groups -replace (" ; ",";")
-			$groups=$groups -replace (" ;",";")
-			$groups=$groups -replace ("; ",";")
-			$groups=$groups.Split(';')
-			foreach ($group in $groups) {
-				get-brokerapplication "$app"|Remove-Brokeruser "$group" 
-		  }
-		  $applicationchecked[$i]=$app
-          $i++
-	      }
-		  $l=0
-		foreach ( $objItem in $delscheck ) {
-	      $del="$objItem"
-	      $groups = $Text_Dom_usr_grp.Text
-		  $groups=$groups -replace (" ; ",";")
-	      $groups=$groups -replace (" ;",";")
-		  $groups=$groups -replace ("; ",";")
-		  $groups=$groups.Split(';')
-		  Get-BrokerAccessPolicyRule -DesktopGroupName $del | Set-BrokerAccessPolicyRule -RemoveIncludedUsers $Groups
-	      $deliverychecked[$l]=$del
-          $l++
-	      }
-		  }
-		  if ($i -eq 0){
-			if ($l -eq 0) {
-				$message = [string]"Cancelado"
-				$wshell = New-Object -ComObject Wscript.Shell
-				$wshell.Popup($message,0,"Done",0x0)
-			}
-          } 
-		   else {
-		   
-		$applicationchecked=$applicationchecked|out-string
-		$deliverychecked=$deliverychecked|out-string
-		IF ($countapp -eq "0") {
-			if ($countdel -ne "0") {
-				$message = [string]"Trying to Remove User/group " + "$([char]34)$groups$([char]34)" + " to deliveries " + "`r`n" + "$deliverychecked"
-				$wshell = New-Object -ComObject Wscript.Shell
-				$wshell.Popup($message,0,"Done",0x0)
-			}
-			else {
-				$message = [string]"Please, select some Application and/or Delivery group"
-				$wshell = New-Object -ComObject Wscript.Shell
-				$wshell.Popup($message,0,"Done",0x0)
-			}
-		}
-		else {
-			if ($countdel -eq "0") {
-				$message = [string]"Trying to Remove User/group " +  "$([char]34)$groups$([char]34)" + " to applications " + "`r`n" + "$applicationchecked"
-				$wshell = New-Object -ComObject Wscript.Shell
-				$wshell.Popup($message,0,"Done",0x0)
-			}
-			else {
-				$message = [string]"Trying to Remove User/group " +  "$([char]34)$groups$([char]34)" + " to applications: " + "`r`n" + "$applicationchecked" + "`r`n" + " And to delivery groups: " + "`r`n" + "$deliverychecked"
-				$wshell = New-Object -ComObject Wscript.Shell
-				$wshell.Popup($message,0,"Done",0x0)
-			}
+	$buttonCancelProcess_Click={
+		$script:CancelLoop = $true
+	}
+	
+	$buttonStartProcess_Click={
+		#Init CancelLoop
+		$script:CancelLoop = $false
+		$buttonCancelProcess.Enabled = $true
+		#Disable the button so we don't trigger it again
+		$this.Enabled = $false
+		#Reset the Progress Bar
+		$progressbar.Value = 0
+		
+		for($i = 0; $i -lt $progressbar.Maximum; $i++)
+		{
+			#----------------------------------------
+			#Place custom script here
+			sleep -Milliseconds 200
 			
+			#----------------------------------------
+			#process the pending message
+			[System.Windows.Forms.Application]::DoEvents()
+			
+			if($script:CancelLoop -eq $true)
+			{
+				#Clear the progress bar
+				$progressbar.Value = 0
+				#Exit the loop
+				break;
+			}
+			#Step the progress bar
+			$progressbar.PerformStep() 
 		}
 		
-    }
-	
-	}
-	}
-	
-	$but_Update_FarmData_Click={
-		$Applications_list.Items.clear()
-		$Delivery_groups_list.Items.clear()
-		$filename="delivery.csv"
-		$file = [string]"$scriptPath\$filename"
-		$deliveries=get-BrokerDesktopgroup | select Name,UUID,Description
-        $j=0
-        Foreach ($delivery in $deliveries){
-            $del=$delivery.Name
-            $users=Get-BrokerAccessPolicyRule|where {$_.DesktopGroupName -eq $del}|select IncludedUsers
-            $users=$users[0].IncludedUsers.name -join (";")
-            $deliveries[$j].Description=$users
-            $j++
-        }
-        $deliveries|Export-Csv $file -NoTypeInformation
-		$deliveries = import-csv $scriptPath\delivery.csv|sort-object Name 
-
-		$filename="apps.csv"
-		$file = [string]"$scriptPath\$filename"
-		$apps=get-BrokerApplication | select @{n="ApplicationName";e={[string]::join(" ; ", $_.ApplicationName)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, @{n="DistinguisedName";e={[string]::join(" ; ", $_.Name)}},ApplicationType, @{n="CommandLine";e={[string]::join(" ; ", $_.CommandLineExecutable)}}, @{n="WorkingDirectory";e={[string]::join(" ; ", $_.WorkingDirectory)}}, @{n="ClientFolder";e={[string]::join(" ; ", $_.ClientFolder)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.AssociatedUserNames)}}, @{n="DesktopGroups";e={[string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs)}}, @{n="Priorities";e={[string]::join(" ; ", $_.AssociatedDesktopGroupPriorities)}}
-		$apps|Export-Csv $file -NoTypeInformation
-		$apps = $apps|sort-object ApplicationName 
-	
-	#Add Applications to the list of Applications
-	
-	foreach($test in $apps)
-    {
-		$app=$test.ApplicationName
-		[void] $Applications_list.Items.Add("$app")
-    }
-	
-	#Add Delivery Groups to the list of Delivery Groups
-	
-    foreach($test in $deliveries)
-    {
-		$deliv=$test.Name
-		[void] $Delivery_groups_list.Items.Add("$deliv")
-    }
-	
+		#Enable the button so we can click it again
+		$this.Enabled = $true
+		$buttonCancelProcess.Enabled = $false
 	}
 	
 	$but_Inventory_Click={
-	
-	# Define Xenapp Farm Name
-	$FarmName=get-brokersite|select @{n="Name";e={[string]::join(" ; ", $_.Name)}}
-	$EnvironmentName = $Farmname.name
-	  
-	#=======DONT CHANGE BELOW HERE =======================================================================================
-
-
-	$resultsHTM = Join-Path $scriptpath ("Inventory.htm")
-	$resultscsv = Join-Path $scriptpath ("test.csv")
-
-	#Header for Table "ApplicationList"
-	$AppfirstheaderName = "ApplicationList"
-	$AppHeaderNames = "Enabled", "ApplicationType", "CommandLine", "CommandLineArguments", "WorkingDirectory", "Description", "Clientfolder", "UserandGroups", "DesktopGroups"
-	$AppHeaderWidths = "6" , "4", "4", "10", "10", "10", "4", "4", "4"
-	$Apptablewidth = 1200
-
-	#Header for Table "DeliveryGroups"
-	$DelfirstheaderName = "DeliveryGroups"
-	$DelHeaderNames = "Scopes", "DeliveryType", "InMaintenanceMode", "Servers"
-	$DelHeaderWidths = "20" , "6" , "6"
-	$Deltablewidth = 900
-
-	#Header for Table "XenApp Licenses"
-	$LICfirstheaderName = "License Type"
-	$LICHeaderNames = "Installed", "InUse", "Available"
-	$LICHeaderWidths = "4", "4", "4"
-	$LICtablewidth = 900
-
-	#Header for Table "XD/XA Controllers" Get-BrokerController
-	$XDControllerFirstheaderName = "ControllerServer"
-	$XDControllerHeaderNames = "DesktopsRegistered", "ActiveSiteServices"
-	$XDControllerHeaderWidths = "2", "10"
-	$XDControllerTableWidth= 900
-
-	#Header for Table "MachineCatalogs" Get-BrokerCatalog
-	$CatalogHeaderName = "CatalogName"
-	$CatalogHeaderNames = "AssignedToUser", "AssignedToDG", "NotToUserAssigned", "ProvisioningType", "AllocationType"
-	$CatalogWidths = "4", "8", "8", "8", "8", "8"
-	$CatalogTablewidth = 900
-
-	#Header for Table "Machines" Get-BrokerMachine
-	$MachineHeaderName = "HostedMachineName"
-	$MachineHeaderNames = "IPAddress", "OSType", "CatalogName", "DesktopGroupName", "ProvisioningType", "HostingServerName", "InMaintenanceMode"
-	$MachineWidths = "4", "8", "8", "8", "8", "8", "8"
-	$MachineTablewidth = 900
-
-	#Header for Table "Policies"
-	$PolfirstheaderName = "Path"
-	$PolHeaderNames = "State", "Value"
-	$PolHeaderWidths = "20" , "7" , "20"
-	$Poltablewidth = 900
-
-	#==============================================================================================
-	#==============================================================================================
-	Function writeHtmlHeader
-	{
-	param($title, $fileName)
-	$date = ( Get-Date -format R)
-$head = @"
+		$progressbar.value=0
+		# Define Xenapp Farm Name
+		$FarmName = get-brokersite | select @{ n = "Name"; e = { [string]::join(" ; ", $_.Name) } }
+		$EnvironmentName = $Farmname.name
+		
+		#=======DONT CHANGE BELOW HERE =======================================================================================
+		
+		
+		$resultsHTM = Join-Path $scriptpath ("Inventory.htm")
+		$resultscsv = Join-Path $scriptpath ("test.csv")
+		
+		#Header for Table "ApplicationList"
+		$AppfirstheaderName = "ApplicationList"
+		$AppHeaderNames = "Enabled", "ApplicationType", "CommandLine", "CommandLineArguments", "WorkingDirectory", "Description", "Clientfolder", "UserandGroups", "DesktopGroups"
+		$AppHeaderWidths = "6", "4", "4", "10", "10", "10", "4", "4", "4"
+		$Apptablewidth = 1200
+		
+		#Header for Table "DeliveryGroups"
+		$DelfirstheaderName = "DeliveryGroups"
+		$DelHeaderNames = "Scopes", "DeliveryType", "InMaintenanceMode", "Servers"
+		$DelHeaderWidths = "20", "6", "6"
+		$Deltablewidth = 900
+		
+		#Header for Table "XenApp Licenses"
+		$LICfirstheaderName = "License Type"
+		$LICHeaderNames = "Installed", "InUse", "Available"
+		$LICHeaderWidths = "4", "4", "4"
+		$LICtablewidth = 900
+		
+		#Header for Table "XD/XA Controllers" Get-BrokerController
+		$XDControllerFirstheaderName = "ControllerServer"
+		$XDControllerHeaderNames = "DesktopsRegistered", "ActiveSiteServices"
+		$XDControllerHeaderWidths = "2", "10"
+		$XDControllerTableWidth = 900
+		
+		#Header for Table "MachineCatalogs" Get-BrokerCatalog
+		$CatalogHeaderName = "CatalogName"
+		$CatalogHeaderNames = "AssignedToUser", "AssignedToDG", "NotToUserAssigned", "ProvisioningType", "AllocationType"
+		$CatalogWidths = "4", "8", "8", "8", "8", "8"
+		$CatalogTablewidth = 900
+		
+		#Header for Table "Machines" Get-BrokerMachine
+		$MachineHeaderName = "HostedMachineName"
+		$MachineHeaderNames = "IPAddress", "OSType", "CatalogName", "DesktopGroupName", "ProvisioningType", "HostingServerName", "InMaintenanceMode"
+		$MachineWidths = "4", "8", "8", "8", "8", "8", "8"
+		$MachineTablewidth = 900
+		
+		#Header for Table "Policies"
+		$PolfirstheaderName = "Path"
+		$PolHeaderNames = "State", "Value"
+		$PolHeaderWidths = "20", "7", "20"
+		$Poltablewidth = 900
+		
+		#==============================================================================================
+		#==============================================================================================
+		Function writeHtmlHeader
+		{
+			param ($title, $fileName)
+			$date = (Get-Date -format R)
+			$head = @"
 <html>
 <head>
 <meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>
@@ -984,312 +1865,322 @@ border: thin solid #000000;
 </tr>
 </table>
 "@
-	$head | Out-File $fileName
-	}
-	# =====================================================================================$te=========
-	Function writeTableHeader
-	{
-	param($fileName, $firstheaderName, $headerNames, $headerWidths, $tablewidth)
-$tableHeader = @"
+			$head | Out-File $fileName
+		}
+		# =====================================================================================$te=========
+		Function writeTableHeader
+		{
+			param ($fileName, $firstheaderName, $headerNames, $headerWidths, $tablewidth)
+			$tableHeader = @"
   
 <table width='$tablewidth'><tbody>
 <tr bgcolor=#FFCC00>
 <td width='6%' align='center'><strong>$firstheaderName</strong></td>
 "@
-  
-	$i = 0
-	while ($i -lt $headerNames.count) {
-	$headerName = $headerNames[$i]
-	$headerWidth = $headerWidths[$i]
-	$tableHeader += "<td width='" + $headerWidth + "%' align='center'><strong>$headerName</strong></td>"
-	$i++
-	}
-	  
-	$tableHeader += "</tr>"
-	$tableHeader | Out-File $fileName -append
-	}
-  
-	# ==============================================================================================
-	Function writeTableFooter
-	{
-	param($fileName)
-	"</table><br/>"| Out-File $fileName -append
-	}
-	  
-	#==============================================================================================
-	Function writeData
-	{
-	param($data, $fileName, $headerNames)
-	  
-	$data.Keys | sort | foreach {
-	$tableEntry += "<tr>"
-	$computerName = $_
-	$tableEntry += ("<td bgcolor='#FEFAA9' align=center><font color='#000000'>$computerName</font></td>")
-	#$data.$_.Keys | foreach {
-	$headerNames | foreach {
-	#"$computerName : $_" | LogMe -display
-
-	try {
-	$bgcolor = "#CCCCCC"; $fontColor = "#003399"
-	$testResult = $data.$computerName.$_[1]
-	}
-	catch {}
-	#$bgcolor = "#CCCCCC"; $fontColor = "#003399"
-	#$testResult = ""
-	#}
-	$tableEntry += ("<td bgcolor='" + $bgcolor + "' align=left><font color='" + $fontColor + "'>$testResult</font></td>")
-	}
-	$tableEntry += "</tr>"
-	}
-	$tableEntry | Out-File $fileName -append
-	}
-	  
-	# ==============================================================================================
-	  
-	  #==============================================================================================
-	Function writeDatapol
-	{
-	param($data, $fileName, $headerNames)
-	  
-	$data.Keys | sort | foreach {
-	$tableEntry += "<tr>"
-	$computerName = [string]$_
-
-	$tableEntry += ("<td bgcolor='#FEFAA9' align=center><font color='#000000'>$computerName</font></td>")
-	#$data.$_.Keys | foreach {
-	$headerNames | foreach {
-
-	try {
-	$bgcolor = "#CCCCCC"; $fontColor = "#003399"
-	$testResult = $data.$computerName.$_
-	}
-	catch {}
-	#$bgcolor = "#CCCCCC"; $fontColor = "#003399"
-	#$testResult = ""
-	#}
-	$tableEntry += ("<td bgcolor='" + $bgcolor + "' align=left><font color='" + $fontColor + "'>$testResult</font></td>")
-	}
-	$tableEntry += "</tr>"
-	}
-	$tableEntry | Out-File $fileName -append
-	}
-	  
-	# ==============================================================================================
-
-
-
-	#==============================================================================================
-	# == MAIN SCRIPT ==
-	#==============================================================================================
-	rm $resultsHTM -force -EA SilentlyContinue
-	  
-	# Log the loaded Citrix PS Snapins
-	  
-	$controller = Get-BrokerController -AdminAddress $AdminAddress -DNSName $AdminAddress
-	$controllerversion = $controller.ControllerVersion
-
-	  
-	#== App Report ============================================================================================
-	 
-	$AppReport = @{}
-
-	$apps=get-BrokerApplication | select @{n="ApplicationName";e={[string]::join(" ; ", $_.ApplicationName)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, ApplicationType, @{n="CommandLine";e={[string]::join(" ; ", $_.CommandLineExecutable)}}, CommandLineArguments, Description, @{n="WorkingDirectory";e={[string]::join(" ; ", $_.WorkingDirectory)}}, @{n="ClientFolder";e={[string]::join(" ; ", $_.ClientFolder)}}, @{n="UserandGroups";e={[string]::join(" ; ", $_.AssociatedUserNames)}}, @{n="DesktopGroups";e={[string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs)}}
-
-	$count=$apps.count -1
-
-	$desktopgroups = (0 .. $count)
-
-	$i=0
-
-	foreach ($app in $apps) {
-		$tests = @{}
-		$item=$app.DesktopGroups -split ";"
-		$citem=$item.count -1
-		$desktop = (0 .. $citem)
-		$Appname= $app.ApplicationName
-		$tests.appname = "NEUTRAL", $Appname
-		$AppEnabled= $app.Enabled
-		$tests.Enabled = "NEUTRAL", $AppEnabled
-		$AppType=$app.ApplicationType
-		$tests.ApplicationType = "NEUTRAL", $AppType
-		$AppCmd=$app.CommandLine
-		$tests.CommandLine = "NEUTRAL", $AppCmd
-		$AppArg=$app.CommandLineArguments
-		$tests.CommandLineArguments = "NEUTRAL", $AppArg
-		$AppWorkDir=$app.WorkingDirectory
-		$tests.WorkingDirectory = "NEUTRAL", $AppWorkDir
-		$AppDesc=$app.Description
-		$tests.Description = "NEUTRAL", $AppDesc
-		$AppCliFol=$app.ClientFolder
-		$tests.Clientfolder = "NEUTRAL", $AppCliFol
-		$AppUsrGrp=$app.UserandGroups
-		$tests.UserandGroups = "NEUTRAL", $AppUsrGrp
-		$j=0
-		foreach ($it in $item) {
-			$desktop[$j]=get-brokerdesktopgroup|where {$_.UUID -eq $it}|select Name
-			$format=$desktop[$j]|select @{n="Desktopgroups";e={[string]::join(";", $_.Name)}}
-			$desktop[$j]=[string]$format.Desktopgroups
-			$j++
+			
+			$i = 0
+			while ($i -lt $headerNames.count)
+			{
+				$headerName = $headerNames[$i]
+				$headerWidth = $headerWidths[$i]
+				$tableHeader += "<td width='" + $headerWidth + "%' align='center'><strong>$headerName</strong></td>"
+				$i++
+			}
+			
+			$tableHeader += "</tr>"
+			$tableHeader | Out-File $fileName -append
 		}
-		$desktop=$desktop -replace " ","_"
 		
-		$desktopgroups[$i]=[string]$desktop -join ","
-		$desktopgroups[$i]=$desktopgroups[$i] -replace " ",";"
-		$desktopgroups[$i]=$desktopgroups[$i] -replace "_"," "
-
-		$app.DesktopGroups=$desktopgroups[$i]
-		$AppDesGrp=$app.DesktopGroups
-		$tests.DesktopGroups = "NEUTRAL", $AppDesGrp
-		$i++
-		$AppReport.$Appname = $tests 
-	}
-	#== Delivery Report ============================================================================================
-
-	$DelReport = @{}
-	$Deliveries = get-brokerdesktopgroup|select Name, DeliveryType, Scopes, InMaintenanceMode
-
-
-	Foreach ($Delivery in $Deliveries) {
-		$tests = @{}
-		$Delname = $Delivery.Name
-		$tests.Name = "NEUTRAL", $Delname
-		$DelType = $Delivery.DeliveryType
-		$tests.DeliveryType = "NEUTRAL", $DelType
-		$DelScope= $Delivery.Scopes
-		$tests.Scopes = "NEUTRAL", $DelScope
-		$DelMaintenance = $Delivery.InMaintenanceMode
-		$tests.InMaintenanceMode = "NEUTRAL", $DelMaintenance
-		$machines = Get-BrokerDesktop|where {$_.DesktopGroupName -eq "$Delname"}|select DnsName
+		# ==============================================================================================
+		Function writeTableFooter
+		{
+			param ($fileName)
+			"</table><br/>" | Out-File $fileName -append
+		}
 		
-		$Delservers = $machines.Dnsname -join " ; "
-		$tests.Servers = "NEUTRAL", $Delservers
-		$DelReport.$Delname = $tests 
-	}
-
-	#== Machines Report ============================================================================================
-
-	$MachineReport = @{}
-	$Machines = get-brokermachine|select HostedMachineName, IPAddress, OSType, CatalogName, DesktopGroupName, ProvisioningType, HostingServerName, InMaintenanceMode
-
-	Foreach ($Machine in $Machines) {
-		$tests = @{}
-		$Machinename = $Machine.HostedMachineName
-		$tests.HostedMachineName = "NEUTRAL", $Machinename
-		$MachineIP = $Machine.IPAddress
-		$tests.IPAddress = "NEUTRAL", $MachineIP
-		$MachineOSType= $Machine.OSType
-		$tests.OSType = "NEUTRAL", $MachineOSType
-		$MachineCatName= $Machine.CatalogName
-		$tests.CatalogName = "NEUTRAL", $MachineCatName
-		$MachineDeskName= $Machine.DesktopGroupName
-		$tests.DesktopGroupName = "NEUTRAL", $MachineDeskName
-		$MachineProvType= $Machine.ProvisioningType
-		$tests.ProvisioningType = "NEUTRAL", $MachineProvType
-		$MachineHostServer= $Machine.HostingServerName
-		$tests.HostingServerName = "NEUTRAL", $MachineHostServer
-		$MachineMaintenance= $Machine.InMaintenanceMode
-		$tests.InMaintenanceMode = "NEUTRAL", $MachineMaintenance
+		#==============================================================================================
+		Function writeData
+		{
+			param ($data, $fileName, $headerNames)
+			
+			$data.Keys | sort | foreach {
+				$tableEntry += "<tr>"
+				$computerName = $_
+				$tableEntry += ("<td bgcolor='#FEFAA9' align=center><font color='#000000'>$computerName</font></td>")
+				#$data.$_.Keys | foreach {
+				$headerNames | foreach {
+					#"$computerName : $_" | LogMe -display
+					
+					try
+					{
+						$bgcolor = "#CCCCCC"; $fontColor = "#003399"
+						$testResult = $data.$computerName.$_[1]
+					}
+					catch { }
+					#$bgcolor = "#CCCCCC"; $fontColor = "#003399"
+					#$testResult = ""
+					#}
+					$tableEntry += ("<td bgcolor='" + $bgcolor + "' align=left><font color='" + $fontColor + "'>$testResult</font></td>")
+				}
+				$tableEntry += "</tr>"
+			}
+			$tableEntry | Out-File $fileName -append
+		}
 		
-		$MachineReport.$MachineName = $tests 
-	}
-	
-	#== Licenses Check ============================================================================================
-	  
-
-	#Define License Server Name
-	$licserver=get-brokersite|select LicenseServerName
-	$licservername=$licserver.LicenseServerName
-	 
-	$LicResults = @{}
-	$licenses=Get-WmiObject -class "Citrix_GT_License_Pool" -Namespace "ROOT\CitrixLicensing" -ComputerName $licservername|where {$_.PLD -ne "ctxlsdiag"}
-	  
-	foreach ($license in $licenses) {
-	$tests = @{}
-	  
-	#Name of License
-	$Licname = $license.PLD 
-	$tests.Licname = "NEUTRAL", $Licname
-
-	#Installed
-	$LicInstalled = $license.count
-	$tests.Installed = "NEUTRAL", $LicInstalled
-
-	#In use
-	$LicInuse = $license.inusecount
-	$tests.InUse = "NEUTRAL", $LicInuse
-
-	#Available
-	$LicAvailable = $license.PooledAvailable
-	$tests.Available = "NEUTRAL", $LicAvailable
-
-	$LICResults.$Licname = $tests 
-	}
-
-
-	#== Controller Check ============================================================================================
-	  
-	$ControllerResults = @{}
-	$Controllers = Get-BrokerController -AdminAddress $AdminAddress
-	 
-	foreach ($Controller in $Controllers) {
-	$tests = @{}
-	  
-	#Name of $Controller
-	$ControllerDNS = $Controller | %{ $_.DNSName }
-	 
-	#DesktopsRegistered on this controller
-	$ControllerDesktopsRegistered = $Controller | %{ $_.DesktopsRegistered }
-	$tests.DesktopsRegistered = "NEUTRAL", $ControllerDesktopsRegistered
-	  
-	#ActiveSiteServices on this controller
-	$ActiveSiteServices = $Controller | %{ $_.ActiveSiteServices }
-	$tests.ActiveSiteServices = "NEUTRAL", $ActiveSiteServices
-	  
-	#Fill $tests into array
-	$ControllerResults.$ControllerDNS = $tests
-	}
-
-	#== Catalog Check ============================================================================================
-	  
-	$CatalogResults = @{}
-	$Catalogs = Get-BrokerCatalog -AdminAddress $AdminAddress
-	  
-	foreach ($Catalog in $Catalogs) {
-	$tests = @{}
-	  
-	#Name of MachineCatalog
-	$CatalogName = $Catalog | %{ $_.Name }
-	  
-	#CatalogAssignedCount
-	$CatalogAssignedCount = $Catalog | %{ $_.AssignedCount }
-	$tests.AssignedToUser = "NEUTRAL", $CatalogAssignedCount
-	  
-	#CatalogUnassignedCount
-	$CatalogUnAssignedCount = $Catalog | %{ $_.UnassignedCount }
-	$tests.NotToUserAssigned = "NEUTRAL", $CatalogUnAssignedCount
-	  
-	# Assigned to DeliveryGroup
-	$CatalogUsedCountCount = $Catalog | %{ $_.UsedCount }
-	$tests.AssignedToDG = "NEUTRAL", $CatalogUsedCountCount
-	  
-	 #ProvisioningType
-	 $CatalogProvisioningType = $Catalog | %{ $_.ProvisioningType }
-	 $tests.ProvisioningType = "NEUTRAL", $CatalogProvisioningType
-	  
-	 #AllocationType
-	 $CatalogAllocationType = $Catalog | %{ $_.AllocationType }
-	 $tests.AllocationType = "NEUTRAL", $CatalogAllocationType
-
-	  
-	$CatalogResults.$CatalogName = $tests
-	}
-
-	# ======= Write all results to an html file =================================================
-
-	Write-Host ("Saving results to html report: " + $resultsHTM)
-	writeHtmlHeader "$EnvironmentName Farm Inventory" $resultsHTM
-
-    @"
+		# ==============================================================================================
+		
+		#==============================================================================================
+		Function writeDatapol
+		{
+			param ($data, $fileName, $headerNames)
+			
+			$data.Keys | sort | foreach {
+				$tableEntry += "<tr>"
+				$computerName = [string]$_
+				
+				$tableEntry += ("<td bgcolor='#FEFAA9' align=center><font color='#000000'>$computerName</font></td>")
+				#$data.$_.Keys | foreach {
+				$headerNames | foreach {
+					
+					try
+					{
+						$bgcolor = "#CCCCCC"; $fontColor = "#003399"
+						$testResult = $data.$computerName.$_
+					}
+					catch { }
+					#$bgcolor = "#CCCCCC"; $fontColor = "#003399"
+					#$testResult = ""
+					#}
+					$tableEntry += ("<td bgcolor='" + $bgcolor + "' align=left><font color='" + $fontColor + "'>$testResult</font></td>")
+				}
+				$tableEntry += "</tr>"
+			}
+			$tableEntry | Out-File $fileName -append
+		}
+		
+		# ==============================================================================================
+		
+		
+		
+		#==============================================================================================
+		# == MAIN SCRIPT ==
+		#==============================================================================================
+		rm $resultsHTM -force -EA SilentlyContinue
+		
+		# Log the loaded Citrix PS Snapins
+		
+		$controller = Get-BrokerController -AdminAddress $AdminAddress -DNSName $AdminAddress
+		$controllerversion = $controller.ControllerVersion
+		
+		
+		#== App Report ============================================================================================
+		
+		$AppReport = @{ }
+		
+		$apps = get-BrokerApplication | select @{ n = "ApplicationName"; e = { [string]::join(" ; ", $_.ApplicationName) } }, @{ n = "Enabled"; e = { [string]::join(" ; ", $_.Enabled) } }, ApplicationType, @{ n = "CommandLine"; e = { [string]::join(" ; ", $_.CommandLineExecutable) } }, CommandLineArguments, Description, @{ n = "WorkingDirectory"; e = { [string]::join(" ; ", $_.WorkingDirectory) } }, @{ n = "ClientFolder"; e = { [string]::join(" ; ", $_.ClientFolder) } }, @{ n = "UserandGroups"; e = { [string]::join(" ; ", $_.AssociatedUserNames) } }, @{ n = "DesktopGroups"; e = { [string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs) } }
+		
+		$count = $apps.count - 1
+		
+		$desktopgroups = (0 .. $count)
+		
+		$i = 0
+		
+		foreach ($app in $apps)
+		{
+			$tests = @{ }
+			$item = $app.DesktopGroups -split ";"
+			$citem = $item.count - 1
+			$desktop = (0 .. $citem)
+			$Appname = $app.ApplicationName
+			$tests.appname = "NEUTRAL", $Appname
+			$AppEnabled = $app.Enabled
+			$tests.Enabled = "NEUTRAL", $AppEnabled
+			$AppType = $app.ApplicationType
+			$tests.ApplicationType = "NEUTRAL", $AppType
+			$AppCmd = $app.CommandLine
+			$tests.CommandLine = "NEUTRAL", $AppCmd
+			$AppArg = $app.CommandLineArguments
+			$tests.CommandLineArguments = "NEUTRAL", $AppArg
+			$AppWorkDir = $app.WorkingDirectory
+			$tests.WorkingDirectory = "NEUTRAL", $AppWorkDir
+			$AppDesc = $app.Description
+			$tests.Description = "NEUTRAL", $AppDesc
+			$AppCliFol = $app.ClientFolder
+			$tests.Clientfolder = "NEUTRAL", $AppCliFol
+			$AppUsrGrp = $app.UserandGroups
+			$tests.UserandGroups = "NEUTRAL", $AppUsrGrp
+			$j = 0
+			foreach ($it in $item)
+			{
+				$desktop[$j] = get-brokerdesktopgroup | where { $_.UUID -eq $it } | select Name
+				$format = $desktop[$j] | select @{ n = "Desktopgroups"; e = { [string]::join(";", $_.Name) } }
+				$desktop[$j] = [string]$format.Desktopgroups
+				$j++
+			}
+			$desktop = $desktop -replace " ", "_"
+			
+			$desktopgroups[$i] = [string]$desktop -join ","
+			$desktopgroups[$i] = $desktopgroups[$i] -replace " ", ";"
+			$desktopgroups[$i] = $desktopgroups[$i] -replace "_", " "
+			
+			$app.DesktopGroups = $desktopgroups[$i]
+			$AppDesGrp = $app.DesktopGroups
+			$tests.DesktopGroups = "NEUTRAL", $AppDesGrp
+			$i++
+			$AppReport.$Appname = $tests
+		}
+		#== Delivery Report ============================================================================================
+		
+		$DelReport = @{ }
+		$Deliveries = get-brokerdesktopgroup | select Name, DeliveryType, Scopes, InMaintenanceMode
+		
+		
+		Foreach ($Delivery in $Deliveries)
+		{
+			$tests = @{ }
+			$Delname = $Delivery.Name
+			$tests.Name = "NEUTRAL", $Delname
+			$DelType = $Delivery.DeliveryType
+			$tests.DeliveryType = "NEUTRAL", $DelType
+			$DelScope = $Delivery.Scopes
+			$tests.Scopes = "NEUTRAL", $DelScope
+			$DelMaintenance = $Delivery.InMaintenanceMode
+			$tests.InMaintenanceMode = "NEUTRAL", $DelMaintenance
+			$machines = Get-BrokerDesktop | where { $_.DesktopGroupName -eq "$Delname" } | select DnsName
+			
+			$Delservers = $machines.Dnsname -join " ; "
+			$tests.Servers = "NEUTRAL", $Delservers
+			$DelReport.$Delname = $tests
+		}
+		
+		#== Machines Report ============================================================================================
+		
+		$MachineReport = @{ }
+		$Machines = get-brokermachine | select HostedMachineName, IPAddress, OSType, CatalogName, DesktopGroupName, ProvisioningType, HostingServerName, InMaintenanceMode
+		
+		Foreach ($Machine in $Machines)
+		{
+			$tests = @{ }
+			$Machinename = $Machine.HostedMachineName
+			$tests.HostedMachineName = "NEUTRAL", $Machinename
+			$MachineIP = $Machine.IPAddress
+			$tests.IPAddress = "NEUTRAL", $MachineIP
+			$MachineOSType = $Machine.OSType
+			$tests.OSType = "NEUTRAL", $MachineOSType
+			$MachineCatName = $Machine.CatalogName
+			$tests.CatalogName = "NEUTRAL", $MachineCatName
+			$MachineDeskName = $Machine.DesktopGroupName
+			$tests.DesktopGroupName = "NEUTRAL", $MachineDeskName
+			$MachineProvType = $Machine.ProvisioningType
+			$tests.ProvisioningType = "NEUTRAL", $MachineProvType
+			$MachineHostServer = $Machine.HostingServerName
+			$tests.HostingServerName = "NEUTRAL", $MachineHostServer
+			$MachineMaintenance = $Machine.InMaintenanceMode
+			$tests.InMaintenanceMode = "NEUTRAL", $MachineMaintenance
+			
+			$MachineReport.$MachineName = $tests
+		}
+		
+		#== Licenses Check ============================================================================================
+		
+		
+		#Define License Server Name
+		$licserver = get-brokersite | select LicenseServerName
+		$licservername = $licserver.LicenseServerName
+		
+		$LicResults = @{ }
+		$licenses = Get-WmiObject -class "Citrix_GT_License_Pool" -Namespace "ROOT\CitrixLicensing" -ComputerName $licservername | where { $_.PLD -ne "ctxlsdiag" }
+		
+		foreach ($license in $licenses)
+		{
+			$tests = @{ }
+			
+			#Name of License
+			$Licname = $license.PLD
+			$tests.Licname = "NEUTRAL", $Licname
+			
+			#Installed
+			$LicInstalled = $license.count
+			$tests.Installed = "NEUTRAL", $LicInstalled
+			
+			#In use
+			$LicInuse = $license.inusecount
+			$tests.InUse = "NEUTRAL", $LicInuse
+			
+			#Available
+			$LicAvailable = $license.PooledAvailable
+			$tests.Available = "NEUTRAL", $LicAvailable
+			
+			$LICResults.$Licname = $tests
+		}
+		
+		
+		#== Controller Check ============================================================================================
+		
+		$ControllerResults = @{ }
+		$Controllers = Get-BrokerController -AdminAddress $AdminAddress
+		
+		foreach ($Controller in $Controllers)
+		{
+			$tests = @{ }
+			
+			#Name of $Controller
+			$ControllerDNS = $Controller | %{ $_.DNSName }
+			
+			#DesktopsRegistered on this controller
+			$ControllerDesktopsRegistered = $Controller | %{ $_.DesktopsRegistered }
+			$tests.DesktopsRegistered = "NEUTRAL", $ControllerDesktopsRegistered
+			
+			#ActiveSiteServices on this controller
+			$ActiveSiteServices = $Controller | %{ $_.ActiveSiteServices }
+			$tests.ActiveSiteServices = "NEUTRAL", $ActiveSiteServices
+			
+			#Fill $tests into array
+			$ControllerResults.$ControllerDNS = $tests
+		}
+		
+		#== Catalog Check ============================================================================================
+		
+		$CatalogResults = @{ }
+		$Catalogs = Get-BrokerCatalog -AdminAddress $AdminAddress
+		
+		foreach ($Catalog in $Catalogs)
+		{
+			$tests = @{ }
+			
+			#Name of MachineCatalog
+			$CatalogName = $Catalog | %{ $_.Name }
+			
+			#CatalogAssignedCount
+			$CatalogAssignedCount = $Catalog | %{ $_.AssignedCount }
+			$tests.AssignedToUser = "NEUTRAL", $CatalogAssignedCount
+			
+			#CatalogUnassignedCount
+			$CatalogUnAssignedCount = $Catalog | %{ $_.UnassignedCount }
+			$tests.NotToUserAssigned = "NEUTRAL", $CatalogUnAssignedCount
+			
+			# Assigned to DeliveryGroup
+			$CatalogUsedCountCount = $Catalog | %{ $_.UsedCount }
+			$tests.AssignedToDG = "NEUTRAL", $CatalogUsedCountCount
+			
+			#ProvisioningType
+			$CatalogProvisioningType = $Catalog | %{ $_.ProvisioningType }
+			$tests.ProvisioningType = "NEUTRAL", $CatalogProvisioningType
+			
+			#AllocationType
+			$CatalogAllocationType = $Catalog | %{ $_.AllocationType }
+			$tests.AllocationType = "NEUTRAL", $CatalogAllocationType
+			
+			
+			$CatalogResults.$CatalogName = $tests
+		}
+		
+		# ======= Write all results to an html file =================================================
+		
+		Write-Host ("Saving results to html report: " + $resultsHTM)
+		writeHtmlHeader "$EnvironmentName Farm Inventory" $resultsHTM
+		
+		    @"
     </table>
     <table width='1200'>
     <tr bgcolor='#CCCCCC
@@ -1300,12 +2191,13 @@ $tableHeader = @"
     </body>
     </html>
 "@ | Out-File $resultsHTM -append
-
-	writeTableHeader $resultsHTM $AppfirstheaderName $Appheadernames $AppHeaderWidths $Apptablewidth
-	$AppReport | sort-object -property Appname | %{ writeData $AppReport $resultsHTM $AppHeaderNames }
-	writeTableFooter $resultsHTM
-
-    @"
+		
+		writeTableHeader $resultsHTM $AppfirstheaderName $Appheadernames $AppHeaderWidths $Apptablewidth
+		$AppReport | sort-object -property Appname | %{ writeData $AppReport $resultsHTM $AppHeaderNames }
+		writeTableFooter $resultsHTM
+		$progressbar.Value = 10
+		
+		    @"
     </table>
     <table width='1200'>
     <tr bgcolor='#CCCCCC
@@ -1316,12 +2208,12 @@ $tableHeader = @"
     </body>
     </html>
 "@ | Out-File $resultsHTM -append
- 
-	writeTableHeader $resultsHTM $DelfirstheaderName $Delheadernames $DelHeaderWidths $Deltablewidth
-	$DelReport | sort-object -property Appname | %{ writeData $DelReport $resultsHTM $DelHeaderNames }
-	writeTableFooter $resultsHTM
-	
-	@"
+		
+		writeTableHeader $resultsHTM $DelfirstheaderName $Delheadernames $DelHeaderWidths $Deltablewidth
+		$DelReport | sort-object -property Appname | %{ writeData $DelReport $resultsHTM $DelHeaderNames }
+		writeTableFooter $resultsHTM
+		$progressbar.Value = 20
+			@"
     </table>
     <table width='1200'>
     <tr bgcolor='#CCCCCC
@@ -1332,12 +2224,12 @@ $tableHeader = @"
     </body>
     </html>
 "@ | Out-File $resultsHTM -append
- 
-writeTableHeader $resultsHTM $MachineheaderName $Machineheadernames $MachineWidths $Machinetablewidth
-$MachineReport | sort-object -property Appname | %{ writeData $MachineReport $resultsHTM $MachineHeaderNames }
-writeTableFooter $resultsHTM
-
-@"
+		
+		writeTableHeader $resultsHTM $MachineheaderName $Machineheadernames $MachineWidths $Machinetablewidth
+		$MachineReport | sort-object -property Appname | %{ writeData $MachineReport $resultsHTM $MachineHeaderNames }
+		writeTableFooter $resultsHTM
+		$progressbar.Value = 30
+		@"
 <br>
 </table>
 <table width='1200'>
@@ -1349,14 +2241,14 @@ writeTableFooter $resultsHTM
 </body>
 </html>
 "@ | Out-File $resultsHTM -append
-
-
-
-	writeTableHeader $resultsHTM $LICfirstheaderName $LICheadernames $LICHeaderWidths $LICtablewidth
-	$LICResults | sort-object -property Licname | %{ writeData $LICResults $resultsHTM $LICHeaderNames }
-	writeTableFooter $resultsHTM
-
-@"
+		
+		
+		
+		writeTableHeader $resultsHTM $LICfirstheaderName $LICheadernames $LICHeaderWidths $LICtablewidth
+		$LICResults | sort-object -property Licname | %{ writeData $LICResults $resultsHTM $LICHeaderNames }
+		writeTableFooter $resultsHTM
+		$progressbar.Value = 40
+		@"
 <br>
 </table>
 <table width='1200'>
@@ -1368,13 +2260,14 @@ writeTableFooter $resultsHTM
 </body>
 </html>
 "@ | Out-File $resultsHTM -append
-
-	# Write Table with the Controllers
-	writeTableHeader $resultsHTM $XDControllerFirstheaderName $XDControllerHeaderNames $XDControllerHeaderWidths $XDControllerTableWidth
-	$ControllerResults | sort-object -property XDControllerFirstheaderName | %{ writeData $ControllerResults $resultsHTM $XDControllerHeaderNames }
-	writeTableFooter $resultsHTM
-
-@"
+		
+		# Write Table with the Controllers
+		writeTableHeader $resultsHTM $XDControllerFirstheaderName $XDControllerHeaderNames $XDControllerHeaderWidths $XDControllerTableWidth
+		$ControllerResults | sort-object -property XDControllerFirstheaderName | %{ writeData $ControllerResults $resultsHTM $XDControllerHeaderNames }
+		writeTableFooter $resultsHTM
+		$progressbar.Value = 50
+		
+		@"
 <br>
 </table>
 <table width='1200'>
@@ -1386,13 +2279,13 @@ writeTableFooter $resultsHTM
 </body>
 </html>
 "@ | Out-File $resultsHTM -append
-
-	# Write Table with the Catalogs
-	writeTableHeader $resultsHTM $CatalogHeaderName $CatalogHeaderNames $CatalogWidths $CatalogTablewidth
-	$CatalogResults | %{ writeData $CatalogResults $resultsHTM $CatalogHeaderNames}
-	writeTableFooter $resultsHTM
-
-    @"
+		
+		# Write Table with the Catalogs
+		writeTableHeader $resultsHTM $CatalogHeaderName $CatalogHeaderNames $CatalogWidths $CatalogTablewidth
+		$CatalogResults | %{ writeData $CatalogResults $resultsHTM $CatalogHeaderNames }
+		writeTableFooter $resultsHTM
+		$progressbar.Value = 60
+		    @"
     </table>
     <table width='1200'>
     <tr bgcolor='#CCCCCC
@@ -1403,216 +2296,221 @@ writeTableFooter $resultsHTM
     </body>
     </html>
 "@ | Out-File $resultsHTM -append
-
-	#REPORT DE POLÍTICAS
-	#Apuntamos a la carpeta de Utilidades de Scout
-	#cd "C:\Program Files (x86)\Citrix\Scout\Current\Utilities"
-
-	#Importamos módulo de políticas
-	Import-Module "C:\Program Files (x86)\Citrix\Scout\Current\Utilities\Citrix.GroupPolicy.Commands.psm1"
-
-	#Definimos PSDrive para que funcionen los comandos
-	$a=New-PSDrive -Name LocalFarmGpo -psprovider CitrixGroupPolicy -controller localhost \
-
-	#
-	#Funciones de Citrix, cogidas de Citrix.GroupPolicy.Commands.psm1. Importando el CMDLET tenía errores...
-	#
-
-	Function FilterString
-	{
-		param([string] $value, [string[]] $wildcards)
-
-		$wildcards | Where { $value -like $_ }
-	}
-
-	Function CreateDictionary
-	{
-		return New-Object "System.Collections.Generic.Dictionary``2[System.String,System.Object]"
-	}
-
-	Function CreateObject
-	{
-		param([System.Collections.IDictionary]$props, [string]$name)
-
-		$obj = New-Object PSObject
-		foreach ($prop in $props.Keys)
+		
+		#REPORT DE POLÍTICAS
+		#Apuntamos a la carpeta de Utilidades de Scout
+		#cd "C:\Program Files (x86)\Citrix\Scout\Current\Utilities"
+		
+		#Importamos módulo de políticas
+		Import-Module "C:\Program Files (x86)\Citrix\Scout\Current\Utilities\Citrix.GroupPolicy.Commands.psm1"
+		
+		#Definimos PSDrive para que funcionen los comandos
+		$a = New-PSDrive -Name LocalFarmGpo -psprovider CitrixGroupPolicy -controller localhost \
+		
+		#
+		#Funciones de Citrix, cogidas de Citrix.GroupPolicy.Commands.psm1. Importando el CMDLET tenía errores...
+		#
+		
+		Function FilterString
 		{
-			$obj | Add-Member NoteProperty -Name $prop -Value $props.$prop
+			param ([string] $value, [string[]] $wildcards)
+			
+			$wildcards | Where { $value -like $_ }
 		}
-		if ($name)
+		
+		Function CreateDictionary
 		{
-			$obj | Add-Member ScriptMethod -Name "ToString" -Value $executioncontext.invokecommand.NewScriptBlock('"{0}"' -f $name) -Force
+			return New-Object "System.Collections.Generic.Dictionary``2[System.String,System.Object]"
 		}
-		return $obj
-	}
-
-	Function CompareObject
-	{
-		param([PSObject] $NewObject, [PSObject] $CurrentObject)
-
-		$props = CreateDictionary
-
-		$oldprops = $CurrentObject | Get-Member -MemberType Properties | Select-Object -Expand Name
-		$newprops = $NewObject | Get-Member -MemberType Properties | Select-Object -Expand Name
-		ForEach($prop in $newprops)
+		
+		Function CreateObject
 		{
-			if ($oldprops -contains $prop)
+			param ([System.Collections.IDictionary]$props, [string]$name)
+			
+			$obj = New-Object PSObject
+			foreach ($prop in $props.Keys)
 			{
-				if (-not (AreValuesEqual $prop $NewObject.$prop $CurrentObject.$prop))
-				{
-					$props.$prop = $NewObject.$prop
-				}
+				$obj | Add-Member NoteProperty -Name $prop -Value $props.$prop
 			}
-		}
-		if ($props.Keys.Count -gt 0)
-		{
-			CreateObject $props
-		}
-	}
-
-	Function AreValuesEqual
-	{
-		param($prop, $new, $old)
-
-		if ($new -eq $null) { return $true }
-		if ($old -eq $null) { return $false }
-
-		if ($new -is [array])
-		{
-			return (Compare-Object $new $old | Measure-Object).Count -eq 0
-		}
-		if ($new -is [PSObject])
-		{
-			return (CompareObject $new $old) -eq $null
-		}
-		$equal = $new -eq $old
-		if ($prop -eq "State")
-		{
-			switch($new)
+			if ($name)
 			{
-				"Enabled" { $equal = "Enabled", "Allowed" -contains $old }
-				"Disabled" { $equal = "Disabled", "Prohibited", "UseDefault" -contains $old }
+				$obj | Add-Member ScriptMethod -Name "ToString" -Value $executioncontext.invokecommand.NewScriptBlock('"{0}"' -f $name) -Force
 			}
+			return $obj
 		}
-		return $equal
-	}
-
-
-	Function Get-CtxGroupPolicy
-	{
-		[CmdletBinding()]
-		param(
-			[Parameter(Position=0, ValueFromPipelineByPropertyName=$true)]
-			[string[]] $PolicyName = "*",
-			[Parameter(Position=1, ValueFromPipelineByPropertyName=$true)]
-			[string] [ValidateSet("Computer", "User", $null)] $Type,
-			[Parameter()]
-			[string] $DriveName = "LocalFarmGpo"
-		)
-
-		process
+		
+		Function CompareObject
 		{
-			$types = if (!$Type) { @("Computer", "User") } else { @($Type) }
-			foreach($polType in $types)
+			param ([PSObject] $NewObject, [PSObject] $CurrentObject)
+			
+			$props = CreateDictionary
+			
+			$oldprops = $CurrentObject | Get-Member -MemberType Properties | Select-Object -Expand Name
+			$newprops = $NewObject | Get-Member -MemberType Properties | Select-Object -Expand Name
+			ForEach ($prop in $newprops)
 			{
-				$pols = @(Get-ChildItem "$($DriveName):\$polType" | Where-Object { FilterString $_.Name $PolicyName })
-				foreach ($pol in $pols)
+				if ($oldprops -contains $prop)
 				{
-				   $props = CreateDictionary
-				   $props.PolicyName = $pol.Name
-				   $props.Type = $poltype
-				   $props.Description = $pol.Description
-				   $props.Enabled = $pol.Enabled
-				   $props.Priority = $pol.Priority
-				   CreateObject $props $pol.Name
-				}
-			}
-		}
-	}
-
-	Function Get-CtxGroupPolicyConfiguration
-	{
-		[CmdletBinding()]
-		param(
-			[Parameter(Position=0, ValueFromPipelineByPropertyName=$true)]
-			[String[]] $PolicyName = "*",
-			[Parameter(Position=1, ValueFromPipelineByPropertyName=$true)]
-			[ValidateSet("Computer", "User", $null)] [String] $Type,
-			[Parameter()]
-			[Switch] $ConfiguredOnly,
-			[Parameter()]
-			[string] $DriveName = "LocalFarmGpo"
-		)
-
-		process
-		{
-			$types = if (!$Type) { @("Computer", "User") } else { @($Type) }
-			foreach ($poltype in $types)
-			{
-				$pols = @(Get-ChildItem "$($DriveName):\$poltype" | Where-Object { FilterString $_.Name $PolicyName })
-				foreach ($pol in $pols)
-				{
-					$props = CreateDictionary
-					$props.PolicyName = $pol.Name
-					$props.Type = $poltype
-
-					foreach ($setting in @(Get-ChildItem "$($DriveName):\$poltype\$($pol.Name)\Settings" -Recurse |
-						Where-Object { $_.State -ne $null }))
+					if (-not (AreValuesEqual $prop $NewObject.$prop $CurrentObject.$prop))
 					{
-						if (!$ConfiguredOnly -or $setting.State -ne "NotConfigured")
-						{
-							$setname = $setting.PSChildName
-							$config = CreateDictionary
-							$config.State = $setting.State.ToString()
-							if ($setting.Values -ne $null) { $config.Values = ([array]($setting.Values)) }
-							if ($setting.Value -ne $null) { $config.Value = ([string]($setting.Value)) }
-							$config.Path = $setting.PSPath.Substring($setting.PSPath.IndexOf("\Settings\")+10)
-							$props.$setname = CreateObject $config
-						}
+						$props.$prop = $NewObject.$prop
 					}
-					CreateObject $props $pol.Name
+				}
+			}
+			if ($props.Keys.Count -gt 0)
+			{
+				CreateObject $props
+			}
+		}
+		
+		Function AreValuesEqual
+		{
+			param ($prop, $new, $old)
+			
+			if ($new -eq $null) { return $true }
+			if ($old -eq $null) { return $false }
+			
+			if ($new -is [array])
+			{
+				return (Compare-Object $new $old | Measure-Object).Count -eq 0
+			}
+			if ($new -is [PSObject])
+			{
+				return (CompareObject $new $old) -eq $null
+			}
+			$equal = $new -eq $old
+			if ($prop -eq "State")
+			{
+				switch ($new)
+				{
+					"Enabled" { $equal = "Enabled", "Allowed" -contains $old }
+					"Disabled" { $equal = "Disabled", "Prohibited", "UseDefault" -contains $old }
+				}
+			}
+			return $equal
+		}
+		
+		
+		Function Get-CtxGroupPolicy
+		{
+			[CmdletBinding()]
+			param (
+				[Parameter(Position = 0, ValueFromPipelineByPropertyName = $true)]
+				[string[]] $PolicyName = "*",
+				[Parameter(Position = 1, ValueFromPipelineByPropertyName = $true)]
+				[string] [ValidateSet("Computer", "User", $null)] $Type,
+				[Parameter()]
+				[string] $DriveName = "LocalFarmGpo"
+			)
+			
+			process
+			{
+				$types = if (!$Type) { @("Computer", "User") }
+				else { @($Type) }
+				foreach ($polType in $types)
+				{
+					$pols = @(Get-ChildItem "$($DriveName):\$polType" | Where-Object { FilterString $_.Name $PolicyName })
+					foreach ($pol in $pols)
+					{
+						$props = CreateDictionary
+						$props.PolicyName = $pol.Name
+						$props.Type = $poltype
+						$props.Description = $pol.Description
+						$props.Enabled = $pol.Enabled
+						$props.Priority = $pol.Priority
+						CreateObject $props $pol.Name
+					}
 				}
 			}
 		}
-	}
-
-	#Reporte de todas las políticas y su configuración
-	$policies=Get-CtxGroupPolicy|Get-CtxGroupPolicyConfiguration
-
-
-	#Recorremos cada una de las políticas
-	Foreach ($policy in $policies) {
-		$PolReport=@{}
-		#Sacamos el nombre y el tipo de la política
-		$Name=$policy.PolicyName
-		$type=$policy.Type
 		
-		#Comenzamos a definir la variable de salida de datos
-
-		#Almacenamos todas las propiedades de las políticas que no sean "PolicyName" ni "Type"
-		$getmember=$policy|Get-Member|where {$_.MemberType -eq "NoteProperty"}|where {$_.Name -ne "PolicyName" -and $_.Name -ne "Type" -and $_.Name -ne "ToString"}
-
-		#Recorremos cada propiedad para almacenar los datos
-		$members=$getmember.name
-		
-		foreach ($member in $members) {
+		Function Get-CtxGroupPolicyConfiguration
+		{
+			[CmdletBinding()]
+			param (
+				[Parameter(Position = 0, ValueFromPipelineByPropertyName = $true)]
+				[String[]] $PolicyName = "*",
+				[Parameter(Position = 1, ValueFromPipelineByPropertyName = $true)]
+				[ValidateSet("Computer", "User", $null)] [String] $Type,
+				[Parameter()]
+				[Switch] $ConfiguredOnly,
+				[Parameter()]
+				[string] $DriveName = "LocalFarmGpo"
+			)
 			
-			#Filtramos únicamente por las propiedades que estén configuradas
-			$propiedades=$policy.$member|where {$_.State -ne "NotConfigured"}
-			foreach ($propiedad in $propiedades){
-			 $tests = @{}       
-			 $Path=$propiedad.Path
-			 $tests.Path=$Path
-			 $tests.State=$propiedad.State
-			 $tests.Value=$propiedad.Value
-			 $PolReport.$Path = $tests        
+			process
+			{
+				$types = if (!$Type) { @("Computer", "User") }
+				else { @($Type) }
+				foreach ($poltype in $types)
+				{
+					$pols = @(Get-ChildItem "$($DriveName):\$poltype" | Where-Object { FilterString $_.Name $PolicyName })
+					foreach ($pol in $pols)
+					{
+						$props = CreateDictionary
+						$props.PolicyName = $pol.Name
+						$props.Type = $poltype
+						
+						foreach ($setting in @(Get-ChildItem "$($DriveName):\$poltype\$($pol.Name)\Settings" -Recurse |
+						Where-Object { $_.State -ne $null }))
+						{
+							if (!$ConfiguredOnly -or $setting.State -ne "NotConfigured")
+							{
+								$setname = $setting.PSChildName
+								$config = CreateDictionary
+								$config.State = $setting.State.ToString()
+								if ($setting.Values -ne $null) { $config.Values = ([array]($setting.Values)) }
+								if ($setting.Value -ne $null) { $config.Value = ([string]($setting.Value)) }
+								$config.Path = $setting.PSPath.Substring($setting.PSPath.IndexOf("\Settings\") + 10)
+								$props.$setname = CreateObject $config
+							}
+						}
+						CreateObject $props $pol.Name
+					}
+				}
+			}
+		}
+		
+		#Reporte de todas las políticas y su configuración
+		$policies = Get-CtxGroupPolicy | Get-CtxGroupPolicyConfiguration
+		
+		
+		#Recorremos cada una de las políticas
+		Foreach ($policy in $policies)
+		{
+			$PolReport = @{ }
+			#Sacamos el nombre y el tipo de la política
+			$Name = $policy.PolicyName
+			$type = $policy.Type
+			
+			#Comenzamos a definir la variable de salida de datos
+			
+			#Almacenamos todas las propiedades de las políticas que no sean "PolicyName" ni "Type"
+			$getmember = $policy | Get-Member | where { $_.MemberType -eq "NoteProperty" } | where { $_.Name -ne "PolicyName" -and $_.Name -ne "Type" -and $_.Name -ne "ToString" }
+			
+			#Recorremos cada propiedad para almacenar los datos
+			$members = $getmember.name
+			
+			foreach ($member in $members)
+			{
+				
+				#Filtramos únicamente por las propiedades que estén configuradas
+				$propiedades = $policy.$member | where { $_.State -ne "NotConfigured" }
+				foreach ($propiedad in $propiedades)
+				{
+					$tests = @{ }
+					$Path = $propiedad.Path
+					$tests.Path = $Path
+					$tests.State = $propiedad.State
+					$tests.Value = $propiedad.Value
+					$PolReport.$Path = $tests
+				}
+				
 			}
 			
-	   }
-	   
-	   
-		
-    @"
+			
+			
+		    @"
     </table>
     <table width='1200'>
     <tr bgcolor='#CCCCCC
@@ -1623,16 +2521,262 @@ writeTableFooter $resultsHTM
     </body>
     </html>
 "@ | Out-File $resultsHTM -append
-
-
-	writeTableHeader $resultsHTM $PolfirstheaderName $Polheadernames $PolHeaderWidths $Poltablewidth
-	$PolReport | sort-object -property Path |%{ writeDataPol $PolReport $resultsHTM $PolHeaderNames }
-	#writeTableFooter $resultsHTM
-
-}
-	start $resultsHTM	
-	
+			
+			
+			writeTableHeader $resultsHTM $PolfirstheaderName $Polheadernames $PolHeaderWidths $Poltablewidth
+			$PolReport | sort-object -property Path | %{ writeDataPol $PolReport $resultsHTM $PolHeaderNames }
+			#writeTableFooter $resultsHTM
+			$progressbar.value = 90
+		}
+		$progressbar.value = 100
+		start $resultsHTM
+				
 	}
+	
+	$But_Rmv_usr_grp_Click={
+		$appscheck = $Applications_list.CheckedItems
+		$delscheck = $Delivery_groups_list.CheckedItems
+		$countapp = $appscheck.count
+		$countdel = $delscheck.count
+		$applicationchecked = (1..$countapp)
+		$deliverychecked = (1..$countdel)
+		IF ($Text_Dom_usr_grp.Text -lt "0")
+		{
+			$message = "Empty field" + "`r`n"
+			$wshell = New-Object -ComObject Wscript.Shell
+			$wshell.Popup($message, 0, "Write a group name", 0x0)
+		}
+		else
+		{
+			$i = 0
+			$a = new-object -comobject wscript.shell
+			$Question = $a.popup("Are you sure to remove permission in applications or DG to the user/group?", 0, "Delete Files", 4)
+			If ($Question -eq 6)
+			{
+				foreach ($objItem in $appscheck)
+				{
+					$app = "$objItem"
+					$groups = $Text_Dom_usr_grp.Text
+					$groups = $groups -replace (" ; ", ";")
+					$groups = $groups -replace (" ;", ";")
+					$groups = $groups -replace ("; ", ";")
+					$groups = $groups.Split(';')
+					foreach ($group in $groups)
+					{
+						get-brokerapplication "$app" | Remove-Brokeruser "$group"
+					}
+					$applicationchecked[$i] = $app
+					$i++
+				}
+				$l = 0
+				foreach ($objItem in $delscheck)
+				{
+					$del = "$objItem"
+					$groups = $Text_Dom_usr_grp.Text
+					$groups = $groups -replace (" ; ", ";")
+					$groups = $groups -replace (" ;", ";")
+					$groups = $groups -replace ("; ", ";")
+					$groups = $groups.Split(';')
+					Get-BrokerAccessPolicyRule -DesktopGroupName $del | Set-BrokerAccessPolicyRule -RemoveIncludedUsers $Groups
+					$deliverychecked[$l] = $del
+					$l++
+				}
+			}
+			if ($i -eq 0)
+			{
+				if ($l -eq 0)
+				{
+					$message = [string]"Cancelado"
+					$wshell = New-Object -ComObject Wscript.Shell
+					$wshell.Popup($message, 0, "Done", 0x0)
+				}
+			}
+			else
+			{
+				
+				$applicationchecked = $applicationchecked | out-string
+				$deliverychecked = $deliverychecked | out-string
+				IF ($countapp -eq "0")
+				{
+					if ($countdel -ne "0")
+					{
+						$message = [string]"Trying to Remove User/group " + "$([char]34)$groups$([char]34)" + " to deliveries " + "`r`n" + "$deliverychecked"
+						$wshell = New-Object -ComObject Wscript.Shell
+						$wshell.Popup($message, 0, "Done", 0x0)
+					}
+					else
+					{
+						$message = [string]"Please, select some Application and/or Delivery group"
+						$wshell = New-Object -ComObject Wscript.Shell
+						$wshell.Popup($message, 0, "Done", 0x0)
+					}
+				}
+				else
+				{
+					if ($countdel -eq "0")
+					{
+						$message = [string]"Trying to Remove User/group " + "$([char]34)$groups$([char]34)" + " to applications " + "`r`n" + "$applicationchecked"
+						$wshell = New-Object -ComObject Wscript.Shell
+						$wshell.Popup($message, 0, "Done", 0x0)
+					}
+					else
+					{
+						$message = [string]"Trying to Remove User/group " + "$([char]34)$groups$([char]34)" + " to applications: " + "`r`n" + "$applicationchecked" + "`r`n" + " And to delivery groups: " + "`r`n" + "$deliverychecked"
+						$wshell = New-Object -ComObject Wscript.Shell
+						$wshell.Popup($message, 0, "Done", 0x0)
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	$But_Add_Usr_Grp_Click={
+		$appscheck = $Applications_list.CheckedItems
+		$delscheck = $Delivery_groups_list.CheckedItems
+		$countapp = $appscheck.count
+		$countdel = $delscheck.count
+		$applicationchecked = (1..$countapp)
+		$deliverychecked = (1..$countdel)
+		IF ($Text_Dom_usr_grp.Text -lt "0")
+		{
+			$message = "Empty field" + "`r`n"
+			$wshell = New-Object -ComObject Wscript.Shell
+			$wshell.Popup($message, 0, "Write a group name", 0x0)
+		}
+		else
+		{
+			$i = 0
+			foreach ($objItem in $appscheck)
+			{
+				$app = "$objItem"
+				$groups = $Text_Dom_usr_grp.Text
+				$groups = $groups -replace (" ; ", ";")
+				$groups = $groups -replace (" ;", ";")
+				$groups = $groups -replace ("; ", ";")
+				$groups = $groups.Split(';')
+				foreach ($group in $groups)
+				{
+					get-brokerapplication "$app" | Add-Brokeruser "$group"
+					$applicationchecked[$i] = $app
+				}
+				$i++
+			}
+			$i = 0
+			foreach ($objItem in $delscheck)
+			{
+				$del = "$objItem"
+				$groups = $Text_Dom_usr_grp.Text
+				$groups = $groups -replace (" ; ", ";")
+				$groups = $groups -replace (" ;", ";")
+				$groups = $groups -replace ("; ", ";")
+				$groups = $groups.Split(';')
+				Get-BrokerAccessPolicyRule -DesktopGroupName $del | Set-BrokerAccessPolicyRule -AddIncludedUsers $Groups
+				$deliverychecked[$i] = $del
+				$i++
+			}
+			
+			$applicationchecked = $applicationchecked | out-string
+			$deliverychecked = $deliverychecked | out-string
+			IF ($countapp -eq "0")
+			{
+				if ($countdel -ne "0")
+				{
+					$message = [string]"Trying to add User/group " + "$([char]34)$groups$([char]34)" + " to deliveries " + "`r`n" + "$deliverychecked"
+					$wshell = New-Object -ComObject Wscript.Shell
+					$wshell.Popup($message, 0, "Done", 0x0)
+				}
+				else
+				{
+					$message = [string]"Please, select some Application and/or Delivery group"
+					$wshell = New-Object -ComObject Wscript.Shell
+					$wshell.Popup($message, 0, "Done", 0x0)
+				}
+			}
+			else
+			{
+				if ($countdel -eq "0")
+				{
+					$message = [string]"Trying to add User/group " + "$([char]34)$groups$([char]34)" + " to applications " + "`r`n" + "$applicationchecked"
+					$wshell = New-Object -ComObject Wscript.Shell
+					$wshell.Popup($message, 0, "Done", 0x0)
+				}
+				else
+				{
+					$message = [string]"Trying to add User/group " + "$([char]34)$groups$([char]34)" + " to applications: " + "`r`n" + "$applicationchecked" + "`r`n" + " And to delivery groups: " + "`r`n" + "$deliverychecked"
+					$wshell = New-Object -ComObject Wscript.Shell
+					$wshell.Popup($message, 0, "Done", 0x0)
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	$Rbut_Enable_Console_CheckedChanged={
+		Show-Console
+		
+	}
+	
+	$Rbut_Disable_Console_CheckedChanged={
+		Hide-Console
+		
+	}
+	
+	$but_Update_FarmData_Click={
+		
+			$progressbar.value=0
+			$Applications_list.Items.clear()
+			$Delivery_groups_list.Items.clear()
+			$filename = "delivery.csv"
+			$file = [string]"$scriptPath\$filename"
+			$deliveries = get-BrokerDesktopgroup | select Name, UUID, Description
+			$j = 0
+			$progressbar.value=20
+			Foreach ($delivery in $deliveries)
+			{
+				$del = $delivery.Name
+				$users = Get-BrokerAccessPolicyRule | where { $_.DesktopGroupName -eq $del } | select IncludedUsers
+				$users = $users[0].IncludedUsers.name -join (";")
+				$deliveries[$j].Description = $users
+				$j++
+			}
+			$progressbar.value=40
+			$deliveries | Export-Csv $file -NoTypeInformation
+			$deliveries = import-csv $scriptPath\delivery.csv | sort-object Name
+			
+			$filename = "apps.csv"
+			$file = [string]"$scriptPath\$filename"
+			$apps = get-BrokerApplication | select @{ n = "ApplicationName"; e = { [string]::join(" ; ", $_.ApplicationName) } }, @{ n = "Enabled"; e = { [string]::join(" ; ", $_.Enabled) } }, @{ n = "DistinguisedName"; e = { [string]::join(" ; ", $_.Name) } }, ApplicationType, @{ n = "CommandLine"; e = { [string]::join(" ; ", $_.CommandLineExecutable) } }, @{ n = "WorkingDirectory"; e = { [string]::join(" ; ", $_.WorkingDirectory) } }, @{ n = "ClientFolder"; e = { [string]::join(" ; ", $_.ClientFolder) } }, @{ n = "UsersandGroups"; e = { [string]::join(" ; ", $_.AssociatedUserNames) } }, @{ n = "DesktopGroups"; e = { [string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs) } }, @{ n = "Priorities"; e = { [string]::join(" ; ", $_.AssociatedDesktopGroupPriorities) } }
+			$apps | Export-Csv $file -NoTypeInformation
+			$apps = $apps | sort-object ApplicationName
+			
+			#Add Applications to the list of Applications
+			$progressbar.value=60
+			foreach ($test in $apps)
+			{
+				$app = $test.ApplicationName
+				[void] $Applications_list.Items.Add("$app")
+			}
+			
+			#Add Delivery Groups to the list of Delivery Groups
+			$progressbar.value=80
+			foreach ($test in $deliveries)
+			{
+				$deliv = $test.Name
+				[void] $Delivery_groups_list.Items.Add("$deliv")
+			}
+			$progressbar.value=100
+			$progressbar.text="OK"
+	}
+	
+		
+		
+	
 	
 	# --End User Generated Script--
 	#----------------------------------------------
@@ -1650,24 +2794,37 @@ writeTableFooter $resultsHTM
 		#Remove all event handlers from the controls
 		try
 		{
+			$but_Inventory.remove_Click($but_Inventory_Click)
+			$but_Update_FarmData.remove_Click($but_Update_FarmData_Click)
+			$progressbar.remove_Click($progressbar_Click)
+			$buttonCancelProcess.remove_Click($buttonCancelProcess_Click)
+			$buttonStartProcess.remove_Click($buttonStartProcess_Click)
 			$but_app_priority.remove_Click($but_app_priority_Click)
+			$Rbut_Enable_Console.remove_CheckedChanged($Rbut_Enable_Console_CheckedChanged)
+			$Rbut_Disable_Console.remove_CheckedChanged($Rbut_Disable_Console_CheckedChanged)
 			$but_less_priority.remove_Click($but_less_priority_Click)
 			$but_more_priority.remove_Click($but_more_priority_Click)
+			$button2.remove_Click($but_App_Uncheck_Click)
 			$But_Add_app_Delivery.remove_Click($But_Add_app_Delivery_Click)
+			$button1.remove_Click($but_App_Check_Click)
 			$But_Rmv_app_Delivery.remove_Click($But_Rmv_app_Delivery_Click)
 			$Applications_list.remove_SelectedIndexChanged($handler_checkedListBox1_SelectedIndexChanged)
 			$but_App_Uncheck.remove_Click($but_App_Uncheck_Click)
 			$but_App_Check.remove_Click($but_App_Check_Click)
 			$but_export.remove_Click($but_export_Click)
+			$buttonUncheck.remove_Click($but_App_Uncheck_Click)
+			$buttonCheck.remove_Click($but_App_Check_Click)
 			$but_perm_report.remove_Click($but_perm_report_Click)
 			$but_clear_field.remove_Click($but_clear_field_Click)
+			$But_Add_Usr_Grp.remove_Click($But_Add_Usr_Grp_Click)
+			$But_Rmv_usr_grp.remove_Click($But_Rmv_usr_grp_Click)
 			$Lab_Dom_user.remove_Click($Lab_Dom_user_Click)
 			$but_Search.remove_Click($but_Search_Click)
 			$but_chk_search_app.remove_Click($but_chk_search_app_Click)
 			$But_Uncheck_delivery_group.remove_Click($But_Uncheck_delivery_group_Click)
 			$But_Check_delivery_group.remove_Click($But_Check_delivery_group_Click)
 			$Citrix_tools.remove_Load($handler_Citrix_tools_Load)
-			$Balloons.remove_Popup($handler_toolTip1_Popup)
+			$toolTip1.remove_Popup($handler_toolTip1_Popup)
 			$Citrix_tools.remove_Load($Form_StateCorrection_Load)
 			$Citrix_tools.remove_FormClosed($Form_Cleanup_FormClosed)
 		}
@@ -1680,6 +2837,7 @@ writeTableFooter $resultsHTM
 	#region Generated Form Code
 	#----------------------------------------------
 	$Citrix_tools.SuspendLayout()
+	$Grp_Farm_actions.SuspendLayout()
 	$grp_App_priority.SuspendLayout()
 	$grpbox_PS_console.SuspendLayout()
 	$grpbox_app_deliv.SuspendLayout()
@@ -1694,8 +2852,9 @@ writeTableFooter $resultsHTM
 	#
 	# Citrix_tools
 	#
-	$Citrix_tools.Controls.Add($but_Inventory)
-	$Citrix_tools.Controls.Add($but_Update_FarmData)
+	$Citrix_tools.Controls.Add($Grp_Farm_actions)
+	$Citrix_tools.Controls.Add($buttonCancelProcess)
+	$Citrix_tools.Controls.Add($buttonStartProcess)
 	$Citrix_tools.Controls.Add($grp_App_priority)
 	$Citrix_tools.Controls.Add($grpbox_PS_console)
 	$Citrix_tools.Controls.Add($grpbox_app_deliv)
@@ -1704,7 +2863,7 @@ writeTableFooter $resultsHTM
 	$Citrix_tools.Controls.Add($Tabctrl_Del_grp)
 	$Citrix_tools.AutoScaleMode = 'None'
 	$Citrix_tools.BackColor = 'Control'
-	$Citrix_tools.ClientSize = '1148, 455'
+	$Citrix_tools.ClientSize = '1148, 436'
 	$Citrix_tools.MaximizeBox = $False
 	$Citrix_tools.MinimizeBox = $False
 	$Citrix_tools.Name = "Citrix_tools"
@@ -1712,25 +2871,75 @@ writeTableFooter $resultsHTM
 	$Citrix_tools.Text = "Citrix Tools"
 	$Citrix_tools.add_Load($handler_Citrix_tools_Load)
 	#
+	# Grp_Farm_actions
+	#
+	$Grp_Farm_actions.Controls.Add($but_Inventory)
+	$Grp_Farm_actions.Controls.Add($but_Update_FarmData)
+	$Grp_Farm_actions.Controls.Add($progressbar)
+	$Grp_Farm_actions.Location = '257, 308'
+	$Grp_Farm_actions.Name = "Grp_Farm_actions"
+	$Grp_Farm_actions.Size = '172, 102'
+	$Grp_Farm_actions.TabIndex = 69
+	$Grp_Farm_actions.TabStop = $False
+	$Grp_Farm_actions.Text = "Farm Actions"
+	#
 	# but_Inventory
 	#
-	$but_Inventory.Location = '257, 314'
+	$but_Inventory.BackColor = 'Window'
+	$but_Inventory.FlatStyle = 'Popup'
+	$but_Inventory.Location = '6, 19'
 	$but_Inventory.Name = "but_Inventory"
-	$but_Inventory.Size = '172, 41'
+	$but_Inventory.Size = '75, 52'
 	$but_Inventory.TabIndex = 68
 	$but_Inventory.Text = "Farm Inventory HTML"
-	$but_Inventory.UseVisualStyleBackColor = $True
+	$but_Inventory.UseVisualStyleBackColor = $False
 	$but_Inventory.add_Click($but_Inventory_Click)
 	#
 	# but_Update_FarmData
 	#
-	$but_Update_FarmData.Location = '257, 366'
+	$but_Update_FarmData.BackColor = 'Window'
+	$but_Update_FarmData.FlatStyle = 'Popup'
+	$but_Update_FarmData.Location = '88, 19'
 	$but_Update_FarmData.Name = "but_Update_FarmData"
-	$but_Update_FarmData.Size = '172, 41'
+	$but_Update_FarmData.Size = '75, 52'
 	$but_Update_FarmData.TabIndex = 67
-	$but_Update_FarmData.Text = "Refresh Farm Data"
-	$but_Update_FarmData.UseVisualStyleBackColor = $True
+	$but_Update_FarmData.Text = "Update Farm Data"
+	$but_Update_FarmData.UseVisualStyleBackColor = $False
 	$but_Update_FarmData.add_Click($but_Update_FarmData_Click)
+	#
+	# progressbar
+	#
+	$progressbar.Anchor = 'Top, Left, Right'
+	$progressbar.BackColor = 'ActiveBorder'
+	$progressbar.ForeColor = 'HotTrack'
+	$progressbar.Location = '6, 77'
+	$progressbar.Name = "progressbar"
+	$progressbar.Size = '157, 19'
+	$progressbar.Step = 1
+	$progressbar.TabIndex = 2
+	$progressbar.add_Click($progressbar_Click)
+	#
+	# buttonCancelProcess
+	#
+	$buttonCancelProcess.Anchor = 'Bottom'
+	$buttonCancelProcess.Location = '357, 443'
+	$buttonCancelProcess.Name = "buttonCancelProcess"
+	$buttonCancelProcess.Size = '93, 23'
+	$buttonCancelProcess.TabIndex = 3
+	$buttonCancelProcess.Text = "Cancel Process"
+	$buttonCancelProcess.UseVisualStyleBackColor = $True
+	$buttonCancelProcess.add_Click($buttonCancelProcess_Click)
+	#
+	# buttonStartProcess
+	#
+	$buttonStartProcess.Anchor = 'Bottom, Left'
+	$buttonStartProcess.Location = '264, 443'
+	$buttonStartProcess.Name = "buttonStartProcess"
+	$buttonStartProcess.Size = '87, 23'
+	$buttonStartProcess.TabIndex = 1
+	$buttonStartProcess.Text = "Start Process"
+	$buttonStartProcess.UseVisualStyleBackColor = $True
+	$buttonStartProcess.add_Click($buttonStartProcess_Click)
 	#
 	# grp_App_priority
 	#
@@ -1744,12 +2953,14 @@ writeTableFooter $resultsHTM
 	#
 	# but_app_priority
 	#
+	$but_app_priority.BackColor = 'ButtonHighlight'
+	$but_app_priority.FlatStyle = 'Popup'
 	$but_app_priority.Location = '6, 27'
 	$but_app_priority.Name = "but_app_priority"
 	$but_app_priority.Size = '75, 24'
 	$but_app_priority.TabIndex = 0
 	$but_app_priority.Text = "Check"
-	$but_app_priority.UseVisualStyleBackColor = $True
+	$but_app_priority.UseVisualStyleBackColor = $False
 	$but_app_priority.add_Click($but_app_priority_Click)
 	#
 	# grpbox_PS_console
@@ -1771,8 +2982,8 @@ writeTableFooter $resultsHTM
 	$Rbut_Enable_Console.TabIndex = 63
 	$Rbut_Enable_Console.TabStop = $True
 	$Rbut_Enable_Console.Text = "Enable"
-	$Rbut_Enable_Console.add_Click($Rbut_Enable_Console_OnClick)
 	$Rbut_Enable_Console.UseVisualStyleBackColor = $True
+	$Rbut_Enable_Console.add_CheckedChanged($Rbut_Enable_Console_CheckedChanged)
 	#
 	# Rbut_Disable_Console
 	#
@@ -1782,18 +2993,19 @@ writeTableFooter $resultsHTM
 	$Rbut_Disable_Console.TabIndex = 64
 	$Rbut_Disable_Console.TabStop = $True
 	$Rbut_Disable_Console.Text = "Disable"
-	$Rbut_Disable_Console.Checked = $true
-	$Rbut_Disable_Console.add_Click($Rbut_Disable_Console_OnClick)
 	$Rbut_Disable_Console.UseVisualStyleBackColor = $True
+	$Rbut_Disable_Console.add_CheckedChanged($Rbut_Disable_Console_CheckedChanged)
 	#
 	# grpbox_app_deliv
 	#
 	$grpbox_app_deliv.Controls.Add($Grpbox_Priority)
+	$grpbox_app_deliv.Controls.Add($button2)
 	$grpbox_app_deliv.Controls.Add($But_Add_app_Delivery)
+	$grpbox_app_deliv.Controls.Add($button1)
 	$grpbox_app_deliv.Controls.Add($But_Rmv_app_Delivery)
 	$grpbox_app_deliv.Location = '257, 108'
 	$grpbox_app_deliv.Name = "grpbox_app_deliv"
-	$grpbox_app_deliv.Size = '172, 113'
+	$grpbox_app_deliv.Size = '172, 102'
 	$grpbox_app_deliv.TabIndex = 42
 	$grpbox_app_deliv.TabStop = $False
 	$grpbox_app_deliv.Text = "Publish application to Delivery Group"
@@ -1812,12 +3024,14 @@ writeTableFooter $resultsHTM
 	#
 	# but_less_priority
 	#
+	$but_less_priority.BackColor = 'ButtonHighlight'
+	$but_less_priority.FlatStyle = 'Popup'
 	$but_less_priority.Location = '44, 47'
 	$but_less_priority.Name = "but_less_priority"
 	$but_less_priority.Size = '28, 25'
 	$but_less_priority.TabIndex = 49
 	$but_less_priority.Text = "-"
-	$but_less_priority.UseVisualStyleBackColor = $True
+	$but_less_priority.UseVisualStyleBackColor = $False
 	$but_less_priority.add_Click($but_less_priority_Click)
 	#
 	# Text_App_Priority
@@ -1830,34 +3044,62 @@ writeTableFooter $resultsHTM
 	#
 	# but_more_priority
 	#
+	$but_more_priority.BackColor = 'ButtonHighlight'
+	$but_more_priority.FlatStyle = 'Popup'
 	$but_more_priority.Location = '44, 19'
 	$but_more_priority.Name = "but_more_priority"
 	$but_more_priority.Size = '28, 25'
 	$but_more_priority.TabIndex = 48
 	$but_more_priority.Text = "+"
-	$but_more_priority.UseVisualStyleBackColor = $True
+	$but_more_priority.UseVisualStyleBackColor = $False
 	$but_more_priority.add_Click($but_more_priority_Click)
+	#
+	# button2
+	#
+	$button2.BackColor = 'ButtonHighlight'
+	$button2.Location = '-235, 295'
+	$button2.Name = "button2"
+	$button2.Size = '59, 21'
+	$button2.TabIndex = 59
+	$button2.Text = "Uncheck"
+	$button2.UseVisualStyleBackColor = $False
+	$button2.add_Click($but_App_Uncheck_Click)
 	#
 	# But_Add_app_Delivery
 	#
+	$But_Add_app_Delivery.BackColor = 'ButtonHighlight'
+	$But_Add_app_Delivery.FlatStyle = 'Popup'
 	$But_Add_app_Delivery.Font = "Microsoft Sans Serif, 8.25pt"
 	$But_Add_app_Delivery.Location = '6, 34'
 	$But_Add_app_Delivery.Name = "But_Add_app_Delivery"
 	$But_Add_app_Delivery.Size = '55, 21'
 	$But_Add_app_Delivery.TabIndex = 38
 	$But_Add_app_Delivery.Text = "Add"
-	$But_Add_app_Delivery.UseVisualStyleBackColor = $True
+	$But_Add_app_Delivery.UseVisualStyleBackColor = $False
 	$But_Add_app_Delivery.add_Click($But_Add_app_Delivery_Click)
+	#
+	# button1
+	#
+	$button1.BackColor = 'ButtonHighlight'
+	$button1.Location = '-170, 295'
+	$button1.Name = "button1"
+	$button1.Size = '59, 21'
+	$button1.TabIndex = 60
+	$button1.Text = "Check"
+	$button1.UseVisualStyleBackColor = $False
+	$button1.add_Click($but_App_Check_Click)
 	#
 	# But_Rmv_app_Delivery
 	#
+	$But_Rmv_app_Delivery.BackColor = 'ButtonHighlight'
+	$But_Rmv_app_Delivery.FlatStyle = 'Popup'
 	$But_Rmv_app_Delivery.Font = "Microsoft Sans Serif, 8.25pt"
 	$But_Rmv_app_Delivery.Location = '6, 61'
 	$But_Rmv_app_Delivery.Name = "But_Rmv_app_Delivery"
 	$But_Rmv_app_Delivery.Size = '55, 21'
 	$But_Rmv_app_Delivery.TabIndex = 37
 	$But_Rmv_app_Delivery.Text = "Remove"
-	$But_Rmv_app_Delivery.UseVisualStyleBackColor = $True
+	$But_Rmv_app_Delivery.UseVisualStyleBackColor = $False
 	$But_Rmv_app_Delivery.add_Click($But_Rmv_app_Delivery_Click)
 	#
 	# Tabctrl_apps
@@ -1867,7 +3109,7 @@ writeTableFooter $resultsHTM
 	$Tabctrl_apps.Location = '12, 13'
 	$Tabctrl_apps.Name = "Tabctrl_apps"
 	$Tabctrl_apps.SelectedIndex = 0
-	$Tabctrl_apps.Size = '239, 400'
+	$Tabctrl_apps.Size = '239, 401'
 	$Tabctrl_apps.TabIndex = 62
 	#
 	# tab_Apps
@@ -1879,42 +3121,44 @@ writeTableFooter $resultsHTM
 	$tab_Apps.Location = '4, 25'
 	$tab_Apps.Name = "tab_Apps"
 	$tab_Apps.Padding = '3, 3, 3, 3'
-	$tab_Apps.Size = '231, 371'
+	$tab_Apps.Size = '231, 372'
 	$tab_Apps.TabIndex = 0
 	$tab_Apps.Text = "Applications"
 	#
 	# Applications_list
 	#
-	$Applications_list.BackColor = 'GradientInactiveCaption'
+	$Applications_list.BackColor = 'LightBlue'
 	$Applications_list.FormattingEnabled = $True
+	$Applications_list.HorizontalScrollbar = $True
 	$Applications_list.Location = '5, 5'
 	$Applications_list.Name = "Applications_list"
 	$Applications_list.ScrollAlwaysVisible = $True
-	$Applications_list.HorizontalScrollBar = $True
 	$Applications_list.Size = '223, 334'
 	$Applications_list.TabIndex = 0
 	$Applications_list.add_SelectedIndexChanged($handler_checkedListBox1_SelectedIndexChanged)
 	#
 	# but_App_Uncheck
 	#
-	$but_App_Uncheck.BackColor = 'Control'
+	$but_App_Uncheck.BackColor = 'ButtonHighlight'
+	$but_App_Uncheck.FlatStyle = 'Popup'
 	$but_App_Uncheck.Location = '6, 344'
 	$but_App_Uncheck.Name = "but_App_Uncheck"
 	$but_App_Uncheck.Size = '59, 21'
 	$but_App_Uncheck.TabIndex = 59
 	$but_App_Uncheck.Text = "Uncheck"
-	$but_App_Uncheck.UseVisualStyleBackColor = $True
+	$but_App_Uncheck.UseVisualStyleBackColor = $False
 	$but_App_Uncheck.add_Click($but_App_Uncheck_Click)
 	#
 	# but_App_Check
 	#
-	$but_App_Check.BackColor = 'Control'
+	$but_App_Check.BackColor = 'ButtonHighlight'
+	$but_App_Check.FlatStyle = 'Popup'
 	$but_App_Check.Location = '71, 344'
 	$but_App_Check.Name = "but_App_Check"
 	$but_App_Check.Size = '59, 21'
 	$but_App_Check.TabIndex = 60
 	$but_App_Check.Text = "Check"
-	$but_App_Check.UseVisualStyleBackColor = $True
+	$but_App_Check.UseVisualStyleBackColor = $False
 	$but_App_Check.add_Click($but_App_Check_Click)
 	#
 	# tabctrl_Users_Search
@@ -1931,6 +3175,8 @@ writeTableFooter $resultsHTM
 	# Tab_users
 	#
 	$Tab_users.Controls.Add($but_export)
+	$Tab_users.Controls.Add($buttonUncheck)
+	$Tab_users.Controls.Add($buttonCheck)
 	$Tab_users.Controls.Add($but_perm_report)
 	$Tab_users.Controls.Add($but_clear_field)
 	$Tab_users.Controls.Add($But_Add_Usr_Grp)
@@ -1948,59 +3194,91 @@ writeTableFooter $resultsHTM
 	#
 	# but_export
 	#
+	$but_export.BackColor = 'Window'
+	$but_export.FlatStyle = 'Popup'
 	$but_export.Location = '362, 316'
 	$but_export.Name = "but_export"
 	$but_export.Size = '75, 48'
 	$but_export.TabIndex = 62
 	$but_export.Text = "Export to file"
-	$but_export.UseVisualStyleBackColor = $True
+	$but_export.UseVisualStyleBackColor = $False
 	$but_export.add_Click($but_export_Click)
+	#
+	# buttonUncheck
+	#
+	$buttonUncheck.BackColor = 'ButtonHighlight'
+	$buttonUncheck.Location = '-571, 371'
+	$buttonUncheck.Name = "buttonUncheck"
+	$buttonUncheck.Size = '59, 21'
+	$buttonUncheck.TabIndex = 59
+	$buttonUncheck.Text = "Uncheck"
+	$buttonUncheck.UseVisualStyleBackColor = $False
+	$buttonUncheck.add_Click($but_App_Uncheck_Click)
+	#
+	# buttonCheck
+	#
+	$buttonCheck.BackColor = 'ButtonHighlight'
+	$buttonCheck.Location = '-506, 371'
+	$buttonCheck.Name = "buttonCheck"
+	$buttonCheck.Size = '59, 21'
+	$buttonCheck.TabIndex = 60
+	$buttonCheck.Text = "Check"
+	$buttonCheck.UseVisualStyleBackColor = $False
+	$buttonCheck.add_Click($but_App_Check_Click)
 	#
 	# but_perm_report
 	#
+	$but_perm_report.BackColor = 'Window'
+	$but_perm_report.FlatStyle = 'Popup'
 	$but_perm_report.Location = '281, 316'
 	$but_perm_report.Name = "but_perm_report"
 	$but_perm_report.Size = '75, 48'
 	$but_perm_report.TabIndex = 61
 	$but_perm_report.Text = "Permission report"
-	$but_perm_report.UseVisualStyleBackColor = $True
+	$but_perm_report.UseVisualStyleBackColor = $False
 	$but_perm_report.add_Click($but_perm_report_Click)
 	#
 	# but_clear_field
 	#
+	$but_clear_field.BackColor = 'Window'
+	$but_clear_field.FlatStyle = 'Popup'
 	$but_clear_field.Location = '149, 303'
 	$but_clear_field.Name = "but_clear_field"
 	$but_clear_field.Size = '93, 21'
 	$but_clear_field.TabIndex = 60
 	$but_clear_field.Text = "Clear Field"
-	$but_clear_field.UseVisualStyleBackColor = $True
+	$but_clear_field.UseVisualStyleBackColor = $False
 	$but_clear_field.add_Click($but_clear_field_Click)
 	#
 	# But_Add_Usr_Grp
 	#
+	$But_Add_Usr_Grp.BackColor = 'Window'
+	$But_Add_Usr_Grp.FlatStyle = 'Popup'
 	$But_Add_Usr_Grp.Font = "Microsoft Sans Serif, 8.25pt"
 	$But_Add_Usr_Grp.Location = '7, 316'
 	$But_Add_Usr_Grp.Name = "But_Add_Usr_Grp"
 	$But_Add_Usr_Grp.Size = '55, 21'
 	$But_Add_Usr_Grp.TabIndex = 59
 	$But_Add_Usr_Grp.Text = "Add"
-	$But_Add_Usr_Grp.UseVisualStyleBackColor = $True
+	$But_Add_Usr_Grp.UseVisualStyleBackColor = $False
 	$But_Add_Usr_Grp.add_Click($But_Add_Usr_Grp_Click)
 	#
 	# But_Rmv_usr_grp
 	#
+	$But_Rmv_usr_grp.BackColor = 'Window'
+	$But_Rmv_usr_grp.FlatStyle = 'Popup'
 	$But_Rmv_usr_grp.Font = "Microsoft Sans Serif, 8.25pt"
 	$But_Rmv_usr_grp.Location = '7, 343'
 	$But_Rmv_usr_grp.Name = "But_Rmv_usr_grp"
 	$But_Rmv_usr_grp.Size = '55, 21'
 	$But_Rmv_usr_grp.TabIndex = 58
 	$But_Rmv_usr_grp.Text = "Remove"
-	$But_Rmv_usr_grp.UseVisualStyleBackColor = $True
+	$But_Rmv_usr_grp.UseVisualStyleBackColor = $False
 	$But_Rmv_usr_grp.add_Click($But_Rmv_usr_grp_Click)
 	#
 	# Text_Dom_usr_grp
 	#
-	$Text_Dom_usr_grp.BackColor = 'GradientActiveCaption'
+	$Text_Dom_usr_grp.BackColor = 'LightBlue'
 	$Text_Dom_usr_grp.Location = '7, 276'
 	$Text_Dom_usr_grp.Name = "Text_Dom_usr_grp"
 	$Text_Dom_usr_grp.Size = '427, 20'
@@ -2017,7 +3295,7 @@ writeTableFooter $resultsHTM
 	#
 	# Text_perms_rep
 	#
-	$Text_perms_rep.BackColor = 'GradientInactiveCaption'
+	$Text_perms_rep.BackColor = 'LightBlue'
 	$Text_perms_rep.Location = '7, 7'
 	$Text_perms_rep.Multiline = $True
 	$Text_perms_rep.Name = "Text_perms_rep"
@@ -2036,37 +3314,41 @@ writeTableFooter $resultsHTM
 	$tab_Search.Controls.Add($lab_SearchBy)
 	$tab_Search.Controls.Add($Text_search_field)
 	$tab_Search.Controls.Add($lab_SearchField)
+	$tab_Search.BackColor = 'Control'
 	$tab_Search.Location = '4, 25'
 	$tab_Search.Name = "tab_Search"
 	$tab_Search.Padding = '3, 3, 3, 3'
 	$tab_Search.Size = '445, 372'
 	$tab_Search.TabIndex = 2
 	$tab_Search.Text = "Search"
-	$tab_Search.UseVisualStyleBackColor = $True
 	#
 	# but_Search
 	#
+	$but_Search.BackColor = 'ButtonHighlight'
+	$but_Search.FlatStyle = 'Popup'
 	$but_Search.Location = '267, 71'
 	$but_Search.Name = "but_Search"
 	$but_Search.Size = '73, 20'
 	$but_Search.TabIndex = 9
 	$but_Search.Text = "Search"
-	$but_Search.UseVisualStyleBackColor = $True
+	$but_Search.UseVisualStyleBackColor = $False
 	$but_Search.add_Click($but_Search_Click)
 	#
 	# but_chk_search_app
 	#
+	$but_chk_search_app.BackColor = 'ButtonHighlight'
+	$but_chk_search_app.FlatStyle = 'Popup'
 	$but_chk_search_app.Location = '9, 345'
 	$but_chk_search_app.Name = "but_chk_search_app"
 	$but_chk_search_app.Size = '95, 20'
 	$but_chk_search_app.TabIndex = 8
 	$but_chk_search_app.Text = "Check Apps"
-	$but_chk_search_app.UseVisualStyleBackColor = $True
+	$but_chk_search_app.UseVisualStyleBackColor = $False
 	$but_chk_search_app.add_Click($but_chk_search_app_Click)
 	#
 	# Text_Search_Result
 	#
-	$Text_Search_Result.BackColor = 'GradientInactiveCaption'
+	$Text_Search_Result.BackColor = 'LightBlue'
 	$Text_Search_Result.Location = '9, 121'
 	$Text_Search_Result.Multiline = $True
 	$Text_Search_Result.Name = "Text_Search_Result"
@@ -2085,7 +3367,7 @@ writeTableFooter $resultsHTM
 	#
 	# Cbox_Searh_by
 	#
-	$Cbox_Searh_by.BackColor = 'GradientActiveCaption'
+	$Cbox_Searh_by.BackColor = 'LightBlue'
 	$Cbox_Searh_by.FormattingEnabled = $True
 	[void]$Cbox_Searh_by.Items.Add("User or Group")
 	[void]$Cbox_Searh_by.Items.Add("Delivery Group")
@@ -2104,7 +3386,7 @@ writeTableFooter $resultsHTM
 	#
 	# Text_search_field
 	#
-	$Text_search_field.BackColor = 'GradientActiveCaption'
+	$Text_search_field.BackColor = 'LightBlue'
 	$Text_search_field.Location = '7, 28'
 	$Text_search_field.Name = "Text_search_field"
 	$Text_search_field.Size = '430, 20'
@@ -2143,67 +3425,63 @@ writeTableFooter $resultsHTM
 	#
 	# Delivery_groups_list
 	#
-	$Delivery_groups_list.BackColor = 'GradientInactiveCaption'
+	$Delivery_groups_list.BackColor = 'LightBlue'
 	$Delivery_groups_list.FormattingEnabled = $True
+	$Delivery_groups_list.HorizontalScrollbar = $True
 	$Delivery_groups_list.Location = '6, 7'
 	$Delivery_groups_list.Name = "Delivery_groups_list"
 	$Delivery_groups_list.ScrollAlwaysVisible = $True
-	$Delivery_groups_list.HorizontalScrollBar = $True
 	$Delivery_groups_list.Size = '223, 334'
 	$Delivery_groups_list.TabIndex = 12
 	#
 	# But_Uncheck_delivery_group
 	#
-	$But_Uncheck_delivery_group.BackColor = 'Control'
+	$But_Uncheck_delivery_group.BackColor = 'ButtonHighlight'
+	$But_Uncheck_delivery_group.FlatStyle = 'Popup'
 	$But_Uncheck_delivery_group.Location = '6, 347'
 	$But_Uncheck_delivery_group.Name = "But_Uncheck_delivery_group"
 	$But_Uncheck_delivery_group.Size = '59, 21'
 	$But_Uncheck_delivery_group.TabIndex = 13
 	$But_Uncheck_delivery_group.Text = "Uncheck"
-	$But_Uncheck_delivery_group.UseVisualStyleBackColor = $True
+	$But_Uncheck_delivery_group.UseVisualStyleBackColor = $False
 	$But_Uncheck_delivery_group.add_Click($But_Uncheck_delivery_group_Click)
 	#
 	# But_Check_delivery_group
 	#
-	$But_Check_delivery_group.BackColor = 'Control'
+	$But_Check_delivery_group.BackColor = 'ButtonHighlight'
+	$But_Check_delivery_group.FlatStyle = 'Popup'
 	$But_Check_delivery_group.Location = '71, 347'
 	$But_Check_delivery_group.Name = "But_Check_delivery_group"
 	$But_Check_delivery_group.Size = '59, 21'
 	$But_Check_delivery_group.TabIndex = 14
 	$But_Check_delivery_group.Text = "Check"
-	$But_Check_delivery_group.UseVisualStyleBackColor = $True
+	$But_Check_delivery_group.UseVisualStyleBackColor = $False
 	$But_Check_delivery_group.add_Click($But_Check_delivery_group_Click)
 	#
-	# Balloons
+	# toolTip1
 	#
-	$Balloons.IsBalloon = $True
-	$Balloons.add_Popup($handler_toolTip1_Popup)
-	$balloons.SetToolTip($but_Update_FarmData, "Reload all farm data to CSVs")
-	$balloons.SetToolTip($Rbut_Enable_Console, "Enable Powershell Console")
-	$balloons.SetToolTip($Rbut_Disable_Console, "Disable Powershell Console")
-	$balloons.SetToolTip($but_less_priority, "Less application priority")
-	$balloons.SetToolTip($but_more_priority, "More application priority")
-	$balloons.SetToolTip($But_Add_app_Delivery, "Add checked applications to checked Delivery Groups")
-	$balloons.SetToolTip($But_Rmv_app_Delivery, "Remove checked applications from checked Delivery Groups")
-	$balloons.SetToolTip($but_export , "Export data to file")
-	$balloons.SetToolTip($but_perm_report, "Permission Report")
-	$balloons.SetToolTip($but_clear_field, "Clear User/Group Field")
-	$balloons.SetToolTip($But_Add_Usr_Grp, "Add Users/Groups to checked Applications and/or checked Delivery Groups")
-	$balloons.SetToolTip($But_Rmv_Usr_Grp, "Remove Users/Groups from checked Applications and/or checked Delivery Groups")
-	$balloons.SetToolTip($but_App_check, "Check all applications")
-	$balloons.SetToolTip($but_App_Uncheck , "Uncheck all applications")
-	$balloons.SetToolTip($But_Check_delivery_group, "Check all Delivery Groups")
-	$balloons.SetToolTip($But_Uncheck_delivery_group , "Uncheck all Delivery Groups")
-	$balloons.SetToolTip($but_chk_search_app, "Check applications from search")
-	$balloons.SetToolTip($but_Search, "Search Applications from Delivery Group or Domain User/group")
-	$balloons.SetToolTip($but_app_priority, "Report Application priority in Delivery Groups")
-	$balloons.SetToolTip($Text_App_Priority, "Application Priority to add in the Delivery groups")
-	$balloons.SetToolTip($Text_Dom_usr_grp, "Domain Users/Groups")
-	$balloons.SetToolTip($Text_Search_Result , "Search result")
-	$balloons.SetToolTip($Text_perms_rep, "Permission Report result")
-	$balloons.SetToolTip($Text_search_field, "Text Search Field")
-	$balloons.SetToolTip($Cbox_Searh_by, "Choose search by User/group or Delivery Group")
-	$balloons.SetToolTip($but_Inventory , "Generate HTML with Farm Inventory")
+	$toolTip1.IsBalloon = $True
+	$toolTip1.add_Popup($handler_toolTip1_Popup)
+	$toolTip1.SetToolTip($but_Update_FarmData, "Reload all farm data to CSVs")
+	$toolTip1.SetToolTip($Rbut_Enable_Console, "Enable Powershell Console")
+	$toolTip1.SetToolTip($Rbut_Disable_Console, "Disable Powershell Console")
+	$toolTip1.SetToolTip($but_less_priority, "Less application priority")
+	$toolTip1.SetToolTip($but_more_priority, "More application priority")
+	$toolTip1.SetToolTip($But_Add_app_Delivery, "Add checked applications to checked Delivery Groups")
+	$toolTip1.SetToolTip($But_Rmv_app_Delivery, "Remove checked applications from checked Delivery Groups")
+	$toolTip1.SetToolTip($but_export , "Export data to file")
+	$toolTip1.SetToolTip($but_perm_report, "Permission Report")
+	$toolTip1.SetToolTip($but_clear_field, "Clear User/Group Field")
+	$toolTip1.SetToolTip($But_Add_Usr_Grp, "Add Users/Groups to checked Applications and/or checked Delivery Groups")
+	$toolTip1.SetToolTip($But_Rmv_Usr_Grp, "Remove Users/Groups from checked Applications and/or checked Delivery Groups")
+	$toolTip1.SetToolTip($but_App_check, "Check all applications")
+	$toolTip1.SetToolTip($but_App_Uncheck , "Uncheck all applications")
+	$toolTip1.SetToolTip($But_Check_delivery_group, "Check all Delivery Groups")
+	$toolTip1.SetToolTip($But_Uncheck_delivery_group , "Uncheck all Delivery Groups")
+	$toolTip1.SetToolTip($but_chk_search_app, "Check applications from search")
+	$toolTip1.SetToolTip($but_Search, "Search Applications from Delivery Group or Domain User/group")
+	$toolTip1.SetToolTip($but_app_priority, "Report Application priority in Delivery Groups")
+	$toolTip1.SetToolTip($but_Inventory , "Generate HTML with Farm Inventory")
 	
 	$Tab_Del_Grp.ResumeLayout()
 	$Tabctrl_Del_grp.ResumeLayout()
@@ -2216,6 +3494,7 @@ writeTableFooter $resultsHTM
 	$grpbox_app_deliv.ResumeLayout()
 	$grpbox_PS_console.ResumeLayout()
 	$grp_App_priority.ResumeLayout()
+	$Grp_Farm_actions.ResumeLayout()
 	$Citrix_tools.ResumeLayout()
 	#endregion Generated Form Code
 
@@ -2229,8 +3508,8 @@ writeTableFooter $resultsHTM
 	$Citrix_tools.add_FormClosed($Form_Cleanup_FormClosed)
 	#Show the Form
 	return $Citrix_tools.ShowDialog()
-	
+
 } #End Function
 
 #Call the form
-Call-citrixtoolXA76v02_psf | Out-Null
+Call-citrixtoolXA76v03_psf | Out-Null
