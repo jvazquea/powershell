@@ -143,7 +143,27 @@ function Call-citrixtoolXA76v03_psf {
 
 		$filename="apps.csv"
 		$file = [string]"$scriptPath\$filename"
-		$apps=get-BrokerApplication | select @{n="ApplicationName";e={[string]::join(" ; ", $_.ApplicationName)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, @{n="DistinguisedName";e={[string]::join(" ; ", $_.Name)}},ApplicationType, @{n="CommandLine";e={[string]::join(" ; ", $_.CommandLineExecutable)}}, @{n="WorkingDirectory";e={[string]::join(" ; ", $_.WorkingDirectory)}}, @{n="ClientFolder";e={[string]::join(" ; ", $_.ClientFolder)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.AssociatedUserNames)}}, @{n="DesktopGroups";e={[string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs)}}, @{n="Priorities";e={[string]::join(" ; ", $_.AssociatedDesktopGroupPriorities)}}
+        $apps=get-BrokerApplication | select @{n="ApplicationName";e={[string]::join(" ; ", $_.ApplicationName)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, @{n="DistinguisedName";e={[string]::join(" ; ", $_.Name)}},ApplicationType, @{n="CommandLine";e={[string]::join(" ; ", $_.CommandLineExecutable)}}, @{n="WorkingDirectory";e={[string]::join(" ; ", $_.WorkingDirectory)}}, @{n="ClientFolder";e={[string]::join(" ; ", $_.ClientFolder)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.AssociatedUserNames)}}, @{n="DesktopGroups";e={[string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs)}}, @{n="Priorities";e={[string]::join(" ; ", $_.AssociatedDesktopGroupPriorities)}}
+        $n=0
+        foreach ($app in $apps){
+            $delid=$app.DesktopGroups -split (" ; ")
+            $count=$delid.count
+            $count--
+            $dels=(0..$count)
+            $x=0
+            foreach ($del in $delid) {
+	            $DG = $Deliveries | where { $_.UUID -eq $del } | select name
+                $dels[$x] = [string]$DG.name
+                $x++   
+               
+		    }
+            $delivs=$dels -join " ; "
+            
+            $apps[$n].DesktopGroups=[string]$delivs
+            $n++
+
+        }
+        
 		$apps|Export-Csv $file -NoTypeInformation
 		$apps = $apps|sort-object ApplicationName 
 	}
@@ -1524,29 +1544,6 @@ function Call-citrixtoolXA76v03_psf {
 	
 	$but_app_priority_Click={
 		$apps_csv = import-csv $scriptPath\apps.csv | sort-object ApplicationName
-		$Del_csv = import-csv $scriptPath\delivery.csv
-		$resultado = @{ }
-		$test = @{ }
-		$names = @{ }
-		$n = 0
-		foreach ($app in $apps_csv)
-		{
-			$names[$n] = $app.ApplicationName
-			$priorities = $app.priorities -split (" ; ")
-			$deliveries = $app.DesktopGroups -split (" ; ")
-			$x = 0
-			foreach ($delivery in $deliveries)
-			{
-				$DG = $Del_csv | where { $_.UUID -eq $delivery } | select name
-				$deliveries[$x] = $DG.name
-				$x++
-			}
-			$resultado.priority = $priorities
-			$resultado.deliveries = $deliveries
-			$nombre = $names[$n]
-			$test.$nombre = $resultado
-			$n++
-		}
 		$count = $Applications_list.CheckedItems.count
 		$count = $count - 1
 		
@@ -1555,9 +1552,9 @@ function Call-citrixtoolXA76v03_psf {
 		foreach ($objItem in $Applications_list.CheckedItems)
 		{
 			$appname = $objItem
-			#$text_perms_rep.text=$objItem
-			$priors = $test.$appname.priority
-			$delivers = $test.$appname.deliveries
+			$app=$apps_csv|where {$_.ApplicationName -eq $appname}
+			$priors = $app.priorities -split (" ; ")
+			$delivers = $app.DesktopGroups -split (" ; ")
 			$x = 0
 			$count = $priors.count - 1
 			$array = (0..$count)
@@ -2749,11 +2746,32 @@ border: thin solid #000000;
 			$deliveries | Export-Csv $file -NoTypeInformation
 			$deliveries = import-csv $scriptPath\delivery.csv | sort-object Name
 			
-			$filename = "apps.csv"
-			$file = [string]"$scriptPath\$filename"
-			$apps = get-BrokerApplication | select @{ n = "ApplicationName"; e = { [string]::join(" ; ", $_.ApplicationName) } }, @{ n = "Enabled"; e = { [string]::join(" ; ", $_.Enabled) } }, @{ n = "DistinguisedName"; e = { [string]::join(" ; ", $_.Name) } }, ApplicationType, @{ n = "CommandLine"; e = { [string]::join(" ; ", $_.CommandLineExecutable) } }, @{ n = "WorkingDirectory"; e = { [string]::join(" ; ", $_.WorkingDirectory) } }, @{ n = "ClientFolder"; e = { [string]::join(" ; ", $_.ClientFolder) } }, @{ n = "UsersandGroups"; e = { [string]::join(" ; ", $_.AssociatedUserNames) } }, @{ n = "DesktopGroups"; e = { [string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs) } }, @{ n = "Priorities"; e = { [string]::join(" ; ", $_.AssociatedDesktopGroupPriorities) } }
-			$apps | Export-Csv $file -NoTypeInformation
-			$apps = $apps | sort-object ApplicationName
+            $filename="apps.csv"
+		    $file = [string]"$scriptPath\$filename"
+            $apps=get-BrokerApplication | select @{n="ApplicationName";e={[string]::join(" ; ", $_.ApplicationName)}}, @{n="Enabled";e={[string]::join(" ; ", $_.Enabled)}}, @{n="DistinguisedName";e={[string]::join(" ; ", $_.Name)}},ApplicationType, @{n="CommandLine";e={[string]::join(" ; ", $_.CommandLineExecutable)}}, @{n="WorkingDirectory";e={[string]::join(" ; ", $_.WorkingDirectory)}}, @{n="ClientFolder";e={[string]::join(" ; ", $_.ClientFolder)}}, @{n="UsersandGroups";e={[string]::join(" ; ", $_.AssociatedUserNames)}}, @{n="DesktopGroups";e={[string]::join(" ; ", $_.AssociatedDesktopGroupUUIDs)}}, @{n="Priorities";e={[string]::join(" ; ", $_.AssociatedDesktopGroupPriorities)}}
+            $n=0
+            foreach ($app in $apps){
+                $delid=$app.DesktopGroups -split (" ; ")
+                $count=$delid.count
+                $count--
+                $dels=(0..$count)
+                $x=0
+                foreach ($del in $delid) {
+	                $DG = $Deliveries | where { $_.UUID -eq $del } | select name
+                    $dels[$x] = [string]$DG.name
+                    $x++   
+               
+		        }
+                $delivs=$dels -join " ; "
+            
+                $apps[$n].DesktopGroups=[string]$delivs
+                $n++
+
+            }
+        
+		    $apps|Export-Csv $file -NoTypeInformation
+		    $apps = $apps|sort-object ApplicationName 
+
 			
 			#Add Applications to the list of Applications
 			$progressbar.value=60
